@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -34,4 +34,4 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpiry: Data,
 });
 
-export default new mongoose.model("User", userSchema);
+module.exports = new mongoose.model("User", userSchema);
