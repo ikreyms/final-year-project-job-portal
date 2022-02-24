@@ -12,11 +12,38 @@ import React, { useState } from "react";
 import GoogleLogin from "react-google-login";
 import AuthLogo from "./AuthLogo";
 import useStyles from "./styles";
+import axios from "axios";
 
 const Auth = () => {
   const classes = useStyles();
   const [selectedUserType, setSelectedUserType] = useState("");
   const [isSignupForm, setIsSignupForm] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    accountType: "",
+    password: "",
+  });
+  const [repeatPassword, setRepeatPassword] = useState("");
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    try {
+      if (repeatPassword !== formData.password) {
+        console.log("passwords must match");
+      } else {
+        const response = await axios.post(
+          "http://localhost:2900/api/auth/signup",
+          formData
+        );
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 
   const googleLoginSuccess = (googleData) => {
     console.log(googleData);
@@ -67,7 +94,12 @@ const Auth = () => {
               ? "Complete the details to create an account."
               : "Complete the login credentials."}
           </Typography>
-          <form className={classes.form} autoComplete="off" noValidate>
+          <form
+            onSubmit={submitHandler}
+            className={classes.form}
+            autoComplete="off"
+            noValidate
+          >
             <TextField
               className={classes.formControl}
               label="First Name"
@@ -78,6 +110,9 @@ const Auth = () => {
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
             />
 
             <TextField
@@ -90,6 +125,9 @@ const Auth = () => {
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
             />
 
             <TextField
@@ -98,6 +136,9 @@ const Auth = () => {
               type="email"
               required
               margin="dense"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
 
             <TextField
@@ -107,7 +148,12 @@ const Auth = () => {
               label="Account Type"
               margin="dense"
               value={selectedUserType}
-              onChange={(e) => setSelectedUserType(e.target.value)}
+              onChange={(e) => {
+                setSelectedUserType(e.target.value);
+              }}
+              onChange={(e) =>
+                setFormData({ ...formData, accountType: e.target.value })
+              }
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
@@ -122,6 +168,9 @@ const Auth = () => {
               margin="dense"
               label="Password"
               type="password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
             <TextField
               className={classes.formControl}
@@ -130,6 +179,7 @@ const Auth = () => {
               label="Repeat Password"
               type="password"
               sx={{ display: isSignupForm ? "flex" : "none" }}
+              onChange={(e) => setRepeatPassword(e.target.value)}
             />
             <Button
               type="submit"

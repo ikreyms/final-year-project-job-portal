@@ -14,10 +14,12 @@
   "author": "Mohamed Ikram",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ikreyms/Job-Portal/issues"
+    "url": "https://github.com/ikreyms/final-year-project-job-portal/issues"
   },
-  "homepage": "https://github.com/ikreyms/Job-Portal#readme",
+  "homepage": "https://github.com/ikreyms/final-year-project-job-portal#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.2.3"
