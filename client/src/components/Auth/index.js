@@ -1,14 +1,14 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
-  Grid,
   Link,
   MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleLogin from "react-google-login";
 import AuthLogo from "./AuthLogo";
 import useStyles from "./styles";
@@ -16,33 +16,67 @@ import axios from "axios";
 
 const Auth = () => {
   const classes = useStyles();
-  const [selectedUserType, setSelectedUserType] = useState("");
+
+  const [loading, setLoading] = useState(false);
   const [isSignupForm, setIsSignupForm] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    accountType: "",
-    password: "",
-  });
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [accountType, setAccountType] = useState("");
+  const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+
+  const [serverResponse, setServerResponse] = useState({});
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    if (isSignupForm) await register();
+    else console.log("Login function not defined yet.");
+  };
+
+  const register = async () => {
+    setLoading(true);
+    const formData = {
+      firstName,
+      lastName,
+      email,
+      accountType,
+      password,
+      repeatPassword,
+    };
     try {
-      if (repeatPassword !== formData.password) {
-        console.log("passwords must match");
-      } else {
-        const response = await axios.post(
-          "http://localhost:2900/api/auth/signup",
-          formData
-        );
-        console.log(response.data);
-      }
+      const response = await axios.post(
+        "http://localhost:2900/api/auth/signup",
+        formData
+      );
+      const data = await response.data;
+      setLoading(false);
+      setServerResponse(data);
+      setIsSignupForm(false);
     } catch (error) {
-      console.log(error.response);
+      if (error.response) {
+        const errorData = error.response.data;
+        setServerResponse(errorData);
+      } else if (error.request) {
+        const failedResponse = {
+          success: false,
+          error: { server: "No response from the server. Status Code: 500" },
+        };
+        setServerResponse(failedResponse);
+      }
+      setLoading(false);
     }
+    console.log(serverResponse);
+  };
+
+  const clearFields = () => {
+    setServerResponse({});
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setRepeatPassword("");
   };
 
   const googleLoginSuccess = (googleData) => {
@@ -52,6 +86,13 @@ const Auth = () => {
   const googleLoginFailure = (failedResult) => {
     console.log(failedResult);
   };
+
+  const isObjectEmpty = (obj) =>
+    Object.keys(obj).length === 0 && obj.constructor === Object;
+
+  useEffect(() => {
+    clearFields();
+  }, [isSignupForm]);
 
   return (
     <Box className={classes.container}>
@@ -88,11 +129,13 @@ const Auth = () => {
             variant="subtitle1"
             mb={1}
             className={classes.promoText}
-            color="secondary"
+            color={serverResponse?.error?.server ? "error" : "secondary"}
           >
-            {isSignupForm
+            {serverResponse?.error?.server
+              ? serverResponse.error.server
+              : isSignupForm
               ? "Complete the details to create an account."
-              : "Complete the login credentials."}
+              : "Login to continue."}
           </Typography>
           <form
             onSubmit={submitHandler}
@@ -110,9 +153,16 @@ const Auth = () => {
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
-              onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.firstName
+                    ? true
+                    : false
+                  : false
               }
+              helperText={serverResponse?.error?.firstName}
             />
 
             <TextField
@@ -125,9 +175,16 @@ const Auth = () => {
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.lastName
+                    ? true
+                    : false
+                  : false
               }
+              helperText={serverResponse?.error?.lastName}
             />
 
             <TextField
@@ -136,9 +193,16 @@ const Auth = () => {
               type="email"
               required
               margin="dense"
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.email
+                    ? true
+                    : false
+                  : false
               }
+              helperText={serverResponse?.error?.email}
             />
 
             <TextField
@@ -147,16 +211,19 @@ const Auth = () => {
               required
               label="Account Type"
               margin="dense"
-              value={selectedUserType}
-              onChange={(e) => {
-                setSelectedUserType(e.target.value);
-              }}
-              onChange={(e) =>
-                setFormData({ ...formData, accountType: e.target.value })
-              }
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
+              value={accountType}
+              onChange={(e) => setAccountType(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.accountType
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.accountType}
             >
               <MenuItem value="Job Seeker">Job Seeker</MenuItem>
               <MenuItem value="Employer">Employer</MenuItem>
@@ -168,9 +235,16 @@ const Auth = () => {
               margin="dense"
               label="Password"
               type="password"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.password
+                    ? true
+                    : false
+                  : false
               }
+              helperText={serverResponse?.error?.password}
             />
             <TextField
               className={classes.formControl}
@@ -179,7 +253,16 @@ const Auth = () => {
               label="Repeat Password"
               type="password"
               sx={{ display: isSignupForm ? "flex" : "none" }}
+              value={repeatPassword}
               onChange={(e) => setRepeatPassword(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.repeatPassword
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.repeatPassword}
             />
             <Button
               type="submit"
@@ -187,6 +270,12 @@ const Auth = () => {
               size="large"
               className={classes.submitButton}
               disableElevation
+              endIcon={
+                <CircularProgress
+                  size={20}
+                  sx={{ color: "white", opacity: loading ? 1 : 0 }}
+                />
+              }
             >
               {isSignupForm ? "Register" : "Login"}
             </Button>

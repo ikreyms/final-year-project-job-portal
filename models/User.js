@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const { responseToClient } = require("../utils/responseToClient");
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -26,11 +25,15 @@ const userSchema = new mongoose.Schema({
   },
   accountType: {
     type: String,
-    enum: ["Job Seeker", "Employer", "Admin"],
+    enum: {
+      values: ["Job Seeker", "Employer", "Admin"],
+      message: "Select an account type.",
+    },
+    minlength: [4, "Account type is required."],
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Password is required."],
     minlength: [8, "Password must be minimum 8 characters long."],
     maxlength: [20, "Password cannot be more than 20 characters."],
     select: false,
