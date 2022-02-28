@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { responseToClient } = require("../utils/responseToClient");
 
@@ -51,7 +52,7 @@ exports.signup = async (req, res, next) => {
           accountType,
           password,
         });
-        responseToClient(res, 201, { success: true, user });
+        sendToken(user, 201, res);
       }
     } catch (error) {
       let errorMessage = {};
@@ -67,8 +68,60 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-exports.login = (req, res, next) => {
-  res.send("login route");
+exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const reqMap = new Map();
+
+  reqMap.set(["email", "Email"], email);
+  reqMap.set(["password", "Password"], password);
+
+  let errorObj = {};
+
+  for (let [key, value] of reqMap.entries()) {
+    if (value === "") {
+      errorObj[key[0]] = `${key[1]} is required.`;
+    }
+  }
+
+  if (
+    !(Object.keys(errorObj).length === 0 && errorObj.constructor === Object)
+  ) {
+    responseToClient(res, 400, {
+      success: false,
+      error: errorObj,
+    });
+  } else {
+    try {
+      const user = await User.findOne({ email }).select("+password");
+      if (!user) {
+        responseToClient(res, 401, {
+          success: false,
+          error: { credentials: "Invalid email/password." },
+        });
+      } else {
+        const isPasswordMatch = await user.comparePasswords(password);
+        if (isPasswordMatch) {
+          sendToken(user, 200, res);
+        } else {
+          responseToClient(res, 401, {
+            success: false,
+            error: { credentials: "Invalid email/password." },
+          });
+        }
+      }
+    } catch (error) {
+      let errorMessage = {};
+      if (error.name === "ValidationError") {
+        Object.keys(error.errors).forEach((key) => {
+          errorMessage[key] = error.errors[key].message;
+        });
+        responseToClient(res, 400, { success: false, error: errorMessage });
+      } else {
+        responseToClient(res, 500, { success: false, error: error.message });
+      }
+    }
+  }
 };
 
 exports.forgetPassword = (req, res, next) => {
@@ -77,4 +130,19 @@ exports.forgetPassword = (req, res, next) => {
 
 exports.resetPassword = (req, res, next) => {
   res.send("resetPassword route");
+};
+const sendToken = (user, statusCode, res) => {
+  const token = user.getSignedToken();
+  res
+    .set("Authorization", `Bearer ${token}`)
+    .status(statusCode)
+    .json({
+      success: true,
+      user: {
+        email: user.email,
+        firstName: user.firstName,
+        userType: user.userType,
+      },
+      token,
+    });
 };
