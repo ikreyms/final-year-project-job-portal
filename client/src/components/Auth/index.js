@@ -13,9 +13,13 @@ import GoogleLogin from "react-google-login";
 import AuthLogo from "./AuthLogo";
 import useStyles from "./styles";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/actionCreators";
 
 const Auth = () => {
   const classes = useStyles();
+
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [isSignupForm, setIsSignupForm] = useState(false);
@@ -31,11 +35,45 @@ const Auth = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (isSignupForm) await register();
-    else console.log("Login function not defined yet.");
+    if (isSignupForm) await registerHandler();
+    else await loginHandler();
   };
 
-  const register = async () => {
+  const setUser = (data) => {
+    localStorage.setItem("joblookupLoginToken", data.token);
+    dispatch(login(data.user));
+  };
+
+  const loginHandler = async () => {
+    setLoading(true);
+    const formData = { email, password };
+    try {
+      const response = await axios.post(
+        "http://localhost:2900/api/auth/login",
+        formData
+      );
+      const data = await response.data;
+      setLoading(false);
+      setServerResponse(data);
+      setUser(data);
+    } catch (error) {
+      if (error.response) {
+        const errorData = error.response.data;
+        setServerResponse(errorData);
+        console.log(serverResponse);
+      } else if (error.request) {
+        const failedResponse = {
+          success: false,
+          error: { server: "No response from the server. Status Code: 500" },
+        };
+        setServerResponse(failedResponse);
+      }
+      setLoading(false);
+      console.log(serverResponse);
+    }
+  };
+
+  const registerHandler = async () => {
     setLoading(true);
     const formData = {
       firstName,
@@ -67,7 +105,6 @@ const Auth = () => {
       }
       setLoading(false);
     }
-    console.log(serverResponse);
   };
 
   const clearFields = () => {
@@ -92,6 +129,7 @@ const Auth = () => {
 
   useEffect(() => {
     clearFields();
+    console.log(serverResponse);
   }, [isSignupForm]);
 
   return (
@@ -133,6 +171,8 @@ const Auth = () => {
           >
             {serverResponse?.error?.server
               ? serverResponse.error.server
+              : serverResponse?.error?.credentials
+              ? serverResponse.error.credentials
               : isSignupForm
               ? "Complete the details to create an account."
               : "Login to continue."}
