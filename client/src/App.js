@@ -12,6 +12,7 @@ import { useTheme } from "@mui/styles";
 
 const App = () => {
   console.log(useTheme());
+
   return (
     <Router>
       <NavBar />

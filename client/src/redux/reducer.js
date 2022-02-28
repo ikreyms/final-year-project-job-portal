@@ -1,4 +1,4 @@
-import { LOGIN } from "./actions";
+import { LOGIN, LOGOUT } from "./actions";
 
 const initState = {
   loggedIn: false,
@@ -16,7 +16,9 @@ const initState = {
 const reducer = (state = initState, action) => {
   switch (action.type) {
     case LOGIN:
-      return { ...state, loggedIn: true };
+      return { ...state, loggedIn: true, user: action.payload };
+    case LOGOUT:
+      return { ...state, loggedIn: false };
     default:
       return state;
   }

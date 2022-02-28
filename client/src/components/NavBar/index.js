@@ -47,6 +47,9 @@ const NavBar = () => {
           <AdminNavLinks />
         )}
 
+        {console.log("loggedin", loggedIn)}
+        {console.log("usertype", userType)}
+
         <MobileDrawer loggedIn={loggedIn} userType={userType} />
       </Toolbar>
     </AppBar>

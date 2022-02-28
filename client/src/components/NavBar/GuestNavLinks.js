@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Stack, Divider } from "@mui/material";
+import { Link, Stack } from "@mui/material";
 import clsx from "clsx";
 import useStyles from "./styles";
 

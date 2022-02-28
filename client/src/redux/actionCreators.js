@@ -1,5 +1,17 @@
-import { LOGIN } from "./actions";
+import { LOGIN, LOGOUT } from "./actions";
 
-export const login = () => ({
-  type: LOGIN,
-});
+export const login = (user) => {
+  return {
+    type: LOGIN,
+    payload: user,
+  };
+};
+export const logout = () => {
+  return {
+    type: LOGOUT,
+  };
+};
+
+// export const logout = () => ({
+//   type: LOGOUT,
+// });
