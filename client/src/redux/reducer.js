@@ -9,14 +9,14 @@ const initState = {
     email: "ikreyms@gmail.com",
     following: ["Dhiraagu", "MPL", "Ooredoo"],
     ratings: [{ employer: "Dhiraagu", rating: 4.5 }],
-    userType: "guest",
+    accountType: "guest",
   },
 };
 
 const reducer = (state = initState, action) => {
   switch (action.type) {
     case LOGIN:
-      return { ...state, loggedIn: true, user: action.payload };
+      return { ...state, loggedIn: true, user: { ...action.payload } };
     case LOGOUT:
       return { ...state, loggedIn: false };
     default:
