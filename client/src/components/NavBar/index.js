@@ -13,7 +13,7 @@ const NavBar = () => {
   const classes = useStyles();
 
   const loggedIn = useSelector((state) => state.loggedIn);
-  const userType = useSelector((state) => state.userType);
+  const accountType = useSelector((state) => state.user?.accountType);
 
   const navigate = useNavigate();
 
@@ -39,18 +39,15 @@ const NavBar = () => {
 
         {!loggedIn ? (
           <GuestNavLinks />
-        ) : loggedIn && userType === "employer" ? (
+        ) : loggedIn && accountType === "Employer" ? (
           <EmployerNavLinks />
-        ) : loggedIn && userType === "jobseeker" ? (
+        ) : loggedIn && accountType === "Job Seeker" ? (
           <JobSeekerNavLinks />
         ) : (
           <AdminNavLinks />
         )}
 
-        {console.log("loggedin", loggedIn)}
-        {console.log("usertype", userType)}
-
-        <MobileDrawer loggedIn={loggedIn} userType={userType} />
+        <MobileDrawer loggedIn={loggedIn} accountType={accountType} />
       </Toolbar>
     </AppBar>
   );

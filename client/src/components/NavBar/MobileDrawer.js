@@ -20,7 +20,7 @@ import useStyles from "./styles";
 import { paperProps } from "./styles";
 import { useNavigate } from "react-router-dom";
 
-const MobileDrawer = ({ loggedIn, userType }) => {
+const MobileDrawer = ({ loggedIn, accountType }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const classes = useStyles();
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ const MobileDrawer = ({ loggedIn, userType }) => {
               <ListItemText>Login</ListItemText>
             </ListItem>
           </>
-        ) : loggedIn && userType === "employer" ? (
+        ) : loggedIn && accountType === "employer" ? (
           <>
             <Divider />
             <ListItem>
@@ -113,7 +113,7 @@ const MobileDrawer = ({ loggedIn, userType }) => {
               <ListItemText>Logout</ListItemText>
             </ListItem>
           </>
-        ) : loggedIn && userType === "jobseeker" ? (
+        ) : loggedIn && accountType === "jobseeker" ? (
           <>
             <Divider />
             <ListItem>
