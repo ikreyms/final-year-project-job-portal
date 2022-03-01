@@ -13,13 +13,15 @@ import GoogleLogin from "react-google-login";
 import AuthLogo from "./AuthLogo";
 import useStyles from "./styles";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import { login } from "../../redux/actionCreators";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [isSignupForm, setIsSignupForm] = useState(false);
@@ -39,9 +41,8 @@ const Auth = () => {
     else await loginHandler();
   };
 
-  const setUser = (data) => {
+  const setTokenOnStorage = (data) => {
     localStorage.setItem("joblookupLoginToken", data.token);
-    dispatch(login(data.user));
   };
 
   const loginHandler = async () => {
@@ -55,7 +56,11 @@ const Auth = () => {
       const data = await response.data;
       setLoading(false);
       setServerResponse(data);
-      setUser(data);
+      setTokenOnStorage(data);
+      dispatch(login(data.user));
+      navigate("/jobs");
+      //navigate to jobs if job seeker else if employer employer profile or if admin admin profile
+      // for now leave as navigate('/jobs');
     } catch (error) {
       if (error.response) {
         const errorData = error.response.data;
@@ -167,7 +172,13 @@ const Auth = () => {
             variant="subtitle1"
             mb={1}
             className={classes.promoText}
-            color={serverResponse?.error?.server ? "error" : "secondary"}
+            color={
+              serverResponse?.error?.server
+                ? "error"
+                : serverResponse?.error?.credentials
+                ? "error"
+                : "secondary"
+            }
           >
             {serverResponse?.error?.server
               ? serverResponse.error.server
@@ -190,6 +201,7 @@ const Auth = () => {
               required
               margin="dense"
               fullWidth
+              focused={isSignupForm}
               sx={{
                 display: isSignupForm ? "inline-flex" : "none",
               }}
@@ -233,6 +245,7 @@ const Auth = () => {
               type="email"
               required
               margin="dense"
+              focused={!isSignupForm && true}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={
