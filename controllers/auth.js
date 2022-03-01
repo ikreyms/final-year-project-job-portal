@@ -131,18 +131,39 @@ exports.forgetPassword = (req, res, next) => {
 exports.resetPassword = (req, res, next) => {
   res.send("resetPassword route");
 };
+
+exports.isLoggedIn = async (req, res, next) => {
+  const token = req.headers["authorization"];
+  console.log(req.headers);
+  if (!token) return responseToClient(res, 401, { error: "No token" });
+  try {
+    const tokenValid = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(tokenValid);
+    if (tokenValid) {
+      const { email, firstName, accountType, id } = tokenValid;
+      return responseToClient(res, 200, {
+        success: true,
+        token,
+        user: { email, firstName, accountType, id },
+      });
+    }
+  } catch (error) {
+    responseToClient(res, 401, {
+      success: false,
+      error: { notAuth: "Login first." },
+    });
+  }
+};
+
 const sendToken = (user, statusCode, res) => {
   const token = user.getSignedToken();
-  res
-    .set("Authorization", `Bearer ${token}`)
-    .status(statusCode)
-    .json({
-      success: true,
-      user: {
-        email: user.email,
-        firstName: user.firstName,
-        userType: user.userType,
-      },
-      token,
-    });
+  res.status(statusCode).json({
+    success: true,
+    user: {
+      email: user.email,
+      firstName: user.firstName,
+      accountType: user.accountType,
+    },
+    token,
+  });
 };
