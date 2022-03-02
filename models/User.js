@@ -5,16 +5,19 @@ const jwt = require("jsonwebtoken");
 const userSchema = new mongoose.Schema({
   //User is === Job Seeker
   image: String,
+
   firstName: {
     type: String,
     required: [true, "Please provide your first name."],
     trim: true,
   },
+
   lastName: {
     type: String,
     required: [true, "Please provide your last name."],
     trim: true,
   },
+
   nid: {
     type: String,
     required: [true, "Please provide the national ID card number."],
@@ -22,6 +25,7 @@ const userSchema = new mongoose.Schema({
     match: [/A\d\d\d\d\d\d/i, "Provide a valid national ID card number."],
     length: [7, "Provide a valid national ID card number."],
   },
+
   email: {
     type: String,
     required: [true, "Please provide your email address"],
@@ -33,6 +37,7 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     unique: true,
   },
+
   accountType: {
     required: [true, "Select an account type."],
     type: String,
@@ -42,6 +47,7 @@ const userSchema = new mongoose.Schema({
     },
     // default: "Job Seeker",
   },
+
   password: {
     type: String,
     required: [true, "Password is required."],
@@ -49,9 +55,13 @@ const userSchema = new mongoose.Schema({
     maxlength: [20, "Password cannot be more than 20 characters."],
     select: false,
   },
+
   following: { type: [mongoose.SchemaTypes.ObjectId], ref: "Employer" },
+
   ratings: { type: [mongoose.SchemaTypes.ObjectId], ref: "Employer" },
+
   resetPasswordToken: String,
+
   resetPasswordExpiry: Date,
 });
 

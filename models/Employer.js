@@ -6,10 +6,12 @@ const jwt = require("jsonwebtoken");
 
 const employerSchema = new mongoose.Schema({
   image: String,
+
   companyName: {
     type: String,
     required: [true, "Please provide the company name."],
   },
+
   sector: {
     required: [true, "Select a sector."],
     type: String,
@@ -18,6 +20,7 @@ const employerSchema = new mongoose.Schema({
       message: "Sector must be either Government or Private.",
     },
   },
+
   accountType: {
     required: [true, "Select an account type."],
     type: String,
@@ -26,11 +29,17 @@ const employerSchema = new mongoose.Schema({
       message: "Select an account type.",
     },
   },
+
   about: String,
+
   whyWorkWithUs: String,
+
   mission: String,
+
   openings: Number,
+
   location: String,
+
   email: {
     type: String,
     required: [true, "Please provide your email address"],
@@ -42,9 +51,11 @@ const employerSchema = new mongoose.Schema({
     lowercase: true,
     unique: true,
   },
+
   contact: String,
 
   totalRatings: Number,
+
   ratingsSubmitted: Number,
 
   password: {
@@ -54,6 +65,7 @@ const employerSchema = new mongoose.Schema({
     maxlength: [20, "Password cannot be more than 20 characters."],
     select: false,
   },
+
   // rating: Number, // rating in virtuals
 
   // followers: Number, followers in virtuals
