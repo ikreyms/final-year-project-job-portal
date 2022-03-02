@@ -26,10 +26,13 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [isSignupForm, setIsSignupForm] = useState(false);
 
+  const [accountType, setAccountType] = useState("Job Seeker");
+  const [companyName, setCompanyName] = useState("");
+  const [sector, setSector] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [nid, setNid] = useState("");
   const [email, setEmail] = useState("");
-  const [accountType, setAccountType] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
 
@@ -80,14 +83,19 @@ const Auth = () => {
 
   const registerHandler = async () => {
     setLoading(true);
+
     const formData = {
+      accountType,
+      companyName,
+      sector,
       firstName,
       lastName,
+      nid,
       email,
-      accountType,
       password,
       repeatPassword,
     };
+
     try {
       const response = await axios.post(
         "http://localhost:2900/api/auth/signup",
@@ -114,6 +122,8 @@ const Auth = () => {
 
   const clearFields = () => {
     setServerResponse({});
+    setCompanyName("");
+    setSector("");
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -134,8 +144,8 @@ const Auth = () => {
 
   useEffect(() => {
     clearFields();
-    console.log(serverResponse);
-  }, [isSignupForm]);
+    setServerResponse({});
+  }, [isSignupForm, accountType]);
 
   return (
     <Box className={classes.container}>
@@ -196,70 +206,6 @@ const Auth = () => {
           >
             <TextField
               className={classes.formControl}
-              label="First Name"
-              type="text"
-              required
-              margin="dense"
-              fullWidth
-              focused={isSignupForm}
-              sx={{
-                display: isSignupForm ? "inline-flex" : "none",
-              }}
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              error={
-                !isObjectEmpty(serverResponse)
-                  ? serverResponse.error?.firstName
-                    ? true
-                    : false
-                  : false
-              }
-              helperText={serverResponse?.error?.firstName}
-            />
-
-            <TextField
-              className={classes.formControl}
-              label="Last Name"
-              type="text"
-              required
-              margin="dense"
-              fullWidth
-              sx={{
-                display: isSignupForm ? "inline-flex" : "none",
-              }}
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              error={
-                !isObjectEmpty(serverResponse)
-                  ? serverResponse.error?.lastName
-                    ? true
-                    : false
-                  : false
-              }
-              helperText={serverResponse?.error?.lastName}
-            />
-
-            <TextField
-              className={classes.formControl}
-              label="Email Address"
-              type="email"
-              required
-              margin="dense"
-              focused={!isSignupForm && true}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              error={
-                !isObjectEmpty(serverResponse)
-                  ? serverResponse.error?.email
-                    ? true
-                    : false
-                  : false
-              }
-              helperText={serverResponse?.error?.email}
-            />
-
-            <TextField
-              className={classes.formControl}
               select
               required
               label="Account Type"
@@ -281,6 +227,151 @@ const Auth = () => {
               <MenuItem value="Job Seeker">Job Seeker</MenuItem>
               <MenuItem value="Employer">Employer</MenuItem>
             </TextField>
+
+            <TextField
+              className={classes.formControl}
+              label="Company Name"
+              type="text"
+              required
+              margin="dense"
+              fullWidth
+              sx={{
+                display:
+                  isSignupForm && accountType === "Employer"
+                    ? "inline-flex"
+                    : "none",
+              }}
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.companyName
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.companyName}
+            />
+
+            <TextField
+              className={classes.formControl}
+              select
+              required
+              label="Sector"
+              margin="dense"
+              sx={{
+                display:
+                  isSignupForm && accountType === "Employer"
+                    ? "inline-flex"
+                    : "none",
+              }}
+              value={sector}
+              onChange={(e) => setSector(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.sector
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.sector}
+            >
+              <MenuItem value="Government">Government</MenuItem>
+              <MenuItem value="Private">Private</MenuItem>
+            </TextField>
+
+            <TextField
+              className={classes.formControl}
+              label="First Name"
+              type="text"
+              required
+              margin="dense"
+              fullWidth
+              sx={{
+                display:
+                  isSignupForm && accountType === "Job Seeker"
+                    ? "inline-flex"
+                    : "none",
+              }}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.firstName
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.firstName}
+            />
+
+            <TextField
+              className={classes.formControl}
+              label="Last Name"
+              type="text"
+              required
+              margin="dense"
+              fullWidth
+              sx={{
+                display:
+                  isSignupForm && accountType === "Job Seeker"
+                    ? "inline-flex"
+                    : "none",
+              }}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.lastName
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.lastName}
+            />
+
+            <TextField
+              className={classes.formControl}
+              label="NID"
+              type="text"
+              required
+              margin="dense"
+              fullWidth
+              sx={{
+                display:
+                  isSignupForm && accountType === "Job Seeker"
+                    ? "inline-flex"
+                    : "none",
+              }}
+              value={nid}
+              onChange={(e) => setNid(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.nid
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.nid}
+            />
+
+            <TextField
+              className={classes.formControl}
+              label="Email Address"
+              type="email"
+              required
+              margin="dense"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={
+                !isObjectEmpty(serverResponse)
+                  ? serverResponse.error?.email
+                    ? true
+                    : false
+                  : false
+              }
+              helperText={serverResponse?.error?.email}
+            />
 
             <TextField
               className={classes.formControl}
