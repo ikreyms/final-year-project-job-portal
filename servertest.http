@@ -1,0 +1,46 @@
+POST http://localhost:2900/api/auth/
+content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTllOTNkOTZlMzAwNWEyMGFkNmZkNCIsImZpcnN0TmFtZSI6Ik1vaGFtZWQiLCJhY2NvdW50VHlwZSI6IkVtcGxveWVyIiwiaWF0IjoxNjQ2MTM2NTI1LCJleHAiOjE2NDYxMzcyNDV9.dieBV-csw47o9cLvc6F8HLHkZsQOYOtHgIosTPOvcig
+
+{
+    
+}
+
+###
+
+POST http://localhost:2900/api/auth/login
+Content-Type: application/json
+
+{
+    "email":"ikreyms@gmail.com",
+    "password": "asdfasdf"
+}
+
+###
+
+POST http://localhost:2900/api/auth/signup
+Content-Type: application/json
+
+{
+    "accountType":"Employer",
+    "companyName": "MPL",
+    "sector":"Private",
+    "email": "Mpl2@mpl.com.mv",
+    "password": "12345678",
+    "repeatPassword":"12345678"
+}
+
+###
+
+POST http://localhost:2900/api/auth/signup
+Content-Type: application/json
+
+{
+   "accountType":"Job Seeker",
+    "firstName":"Mohamed",     
+    "lastName":"Ikram",
+    "nid":"A234167",
+    "email":"testiku3@gmail.com",
+    "password":"12345678",
+    "repeatPassword":"12345678"
+}
