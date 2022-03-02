@@ -14,8 +14,6 @@ import { login } from "./redux/actionCreators";
 import { useDispatch } from "react-redux";
 
 const App = () => {
-  console.log(useTheme());
-
   const dispatch = useDispatch();
 
   const checkIfLoggedIn = async () => {
@@ -32,7 +30,7 @@ const App = () => {
         }
       );
       dispatch(login(response.data.user));
-      console.log(response.data.user);
+      // console.log(response.data.user);
     } catch (error) {
       if (error.response) {
         console.log(error.response);
