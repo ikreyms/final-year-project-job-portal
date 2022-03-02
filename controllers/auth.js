@@ -127,22 +127,37 @@ exports.login = async (req, res, next) => {
       error: errorObj,
     });
   } else {
+    let jobSeeker;
+    let employer;
     try {
-      const user = await User.findOne({ email }).select("+password");
-      if (!user) {
+      jobSeeker = await User.findOne({ email }).select("+password");
+      employer = await Employer.findOne({ email }).select("+password");
+      if (!jobSeeker && !employer) {
         responseToClient(res, 401, {
           success: false,
           error: { credentials: "Invalid email/password." },
         });
       } else {
-        const isPasswordMatch = await user.comparePasswords(password);
-        if (isPasswordMatch) {
-          sendToken(user, 200, res);
-        } else {
-          responseToClient(res, 401, {
-            success: false,
-            error: { credentials: "Invalid email/password." },
-          });
+        if (jobSeeker) {
+          const isPasswordMatch = await jobSeeker.comparePasswords(password);
+          if (isPasswordMatch) {
+            sendUserToken(jobSeeker, 200, res);
+          } else {
+            responseToClient(res, 401, {
+              success: false,
+              error: { credentials: "Invalid email/password." },
+            });
+          }
+        } else if (employer) {
+          const isPasswordMatch = await employer.comparePasswords(password);
+          if (isPasswordMatch) {
+            sendEmployerToken(employer, 200, res);
+          } else {
+            responseToClient(res, 401, {
+              success: false,
+              error: { credentials: "Invalid email/password." },
+            });
+          }
         }
       }
     } catch (error) {
