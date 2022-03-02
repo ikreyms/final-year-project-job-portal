@@ -184,11 +184,9 @@ exports.resetPassword = (req, res, next) => {
 
 exports.isLoggedIn = async (req, res, next) => {
   const token = req.headers["authorization"];
-  console.log(req.headers);
   if (!token) return responseToClient(res, 401, { error: "No token" });
   try {
     const tokenValid = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(tokenValid);
     if (tokenValid) {
       const { email, firstName, accountType, id } = tokenValid;
       return responseToClient(res, 200, {
