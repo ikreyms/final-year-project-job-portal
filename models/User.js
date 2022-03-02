@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
+  //User is === Job Seeker
+  image: String,
   firstName: {
     type: String,
     required: [true, "Please provide your first name."],
@@ -12,6 +14,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide your last name."],
     trim: true,
+  },
+  nid: {
+    type: String,
+    required: [true, "Please provide the national ID card number."],
+    trim: true,
+    match: [/A\d\d\d\d\d\d/i, "Provide a valid national ID card number."],
+    length: [7, "Provide a valid national ID card number."],
   },
   email: {
     type: String,
@@ -25,12 +34,13 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   accountType: {
+    required: [true, "Select an account type."],
     type: String,
     enum: {
-      values: ["Job Seeker", "Employer", "Admin"],
+      values: ["Job Seeker"],
       message: "Select an account type.",
     },
-    minlength: [4, "Account type is required."],
+    // default: "Job Seeker",
   },
   password: {
     type: String,
@@ -39,6 +49,8 @@ const userSchema = new mongoose.Schema({
     maxlength: [20, "Password cannot be more than 20 characters."],
     select: false,
   },
+  following: { type: [mongoose.SchemaTypes.ObjectId], ref: "Employer" },
+  ratings: { type: [mongoose.SchemaTypes.ObjectId], ref: "Employer" },
   resetPasswordToken: String,
   resetPasswordExpiry: Date,
 });
@@ -60,7 +72,7 @@ userSchema.methods.getSignedToken = function () {
   return jwt.sign(
     {
       id: this._id,
-      email: this._email,
+      email: this.email,
       firstName: this.firstName,
       accountType: this.accountType,
     },
