@@ -1,17 +1,30 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Employer = require("../models/Employer");
 const { responseToClient } = require("../utils/responseToClient");
 
 exports.signup = async (req, res, next) => {
-  const { firstName, lastName, email, accountType, password, repeatPassword } =
-    req.body;
+  const {
+    accountType,
+    companyName,
+    sector,
+    firstName,
+    lastName,
+    nid,
+    email,
+    password,
+    repeatPassword,
+  } = req.body;
 
   const reqMap = new Map();
 
+  reqMap.set(["accountType", "Account type"], accountType);
+  reqMap.set(["companyName", "Company name"], companyName);
+  reqMap.set(["sector", "Sector"], sector);
   reqMap.set(["firstName", "First name"], firstName);
   reqMap.set(["lastName", "Last name"], lastName);
+  reqMap.set(["nid", "National ID number"], nid);
   reqMap.set(["email", "Email"], email);
-  reqMap.set(["accountType", "Account type"], accountType);
   reqMap.set(["password", "Password"], password);
   reqMap.set(["repeatPassword", "Repeat password"], repeatPassword);
 
@@ -35,8 +48,18 @@ exports.signup = async (req, res, next) => {
       errorObj.repeatPassword = "Passwords must match.";
     }
     try {
-      const userExist = await User.findOne({ email });
-      if (userExist) {
+      let exists;
+      switch (accountType) {
+        case "Employer":
+          exists = await Employer.findOne({ email });
+          break;
+        case "Job Seeker":
+          exists = await User.findOne({ email });
+          break;
+        default:
+          break;
+      }
+      if (exists) {
         errorObj.email = "User already exists.";
       }
       if (errorObj.repeatPassword || errorObj.email) {
@@ -45,14 +68,26 @@ exports.signup = async (req, res, next) => {
           error: errorObj,
         });
       } else {
-        const user = await User.create({
-          firstName,
-          lastName,
-          email,
-          accountType,
-          password,
-        });
-        sendToken(user, 201, res);
+        if (accountType === "Employer") {
+          const employer = await Employer.create({
+            accountType,
+            companyName,
+            sector,
+            email,
+            password,
+          });
+          sendEmployerToken(employer, 201, res);
+        } else if (accountType === "Job Seeker") {
+          const user = await User.create({
+            accountType,
+            firstName,
+            lastName,
+            nid,
+            email,
+            password,
+          });
+          sendUserToken(user, 201, res);
+        }
       }
     } catch (error) {
       let errorMessage = {};
@@ -155,7 +190,7 @@ exports.isLoggedIn = async (req, res, next) => {
   }
 };
 
-const sendToken = (user, statusCode, res) => {
+const sendUserToken = (user, statusCode, res) => {
   const token = user.getSignedToken();
   res.status(statusCode).json({
     success: true,
@@ -163,6 +198,19 @@ const sendToken = (user, statusCode, res) => {
       email: user.email,
       firstName: user.firstName,
       accountType: user.accountType,
+    },
+    token,
+  });
+};
+
+const sendEmployerToken = (employer, statusCode, res) => {
+  const token = employer.getSignedToken();
+  res.status(statusCode).json({
+    success: true,
+    user: {
+      email: employer.email,
+      companyName: employer.companyName,
+      accountType: employer.accountType,
     },
     token,
   });
