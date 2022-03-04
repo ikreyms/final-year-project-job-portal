@@ -18,15 +18,22 @@ exports.signup = async (req, res, next) => {
 
   const reqMap = new Map();
 
-  reqMap.set(["accountType", "Account type"], accountType);
-  reqMap.set(["companyName", "Company name"], companyName);
-  reqMap.set(["sector", "Sector"], sector);
-  reqMap.set(["firstName", "First name"], firstName);
-  reqMap.set(["lastName", "Last name"], lastName);
-  reqMap.set(["nid", "National ID number"], nid);
-  reqMap.set(["email", "Email"], email);
-  reqMap.set(["password", "Password"], password);
-  reqMap.set(["repeatPassword", "Repeat password"], repeatPassword);
+  if (accountType === "Employer") {
+    reqMap.set(["accountType", "Account type"], accountType);
+    reqMap.set(["companyName", "Company name"], companyName);
+    reqMap.set(["sector", "Sector"], sector);
+    reqMap.set(["email", "Email"], email);
+    reqMap.set(["password", "Password"], password);
+    reqMap.set(["repeatPassword", "Repeat password"], repeatPassword);
+  } else if (accountType === "Job Seeker") {
+    reqMap.set(["accountType", "Account type"], accountType);
+    reqMap.set(["firstName", "First name"], firstName);
+    reqMap.set(["lastName", "Last name"], lastName);
+    reqMap.set(["nid", "National ID number"], nid);
+    reqMap.set(["email", "Email"], email);
+    reqMap.set(["password", "Password"], password);
+    reqMap.set(["repeatPassword", "Repeat password"], repeatPassword);
+  }
 
   let errorObj = {};
 

@@ -19,11 +19,16 @@ import React, { useState } from "react";
 import useStyles from "./styles";
 import { paperProps } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/actionCreators";
 
 const MobileDrawer = ({ loggedIn, accountType }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const classes = useStyles();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
 
   const onDrawerClose = (text) => {
     setIsDrawerOpen(false);
@@ -39,6 +44,12 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
         break;
       case "auth":
         navigate("/auth");
+        break;
+      case "logout":
+        dispatch(logout());
+        navigate("/");
+        localStorage.clear();
+        console.log("reduxstate on logout", state);
         break;
       default:
         return;
@@ -106,7 +117,7 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
               </ListItemIcon>
               <ListItemText>Profile</ListItemText>
             </ListItem>
-            <ListItem>
+            <ListItem onClick={() => onDrawerClose("logout")}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
@@ -122,7 +133,7 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
               </ListItemIcon>
               <ListItemText>Profile</ListItemText>
             </ListItem>
-            <ListItem>
+            <ListItem onClick={() => onDrawerClose("logout")}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>

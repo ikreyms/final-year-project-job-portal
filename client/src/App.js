@@ -11,10 +11,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useTheme } from "@mui/styles";
 import axios from "axios";
 import { login } from "./redux/actionCreators";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = useDispatch();
+  const state = useSelector((state) => state);
 
   const checkIfLoggedIn = async () => {
     const token = localStorage.getItem("joblookupLoginToken");
@@ -35,14 +36,14 @@ const App = () => {
       if (error.response) {
         console.log(error.response);
       } else {
-        console.log("server error");
+        console.log("Server error.");
       }
     }
   };
 
   useEffect(() => {
     checkIfLoggedIn();
-  }, []);
+  }, [state]);
 
   return (
     <Router>
