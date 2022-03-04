@@ -12,7 +12,7 @@ POST http://localhost:2900/api/auth/login
 Content-Type: application/json
 
 {
-    "email":"ikreyms@gmail.com",
+    "email":"logouttest@123.com",
     "password": "asdfasdf"
 }
 
@@ -23,9 +23,10 @@ POST http://localhost:2900/api/auth/login
 Content-Type: application/json
 
 {
-    "email":"testiku3@gmail.com",
-    "password":"12345678"
+   "email": "mpl@mpl.com.mv",
+    "password": "12345678"
 }
+
 ###
 
 POST http://localhost:2900/api/auth/signup
@@ -35,7 +36,7 @@ Content-Type: application/json
     "accountType":"Employer",
     "companyName": "MPL",
     "sector":"Private",
-    "email": "Mpl2@mpl.com.mv",
+    "email": "mpl@mpl.com.mv",
     "password": "12345678",
     "repeatPassword":"12345678"
 }
@@ -47,10 +48,19 @@ Content-Type: application/json
 
 {
    "accountType":"Job Seeker",
-    "firstName":"jobseeker",     
-    "lastName":"sjaso",
-    "nid":"A234234",
-    "email":"jobseeker@123.com",
+    "firstName":"Mohamed",     
+    "lastName":"Ikram",
+    "nid":"A269390",
+    "email":"ikreyms.s@gmail.com",
     "password":"asdfasdf",
     "repeatPassword":"asdfasdf"
+}
+
+###
+
+POST http://localhost:2900/api/auth/forgotPassword
+Content-Type: application/json
+
+{
+ "email": "ikrey@gmail.com"
 }

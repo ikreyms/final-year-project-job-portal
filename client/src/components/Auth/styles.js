@@ -61,12 +61,31 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  resetForm: {
+    height: "70vh",
+    padding: `${theme.spacing(4)} 0`,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    [theme.breakpoints.up("xxs")]: {
+      width: "80%",
+      margin: "auto",
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: "50%",
+      margin: "auto",
+    },
+  },
   formControl: {
     margin: `${theme.spacing(1)} 0 ${theme.spacing(1)} !important`,
   },
   submitButton: {
     height: "3.4rem",
     margin: `${theme.spacing(2)} 0 ${theme.spacing(3)} !important`,
+  },
+  resetButton: {
+    height: "3.4rem",
+    // margin: `${theme.spacing(2)} 0 ${theme.spacing(3)} !important`,
   },
 }));
 

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   //User is === Job Seeker
@@ -45,7 +46,7 @@ const userSchema = new mongoose.Schema({
       values: ["Job Seeker"],
       message: "Select an account type.",
     },
-    // default: "Job Seeker",
+    default: "Job Seeker",
   },
 
   password: {
@@ -89,6 +90,19 @@ userSchema.methods.getSignedToken = function () {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRY }
   );
+};
+
+userSchema.methods.setResetPasswordFields = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpiry = Date.now() + 10 * (60 * 1000);
+
+  return resetToken;
 };
 
 module.exports = new mongoose.model("User", userSchema);

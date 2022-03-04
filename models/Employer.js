@@ -3,6 +3,7 @@ const User = require("./User");
 const Job = require("./Job");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const employerSchema = new mongoose.Schema({
   image: String,
@@ -22,12 +23,14 @@ const employerSchema = new mongoose.Schema({
   },
 
   accountType: {
-    required: [true, "Select an account type."],
+    // required: [true, "Select an account type."],
+    // type: String,
+    // enum: {
+    //   values: ["Employer"],
+    //   message: "Select an account type.",
+    // },
     type: String,
-    enum: {
-      values: ["Employer"],
-      message: "Select an account type.",
-    },
+    default: "Employer",
   },
 
   about: String,
@@ -65,6 +68,10 @@ const employerSchema = new mongoose.Schema({
     maxlength: [20, "Password cannot be more than 20 characters."],
     select: false,
   },
+
+  resetPasswordToken: String,
+
+  resetPasswordExpiry: Date,
 
   // rating: Number, // rating in virtuals
 
@@ -105,6 +112,23 @@ employerSchema.methods.getSignedToken = function () {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRY }
   );
+};
+
+employerSchema.methods.comparePasswords = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+employerSchema.methods.setResetPasswordFields = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpiry = Date.now() + 10 * (60 * 1000);
+
+  return resetToken;
 };
 
 module.exports = new mongoose.model("Employer", employerSchema);

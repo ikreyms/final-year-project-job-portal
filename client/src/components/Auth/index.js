@@ -456,8 +456,14 @@ const Auth = () => {
                 {isSignupForm ? "Go to Login" : "Signup"}
               </Link>
             </Typography>
-            <Typography variant="caption">
-              Forgot password? <Link>Click here to reset.</Link>
+            <Typography
+              variant="caption"
+              sx={{ display: isSignupForm ? "none" : "block" }}
+            >
+              Forgot password?{" "}
+              <Link onClick={() => navigate("/auth/forgotPassword")}>
+                Click here to reset.
+              </Link>
             </Typography>
           </Box>
         </Box>

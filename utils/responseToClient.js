@@ -1,3 +1,3 @@
-exports.responseToClient = (res, statusCode, json) => {
+module.exports = (res, statusCode, json) => {
   res.status(statusCode).json(json);
 };

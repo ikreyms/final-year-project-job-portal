@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Employer = require("../models/Employer");
-const { responseToClient } = require("../utils/responseToClient");
+const responseToClient = require("../utils/responseToClient");
+const sendEmail = require("../utils/sendEmail");
 
 exports.signup = async (req, res, next) => {
   const {
@@ -46,66 +47,75 @@ exports.signup = async (req, res, next) => {
   if (
     !(Object.keys(errorObj).length === 0 && errorObj.constructor === Object)
   ) {
-    responseToClient(res, 400, {
+    return responseToClient(res, 400, {
       success: false,
       error: errorObj,
     });
-  } else {
-    if (password !== repeatPassword) {
-      errorObj.repeatPassword = "Passwords must match.";
+  }
+
+  if (password !== repeatPassword) {
+    errorObj.repeatPassword = "Passwords must match.";
+  }
+
+  try {
+    let exists;
+
+    switch (accountType) {
+      case "Employer":
+        exists = await Employer.findOne({ email });
+        break;
+      case "Job Seeker":
+        exists = await User.findOne({ nid });
+        break;
+      default:
+        break;
     }
-    try {
-      let exists;
-      switch (accountType) {
-        case "Employer":
-          exists = await Employer.findOne({ email });
-          break;
-        case "Job Seeker":
-          exists = await User.findOne({ email });
-          break;
-        default:
-          break;
-      }
-      if (exists) {
+
+    if (exists) {
+      if (!exists.nid) {
         errorObj.email = "User already exists.";
+      } else if (exists.nid) {
+        errorObj.nid = "User already exists.";
       }
-      if (errorObj.repeatPassword || errorObj.email) {
-        responseToClient(res, 400, {
-          success: false,
-          error: errorObj,
-        });
-      } else {
-        if (accountType === "Employer") {
-          const employer = await Employer.create({
-            accountType,
-            companyName,
-            sector,
-            email,
-            password,
-          });
-          sendEmployerToken(employer, 201, res);
-        } else if (accountType === "Job Seeker") {
-          const user = await User.create({
-            accountType,
-            firstName,
-            lastName,
-            nid,
-            email,
-            password,
-          });
-          sendUserToken(user, 201, res);
-        }
-      }
-    } catch (error) {
-      let errorMessage = {};
-      if (error.name === "ValidationError") {
-        Object.keys(error.errors).forEach((key) => {
-          errorMessage[key] = error.errors[key].message;
-        });
-        responseToClient(res, 400, { success: false, error: errorMessage });
-      } else {
-        responseToClient(res, 500, { success: false, error: error.message });
-      }
+    }
+
+    if (errorObj.repeatPassword || errorObj.email || errorObj.nid) {
+      return responseToClient(res, 400, {
+        success: false,
+        error: errorObj,
+      });
+    }
+
+    if (accountType === "Employer") {
+      const employer = await Employer.create({
+        accountType,
+        companyName,
+        sector,
+        email,
+        password,
+      });
+      sendEmployerToken(employer, 201, res);
+    } else if (accountType === "Job Seeker") {
+      const user = await User.create({
+        accountType,
+        firstName,
+        lastName,
+        nid,
+        email,
+        password,
+      });
+      sendUserToken(user, 201, res);
+    }
+  } catch (error) {
+    let errorMessage = {};
+
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errorMessage[key] = error.errors[key].message;
+      });
+      responseToClient(res, 400, { success: false, error: errorMessage });
+    } else {
+      responseToClient(res, 500, { success: false, error: error.message });
     }
   }
 };
@@ -129,65 +139,118 @@ exports.login = async (req, res, next) => {
   if (
     !(Object.keys(errorObj).length === 0 && errorObj.constructor === Object)
   ) {
-    responseToClient(res, 400, {
+    return responseToClient(res, 400, {
       success: false,
       error: errorObj,
     });
-  } else {
-    let jobSeeker;
-    let employer;
-    try {
-      jobSeeker = await User.findOne({ email }).select("+password");
-      employer = await Employer.findOne({ email }).select("+password");
-      if (!jobSeeker && !employer) {
+  }
+
+  let jobSeeker;
+  let employer;
+
+  try {
+    jobSeeker = await User.findOne({ email }).select("+password");
+    employer = await Employer.findOne({ email }).select("+password");
+    if (!jobSeeker && !employer) {
+      return responseToClient(res, 401, {
+        success: false,
+        error: { credentials: "Invalid email/password." },
+      });
+    }
+
+    if (jobSeeker) {
+      const isPasswordMatch = await jobSeeker.comparePasswords(password);
+      if (isPasswordMatch) {
+        sendUserToken(jobSeeker, 200, res);
+      } else {
         responseToClient(res, 401, {
           success: false,
           error: { credentials: "Invalid email/password." },
         });
-      } else {
-        if (jobSeeker) {
-          const isPasswordMatch = await jobSeeker.comparePasswords(password);
-          if (isPasswordMatch) {
-            sendUserToken(jobSeeker, 200, res);
-          } else {
-            responseToClient(res, 401, {
-              success: false,
-              error: { credentials: "Invalid email/password." },
-            });
-          }
-        } else if (employer) {
-          const isPasswordMatch = await employer.comparePasswords(password);
-          if (isPasswordMatch) {
-            sendEmployerToken(employer, 200, res);
-          } else {
-            responseToClient(res, 401, {
-              success: false,
-              error: { credentials: "Invalid email/password." },
-            });
-          }
-        }
       }
-    } catch (error) {
-      let errorMessage = {};
-      if (error.name === "ValidationError") {
-        Object.keys(error.errors).forEach((key) => {
-          errorMessage[key] = error.errors[key].message;
+    } else if (employer) {
+      const isPasswordMatch = await employer.comparePasswords(password);
+      if (isPasswordMatch) {
+        sendEmployerToken(employer, 200, res);
+      } else {
+        responseToClient(res, 401, {
+          success: false,
+          error: { credentials: "Invalid email/password." },
         });
-        responseToClient(res, 400, { success: false, error: errorMessage });
-      } else {
-        responseToClient(res, 500, { success: false, error: error.message });
       }
+    }
+  } catch (error) {
+    let errorMessage = {};
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errorMessage[key] = error.errors[key].message;
+      });
+      responseToClient(res, 400, { success: false, error: errorMessage });
+    } else {
+      responseToClient(res, 500, { success: false, error: error.message });
     }
   }
 };
 
-exports.forgetPassword = (req, res, next) => {
-  res.send("forgetPassword route");
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const jobSeeker = await User.findOne({ email });
+    const employer = await Employer.findOne({ email });
+
+    if (!jobSeeker && !employer) {
+      return responseToClient(res, 404, {
+        success: false,
+        error: "Failed to send email.",
+      });
+    }
+
+    let user;
+
+    if (jobSeeker) user = jobSeeker;
+    else user = employer;
+
+    console.log(user);
+
+    const resetToken = user.setResetPasswordFields();
+
+    await user.save();
+
+    const resetUrl = `http://localhost:3000/auth/resetPassword/${resetToken}`;
+
+    const emailMessage = `
+    <h2>Joblookup. Password Reset</h2>
+    <p>You have requested a password reset of your joblookup account.</p>
+    <p>Click the link below to reset your password</p>
+    <a clicktracking="off" href=${resetUrl}>${resetUrl}</a>
+    `;
+
+    try {
+      sendEmail({
+        to: user.email,
+        subject: "Joblookup Password Reset Request",
+        text: emailMessage,
+      });
+      responseToClient(res, 200, {
+        success: true,
+        message: "Password reset link has been sent to the email address.",
+      });
+    } catch (error) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpiry = undefined;
+      await user.save();
+      responseToClient(res, 500, {
+        success: false,
+        error: "Failed to send email.",
+      });
+      throw { success: false, error: "Failed to send email." };
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-exports.resetPassword = (req, res, next) => {
-  res.send("resetPassword route");
-};
+exports.resetPassword = (req, res, next) => {};
 
 exports.isLoggedIn = async (req, res, next) => {
   const token = req.headers["authorization"];
