@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Homepage from "./components/Homepage";
@@ -12,15 +12,15 @@ import Auth from "./components/Auth";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useTheme } from "@mui/styles";
 import axios from "axios";
-import { login } from "./redux/actionCreators";
+import { login, logout } from "./redux/actionCreators";
 import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const [token, setToken] = useState("");
 
   const checkIfLoggedIn = async () => {
-    const token = localStorage.getItem("joblookupLoginToken");
     try {
       const response = await axios.post(
         "http://localhost:2900/api/auth",
@@ -35,6 +35,7 @@ const App = () => {
       dispatch(login(response.data.user));
       // console.log(response.data.user);
     } catch (error) {
+      dispatch(logout());
       if (error.response) {
         console.log(error.response);
       } else {
@@ -44,8 +45,12 @@ const App = () => {
   };
 
   useEffect(() => {
+    setToken(localStorage.getItem("joblookupLoginToken"));
+  }, []);
+
+  useMemo(() => {
     checkIfLoggedIn();
-  }, [state]);
+  }, [token]);
 
   return (
     <Router>

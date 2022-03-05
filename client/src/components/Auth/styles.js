@@ -85,7 +85,8 @@ const useStyles = makeStyles((theme) => ({
   },
   resetButton: {
     height: "3.4rem",
-    // margin: `${theme.spacing(2)} 0 ${theme.spacing(3)} !important`,
+    // marginTop: theme.spacing(2),
+    margin: `${theme.spacing(2)} 0 ${theme.spacing(1)} !important`,
   },
 }));
 

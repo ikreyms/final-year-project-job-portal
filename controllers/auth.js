@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const User = require("../models/User");
 const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
@@ -250,11 +251,60 @@ exports.forgotPassword = async (req, res, next) => {
   }
 };
 
-exports.resetPassword = (req, res, next) => {};
+exports.resetPassword = async (req, res, next) => {
+  const resetToken = req.params.resetToken;
+  const { password, repeatPassword } = req.body;
+
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  try {
+    const jobSeeker = await User.findOne({ resetPasswordToken });
+    const employer = await Employer.findOne({ resetPasswordToken });
+
+    const user = jobSeeker || employer;
+
+    if (!user) {
+      return responseToClient(res, 400, {
+        error: { resetToken: "Invalid reset token." },
+      });
+    }
+
+    if (password !== repeatPassword) {
+      return responseToClient(res, 400, {
+        error: { repeatPassword: "Passwords do not match." },
+      });
+    }
+
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiry = undefined;
+
+    await user.save();
+
+    responseToClient(res, 200, { success: true, message: "Password changed." });
+  } catch (error) {
+    let errorMessage = {};
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errorMessage[key] = error.errors[key].message;
+      });
+      responseToClient(res, 400, { success: false, error: errorMessage });
+    } else {
+      responseToClient(res, 500, { success: false, error: error.message });
+    }
+  }
+};
 
 exports.isLoggedIn = async (req, res, next) => {
   const token = req.headers["authorization"];
-  if (!token) return responseToClient(res, 401, { error: "No token" });
+  if (!token)
+    return responseToClient(res, 401, {
+      sucess: false,
+      error: "No valid token found. Login again.",
+    });
   try {
     const tokenValid = jwt.verify(token, process.env.JWT_SECRET);
     if (tokenValid) {
@@ -268,7 +318,7 @@ exports.isLoggedIn = async (req, res, next) => {
   } catch (error) {
     responseToClient(res, 401, {
       success: false,
-      error: { notAuth: "Login first." },
+      error: "No valid token found. Login again.",
     });
   }
 };
