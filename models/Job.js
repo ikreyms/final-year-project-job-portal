@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Employer = require("./Employer");
 
 const jobSchema = new mongoose.Schema({
   postedBy: {

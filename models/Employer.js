@@ -5,91 +5,83 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const employerSchema = new mongoose.Schema({
-  image: String,
+const employerSchema = new mongoose.Schema(
+  {
+    image: String,
 
-  companyName: {
-    type: String,
-    required: [true, "Please provide the company name."],
-  },
-
-  sector: {
-    required: [true, "Select a sector."],
-    type: String,
-    enum: {
-      values: ["Government", "Private"],
-      message: "Sector must be either Government or Private.",
+    companyName: {
+      type: String,
+      required: [true, "Please provide the company name."],
     },
+
+    sector: {
+      required: [true, "Select a sector."],
+      type: String,
+      enum: {
+        values: ["Government", "Private"],
+        message: "Sector must be either Government or Private.",
+      },
+    },
+
+    accountType: {
+      type: String,
+      default: "Employer",
+    },
+
+    about: String,
+
+    whyWorkWithUs: String,
+
+    mission: String,
+
+    location: String,
+
+    email: {
+      type: String,
+      required: [true, "Please provide your email address"],
+      trim: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Please provide a valid email address",
+      ],
+      lowercase: true,
+      unique: true,
+    },
+
+    contact: String,
+
+    totalRatings: { type: Number, default: 0 },
+
+    ratingsSubmitted: { type: Number, default: 0 },
+
+    rating: { type: Number, default: 0 },
+
+    password: {
+      type: String,
+      required: [true, "Password is required."],
+      minlength: [8, "Password must be minimum 8 characters long."],
+      maxlength: [20, "Password cannot be more than 20 characters."],
+      select: false,
+    },
+
+    resetPasswordToken: String,
+
+    resetPasswordExpiry: Date,
+
+    jobsPosted: { type: [mongoose.SchemaTypes.ObjectId], ref: "Job" },
   },
-
-  accountType: {
-    // required: [true, "Select an account type."],
-    // type: String,
-    // enum: {
-    //   values: ["Employer"],
-    //   message: "Select an account type.",
-    // },
-    type: String,
-    default: "Employer",
-  },
-
-  about: String,
-
-  whyWorkWithUs: String,
-
-  mission: String,
-
-  openings: Number,
-
-  location: String,
-
-  email: {
-    type: String,
-    required: [true, "Please provide your email address"],
-    trim: true,
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please provide a valid email address",
-    ],
-    lowercase: true,
-    unique: true,
-  },
-
-  contact: String,
-
-  totalRatings: Number,
-
-  ratingsSubmitted: Number,
-
-  password: {
-    type: String,
-    required: [true, "Password is required."],
-    minlength: [8, "Password must be minimum 8 characters long."],
-    maxlength: [20, "Password cannot be more than 20 characters."],
-    select: false,
-  },
-
-  resetPasswordToken: String,
-
-  resetPasswordExpiry: Date,
-
-  // rating: Number, // rating in virtuals
-
-  // followers: Number, followers in virtuals
-
-  // jobsPosted: Number, //jobs posted in virtuals
-});
-
-employerSchema.virtual("rating").get(function () {
-  return (this.totalRatings / this.ratingsSubmitted).toFixed(1);
-});
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
 employerSchema.virtual("followers").get(async function () {
-  return await User.find({ following: { $in: [this._id] } }).count();
+  return await User.count({ following: { $in: [this._id] } });
 });
 
-employerSchema.virtual("jobsPosted").get(async function () {
-  return await Job.find({ postedBy: this._id });
+employerSchema.virtual("openings", {
+  ref: "Job",
+  localField: "_id",
+  foreignField: "postedBy",
+  count: true,
 });
 
 employerSchema.pre("save", async function (next) {
@@ -98,6 +90,14 @@ employerSchema.pre("save", async function (next) {
   }
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+employerSchema.pre("save", async function () {
+  if (!this.isModified("rating")) {
+    next();
+  }
+  this.rating = (this.totalRatings / this.ratingsSubmitted).toFixed(1);
   next();
 });
 
