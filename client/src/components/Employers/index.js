@@ -57,9 +57,10 @@ const Employers = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:4000/employers?_sort=rating&_order=desc&_limit=6"
+        "http://localhost:2900/api/employers?sort=rating&order=desc&limit=6"
       );
-      const data = await response.data;
+      const data = await response.data.employers;
+      console.log(response);
       setPopularEmployersData(data);
       setLoading(false);
     } catch (error) {
