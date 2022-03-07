@@ -29,7 +29,7 @@ const PopularEmployerCard = ({ employer, onClick }) => {
         />
         <Box>
           <CardContent sx={{ px: 2, py: 0 }}>
-            <Typography variant="subtitle2">{employer.name}</Typography>
+            <Typography variant="subtitle2">{employer.companyName}</Typography>
             <Box
               sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}
             >
@@ -51,7 +51,9 @@ const PopularEmployerCard = ({ employer, onClick }) => {
               sx={{ p: 0, fontSize: "0.8rem" }}
             >
               {employer.openings}{" "}
-              {employer.openings > 1 ? "Openings" : "Opening"}
+              {employer.openings === 0 || employer.openings !== 1
+                ? "Openings"
+                : "Opening"}
             </Button>
             <Button
               variant="text"
