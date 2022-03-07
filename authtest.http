@@ -1,0 +1,66 @@
+POST http://localhost:2900/api/auth/
+content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTllOTNkOTZlMzAwNWEyMGFkNmZkNCIsImZpcnN0TmFtZSI6Ik1vaGFtZWQiLCJhY2NvdW50VHlwZSI6IkVtcGxveWVyIiwiaWF0IjoxNjQ2MTM2NTI1LCJleHAiOjE2NDYxMzcyNDV9.dieBV-csw47o9cLvc6F8HLHkZsQOYOtHgIosTPOvcig
+
+{
+    
+}
+
+###
+
+POST http://localhost:2900/api/auth/login
+Content-Type: application/json
+
+{
+    "email":"logouttest@123.com",
+    "password": "asdfasdf"
+}
+
+
+###
+
+POST http://localhost:2900/api/auth/login
+Content-Type: application/json
+
+{
+   "email": "mpl@mpl.com.mv",
+    "password": "12345678"
+}
+
+###
+
+POST http://localhost:2900/api/auth/signup
+Content-Type: application/json
+
+{
+    "accountType":"Employer",
+    "companyName": "Ooredoo",
+    "sector":"Private",
+    "email": "ooredoo@ooredoo.com.mv",
+    "password": "12345678",
+    "repeatPassword":"12345678"
+}
+
+###
+
+POST http://localhost:2900/api/auth/signup
+Content-Type: application/json
+
+{
+   "accountType":"Job Seeker",
+    "firstName":"Mohamed",     
+    "lastName":"Ikram",
+    "nid":"A269390",
+    "email":"ikreyms.s@gmail.com",
+    "password":"asdfasdf",
+    "repeatPassword":"asdfasdf"
+}
+
+###
+
+POST http://localhost:2900/api/auth/forgotPassword
+Content-Type: application/json
+
+{
+ "email": "ikrey@gmail.com"
+}
