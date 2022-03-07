@@ -34,9 +34,9 @@ Content-Type: application/json
 
 {
     "accountType":"Employer",
-    "companyName": "Ooredoo",
+    "companyName": "Habib Bank",
     "sector":"Private",
-    "email": "ooredoo@ooredoo.com.mv",
+    "email": "info@habibbank.com",
     "password": "12345678",
     "repeatPassword":"12345678"
 }

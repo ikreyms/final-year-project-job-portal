@@ -1,3 +1,4 @@
-GET http://localhost:2900/api/employers?sort=rating&order=desc&limit=6&page=1
+GET http://localhost:2900/api/employers?sort=rating&order=desc&limit=6
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTllOTNkOTZlMzAwNWEyMGFkNmZkNCIsImZpcnN0TmFtZSI6Ik1vaGFtZWQiLCJhY2NvdW50VHlwZSI6IkVtcGxveWVyIiwiaWF0IjoxNjQ2MTM2NTI1LCJleHAiOjE2NDYxMzcyNDV9.dieBV-csw47o9cLvc6F8HLHkZsQOYOtHgIosTPOvcig
+
