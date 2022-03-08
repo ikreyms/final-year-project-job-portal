@@ -9,7 +9,11 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: "total-doc-count",
+  })
+);
 
 app.use(express.json());
 
