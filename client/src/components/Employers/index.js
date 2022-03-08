@@ -73,19 +73,20 @@ const Employers = () => {
     if (searchTerm === "") {
       if (sector === "All") {
         response = await axios.get(
-          `http://localhost:4000/employers?_sort=name&_order=asc&_page=${page}`
+          `http://localhost:2900/api/employers?sort=companyName&order=asc&page=${page}`
         );
       } else if (sector === "Government") {
         response = await axios.get(
-          `http://localhost:4000/employers?sector=Government&_sort=name&_order=asc&_page=${page}`
+          `http://localhost:2900/api/employers?sector=Government&sort=companyName&order=asc&page=${page}`
         );
       } else if (sector === "Private") {
         response = await axios.get(
-          `http://localhost:4000/employers?sector=Private&_sort=name&_order=asc&_page=${page}`
+          `http://localhost:2900/api/employers?sector=Private&sort=companyName&order=asc&page=${page}`
         );
       }
-      setPaginationArrayLength(response.headers["x-total-count"]);
-      const data = await response.data;
+      console.log(response);
+      setPaginationArrayLength(response.headers["total-doc-count"]);
+      const data = await response.data.employers;
       return data;
     } else {
       response = await axios.get(
@@ -209,9 +210,9 @@ const Employers = () => {
               filteredEmployerData.map((employer) => (
                 <SearchResult
                   employer={employer}
-                  key={employer.id}
+                  key={employer._id}
                   onClick={() =>
-                    navigate(`${location.pathname}/${employer.id}`)
+                    navigate(`${location.pathname}/${employer._id}`)
                   }
                 />
               ))
@@ -221,8 +222,9 @@ const Employers = () => {
           </Box>
           <Pagination
             sx={{ my: 2, display: paginationArrayLength <= 10 && "none" }}
-            count={Math.ceil(paginationArrayLength / 10)}
+            count={Math.ceil(parseInt(paginationArrayLength) / 10)}
             page={page}
+            boundaryCount={1}
             onChange={(e, selectedPage) => setPage(selectedPage)}
           />
         </Box>
