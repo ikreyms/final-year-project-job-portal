@@ -67,14 +67,21 @@ const employerSchema = new mongoose.Schema(
     resetPasswordToken: String,
 
     resetPasswordExpiry: Date,
-
-    jobsPosted: { type: [mongoose.SchemaTypes.ObjectId], ref: "Job" },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-employerSchema.virtual("followers").get(async function () {
-  return await User.count({ following: { $in: [this._id] } });
+employerSchema.virtual("followers", {
+  ref: "User",
+  localField: "_id",
+  foreignField: "following",
+  count: true,
+});
+
+employerSchema.virtual("jobsPosted", {
+  ref: "Job",
+  localField: "_id",
+  foreignField: "postedBy",
 });
 
 employerSchema.virtual("openings", {
@@ -93,7 +100,7 @@ employerSchema.pre("save", async function (next) {
   next();
 });
 
-employerSchema.pre("save", async function () {
+employerSchema.pre("save", async function (next) {
   if (!this.isModified("rating")) {
     next();
   }
