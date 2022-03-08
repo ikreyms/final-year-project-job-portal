@@ -1,4 +1,8 @@
-GET http://localhost:2900/api/employers?sort=rating&order=desc&limit=6
-content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTllOTNkOTZlMzAwNWEyMGFkNmZkNCIsImZpcnN0TmFtZSI6Ik1vaGFtZWQiLCJhY2NvdW50VHlwZSI6IkVtcGxveWVyIiwiaWF0IjoxNjQ2MTM2NTI1LCJleHAiOjE2NDYxMzcyNDV9.dieBV-csw47o9cLvc6F8HLHkZsQOYOtHgIosTPOvcig
+GET http://localhost:2900/api/employers?sort=companyName&order=asc&page=1
 
+###
+GET http://localhost:2900/api/employers?sector=Government&sort=companyName&order=asc&page=1
+
+###
+GET http://localhost:2900/api/employers?sector=Private&sort=companyName&order=asc&page=1
+# `http://localhost:4000/employers?sector=Private&_sort=name&_order=asc&_page=${page}`

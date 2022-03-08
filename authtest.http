@@ -34,9 +34,9 @@ Content-Type: application/json
 
 {
     "accountType":"Employer",
-    "companyName": "Habib Bank",
+    "companyName": "HSBC",
     "sector":"Private",
-    "email": "info@habibbank.com",
+    "email": "info@hsbc.com.mv",
     "password": "12345678",
     "repeatPassword":"12345678"
 }
