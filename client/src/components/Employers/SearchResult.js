@@ -48,7 +48,7 @@ const SearchResult = ({ employer, onClick }) => {
               sx={{ cursor: "pointer" }}
               onClick={onClick}
             >
-              {employer.name}
+              {employer.companyName}
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
               <Typography variant="body2">
