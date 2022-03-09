@@ -13,11 +13,13 @@ const Employer = () => {
   const { id } = useParams();
 
   const loggedIn = useSelector((state) => state.loggedIn);
-  const userType = useSelector((state) => state.user.accountType);
+  const userType = useSelector((state) => state.user?.accountType);
 
   const loadEmployer = async (id) => {
-    const response = await axios.get(`http://localhost:4000/employers/${id}`);
-    setEmployer(response.data);
+    const response = await axios.get(
+      `http://localhost:2900/api/employers/${id}`
+    );
+    setEmployer(response.data.employer);
   };
 
   useEffect(() => {
