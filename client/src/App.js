@@ -5,7 +5,7 @@ import Homepage from "./components/Homepage";
 import Jobs from "./components/Jobs";
 import About from "./components/About";
 import Employers from "./components/Employers";
-// import Employer from "./components/Employer";
+import Employer from "./components/Employer";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import PasswordReset from "./components/Auth/PasswordReset";
 import Auth from "./components/Auth";
@@ -46,6 +46,7 @@ const App = () => {
 
   useEffect(() => {
     setToken(localStorage.getItem("joblookupLoginToken"));
+    console.log("state", state);
   }, []);
 
   useMemo(() => {
@@ -59,7 +60,7 @@ const App = () => {
         <Route path="/" element={<Homepage />} />
         <Route path="jobs" element={<Jobs />} />
         <Route path="employers" element={<Employers />} />
-        {/* <Route path="employers/:id" element={<Employer />} /> */}
+        <Route path="employers/:id" element={<Employer />} />
 
         {/* if user manually enters a route, and it is invalid:  */}
         {/* <Route path="*" element={<Employers />} />  <=not working... learn more... */}
