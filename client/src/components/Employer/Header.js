@@ -23,8 +23,8 @@ import { useSelector } from "react-redux";
 const Header = ({ employer, loggedIn, userType }) => {
   const classes = useStyles();
 
-  const userFollowingList = useSelector((state) => state.user.following);
-  const userRatingsList = useSelector((state) => state.user.ratings);
+  const userFollowingList = useSelector((state) => state.user?.following);
+  const userRatingsList = useSelector((state) => state.user?.ratings);
 
   const [following, setFollowing] = useState(false);
   // set following when page loads using the userdata on global state
@@ -54,13 +54,13 @@ const Header = ({ employer, loggedIn, userType }) => {
   };
 
   useEffect(() => {
-    if (userFollowingList.includes(employer.name)) {
+    if (userFollowingList.includes(employer.companyName)) {
       setFollowing(true);
     } else {
       setFollowing(false);
     }
     for (const item of userRatingsList) {
-      if (item.employer === employer.name) {
+      if (item.employer === employer.companyName) {
         setRated(true);
         setRatedValue(item.rating);
         break;
@@ -91,7 +91,7 @@ const Header = ({ employer, loggedIn, userType }) => {
             <Box className={classes.mainInfo} sx={{ flexGrow: 1 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography variant="h6" color="white">
-                  {employer.name}
+                  {employer.companyName}
                 </Typography>
                 <Chip
                   label={employer.openings === 1 ? "Opening" : "Openings"}
