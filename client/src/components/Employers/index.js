@@ -90,21 +90,25 @@ const Employers = () => {
       return data;
     } else {
       response = await axios.get(
-        `http://localhost:4000/employers?q=${searchTerm}`
-        // when using this url string based on backend of json-server,
-        //search term is checked if available in any of the employers fields.
-        //this can be improved when creating own backend.
+        `http://localhost:2900/api/employers/search?term=${searchTerm}`
       );
-      let employersArray = await response.data;
+      setPaginationArrayLength(response.headers["total-doc-count"]);
+      let employersArray = await response.data.employers;
       const filteredArray = employersArray.filter((employer) => {
         if (sector === "All") {
-          if (employer.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+          if (
+            employer.companyName
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          ) {
             return true;
           }
           return false;
         } else if (sector !== "All") {
           if (
-            employer.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            employer.companyName
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()) &&
             employer.sector === sector
           ) {
             return true;
