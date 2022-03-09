@@ -44,8 +44,24 @@ exports.filterEmployers = async (req, res, next) => {
       .status(200)
       .json({ success: true, employers: query });
   } catch (error) {
-    responseToClient(res, 400, { error: error.message });
+    responseToClient(res, 400, { success: false, error: error.message });
   }
 };
 
-//"http://localhost:4000/employers?_sort=rating&_order=desc&_limit=6" + [page]
+exports.searchEmployers = async (req, res, next) => {
+  let { term } = req.query;
+  const regex = new RegExp(`${term}`, "i");
+
+  try {
+    const employers = await Employer.find({ companyName: { $regex: regex } });
+
+    res
+      .set("total-doc-count", employers.length)
+      .status(200)
+      .json({ success: true, employers });
+  } catch (error) {
+    responseToClient(res, 400, { success: false, error: error.message });
+  }
+};
+
+//         `http://localhost:4000/employers?q=${searchTerm}`
