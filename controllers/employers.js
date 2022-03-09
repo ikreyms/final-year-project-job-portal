@@ -64,4 +64,29 @@ exports.searchEmployers = async (req, res, next) => {
   }
 };
 
-//         `http://localhost:4000/employers?q=${searchTerm}`
+exports.getOneEmployer = async (req, res, next) => {
+  const { id } = req.params;
+  if (id) {
+    try {
+      const employer = await Employer.find({ _id: id });
+      if (!employer)
+        return responseToClient(res, 400, {
+          success: false,
+          error: "No employer found.",
+        });
+      return res
+        .set("total-doc-count", employer.length)
+        .status(200)
+        .json({ success: true, employer });
+    } catch (error) {
+      return responseToClient(res, 400, {
+        success: false,
+        error: "No employer found.",
+      });
+    }
+  }
+  responseToClient(res, 400, {
+    success: false,
+    error: "No employer found.",
+  });
+};
