@@ -8,3 +8,6 @@ GET http://localhost:2900/api/employers?sector=Private&sort=companyName&order=as
 
 ###
 GET http://localhost:2900/api/employers/search?term=IsTRy
+
+###
+GET http://localhost:2900/api/employers/62266005813800af4efd9ebe
