@@ -37,7 +37,7 @@ const Body = ({ employer }) => {
   };
 
   useEffect(() => {
-    getJobData();
+    // getJobData();
   }, []);
 
   return (
