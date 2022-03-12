@@ -68,7 +68,9 @@ exports.getOneEmployer = async (req, res, next) => {
   const { id } = req.params;
   if (id) {
     try {
-      const employer = await Employer.find({ _id: id });
+      const employer = await Employer.findOne({ _id: id })
+        .populate("openings")
+        .populate("followers");
       if (!employer)
         return responseToClient(res, 400, {
           success: false,
