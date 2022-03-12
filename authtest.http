@@ -12,8 +12,8 @@ POST http://localhost:2900/api/auth/login
 Content-Type: application/json
 
 {
-    "email":"logouttest@123.com",
-    "password": "asdfasdf"
+    "email":"info@hsbc.com.mv",
+    "password": "12345678"
 }
 
 
@@ -23,8 +23,8 @@ POST http://localhost:2900/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "mpl@mpl.com.mv",
-    "password": "12345678"
+   "email": "ikreyms.s@gmail.com",
+    "password": "asdfasdf"
 }
 
 ###

@@ -1,0 +1,8 @@
+GET http://localhost:2900/api/users/622cb7aa28a2d67491d7a36f/getUserRatingsAndFollowing
+
+###
+
+PATCH  http://localhost:2900/api/users/follow/622cb7aa28a2d67491d7a36f/6227481c0267a5d1595a2f23
+
+###
+PATCH  http://localhost:2900/api/users/unfollow/622cb7aa28a2d67491d7a36f/6227481c0267a5d1595a2f23
