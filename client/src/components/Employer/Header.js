@@ -19,12 +19,15 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import logo from "../../assets/logo.svg";
 import useStyles, { primaryBtnSxProps, secondaryBtnSxProps } from "./styles";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const Header = ({ employer, loggedIn, userType }) => {
   const classes = useStyles();
 
-  const userFollowingList = useSelector((state) => state.user?.following);
-  const userRatingsList = useSelector((state) => state.user?.ratings);
+  const userId = useSelector((state) => state.user.id);
+
+  const [userFollowingList, setUserFollowingList] = useState([]);
+  const [userRatingsList, setUserRatingsList] = useState([]);
 
   const [following, setFollowing] = useState(false);
   // set following when page loads using the userdata on global state
@@ -35,37 +38,73 @@ const Header = ({ employer, loggedIn, userType }) => {
   const pleaseLoginText = useRef();
   const ratingForm = useRef();
 
-  const followActionHandler = () => {
+  const followActionHandler = async () => {
     if (!loggedIn) {
       pleaseLoginText.current.style.display = "block";
-    } else if (userType === "jobseeker") {
+    } else if (userType === "Job Seeker") {
       setFollowing(!following);
-      // need HTTP request to update employer followers and user's following.
+      try {
+        if (following === false) {
+          const response = await axios.patch(
+            `http://localhost:2900/api/users/follow/${userId}/${employer.id}`
+          );
+          console.log(response);
+        } else {
+          const response = await axios.patch(
+            `http://localhost:2900/api/users/unfollow/${userId}/${employer.id}`
+          );
+          console.log(response);
+        }
+      } catch (error) {
+        console.log(error.respone);
+      }
     }
   };
 
   const addRatingActionHandler = () => {
     if (!loggedIn) {
       pleaseLoginText.current.style.display = "block";
-    } else if (userType === "jobseeker") {
+    } else if (userType === "Job Seeker") {
       ratingForm.current.style.display = "flex";
       // need HTTP request to update user's rating values and employer ratings.
     }
   };
 
-  useEffect(() => {
-    if (userFollowingList.includes(employer.companyName)) {
-      setFollowing(true);
-    } else {
-      setFollowing(false);
-    }
-    for (const item of userRatingsList) {
-      if (item.employer === employer.companyName) {
-        setRated(true);
-        setRatedValue(item.rating);
+  const getUserRatingsAndFollowing = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:2900/api/users/${userId}/getUserRatingsAndFollowing`
+      );
+      console.log(response.data);
+      setUserFollowingList(response.data.following);
+      setUserRatingsList(response.data.ratings);
+
+      for (let item of userFollowingList) {
+        if (item._id === employer._id) {
+          setFollowing(true);
+          break;
+        }
+        console.log(following);
         break;
       }
-      break;
+      console.log(employer.id);
+      console.log(following);
+    } catch (error) {
+      console.log(error.respone);
+    }
+    // for (const item of userRatingsList) {
+    //   if (item.companyName === employer.companyName) {
+    //     setRated(true);
+    //     setRatedValue(item.rating);
+    //     break;
+    //   }
+    //   break;
+    // }
+  };
+
+  useEffect(() => {
+    if (loggedIn) {
+      getUserRatingsAndFollowing();
     }
   }, []);
 
@@ -148,7 +187,7 @@ const Header = ({ employer, loggedIn, userType }) => {
                     color="white"
                     fontWeight={300}
                   >
-                    {employer.rating}
+                    {employer.rating.toFixed(1)}
                   </Typography>
                 </Stack>
               </Stack>
@@ -225,7 +264,7 @@ const Header = ({ employer, loggedIn, userType }) => {
               fontWeight={300}
               sx={{ color: "white", cursor: "pointer" }}
             >
-              {employer.location}
+              {employer.location ? employer.location : "N/A"}
             </Typography>
             <LocationIcon
               fontSize="0.3rem"
@@ -263,7 +302,7 @@ const Header = ({ employer, loggedIn, userType }) => {
               fontWeight={300}
               sx={{ color: "white", cursor: "pointer" }}
             >
-              {employer.contact}
+              {employer.contact ? employer.contact : "N/A"}
             </Typography>
             <PhoneIcon
               fontSize="0.3rem"
