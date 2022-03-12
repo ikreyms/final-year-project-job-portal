@@ -328,6 +328,7 @@ const sendUserToken = (user, statusCode, res) => {
   res.status(statusCode).json({
     success: true,
     user: {
+      id: user._id,
       email: user.email,
       firstName: user.firstName,
       accountType: user.accountType,
@@ -341,6 +342,7 @@ const sendEmployerToken = (employer, statusCode, res) => {
   res.status(statusCode).json({
     success: true,
     user: {
+      id: employer._id,
       email: employer.email,
       companyName: employer.companyName,
       accountType: employer.accountType,
