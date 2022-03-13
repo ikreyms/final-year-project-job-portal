@@ -53,7 +53,9 @@ exports.searchEmployers = async (req, res, next) => {
   const regex = new RegExp(`${term}`, "i");
 
   try {
-    const employers = await Employer.find({ companyName: { $regex: regex } });
+    const employers = await Employer.find({
+      companyName: { $regex: regex },
+    }).populate("openings");
 
     res
       .set("total-doc-count", employers.length)
