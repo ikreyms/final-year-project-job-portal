@@ -10,7 +10,10 @@ exports.getUserRatingsAndFollowing = async (req, res, next) => {
       .populate("ratings")
       .populate("following");
     if (user) {
-      return responseToClient(res, 200, user);
+      return responseToClient(res, 200, {
+        following: user.following,
+        ratings: user.ratings,
+      });
     }
     responseToClient(res, 404, { error: "User not found." });
   } catch (error) {
@@ -40,7 +43,7 @@ exports.followNewEmployer = async (req, res, next) => {
         message: "You are now following that Employer.",
       });
     }
-    responseToClient(res, 300, {
+    responseToClient(res, 400, {
       message: "You already follow this employer.",
     });
   } catch (error) {
@@ -63,7 +66,7 @@ exports.unfollowNewEmployer = async (req, res, next) => {
 
     // if not following
     if (!user) {
-      return responseToClient(res, 300, {
+      return responseToClient(res, 400, {
         message: "You don't follow this employer.",
       });
     }
