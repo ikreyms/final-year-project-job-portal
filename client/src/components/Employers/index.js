@@ -84,7 +84,7 @@ const Employers = () => {
           `http://localhost:2900/api/employers?sector=Private&sort=companyName&order=asc&page=${page}`
         );
       }
-      console.log(response);
+      console.log("check", response);
       setPaginationArrayLength(response.headers["total-doc-count"]);
       const data = await response.data.employers;
       return data;
