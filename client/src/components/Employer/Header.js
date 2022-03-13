@@ -26,11 +26,8 @@ const Header = ({ employer, loggedIn, userType }) => {
 
   const userId = useSelector((state) => state.user.id);
 
-  const [userFollowingList, setUserFollowingList] = useState([]);
-  const [userRatingsList, setUserRatingsList] = useState([]);
-
   const [following, setFollowing] = useState(false);
-  // set following when page loads using the userdata on global state
+
   const [rated, setRated] = useState(false);
   const [ratedValue, setRatedValue] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -43,21 +40,30 @@ const Header = ({ employer, loggedIn, userType }) => {
       pleaseLoginText.current.style.display = "block";
     } else if (userType === "Job Seeker") {
       setFollowing(!following);
-      try {
-        if (following === false) {
-          const response = await axios.patch(
-            `http://localhost:2900/api/users/follow/${userId}/${employer.id}`
-          );
-          console.log(response);
-        } else {
-          const response = await axios.patch(
-            `http://localhost:2900/api/users/unfollow/${userId}/${employer.id}`
-          );
-          console.log(response);
-        }
-      } catch (error) {
-        console.log(error.respone);
-      }
+      if (!following) await followEmployer();
+      else await unfollowEmployer();
+    }
+  };
+
+  const followEmployer = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:2900/api/users/follow/${userId}/${employer.id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const unfollowEmployer = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:2900/api/users/unfollow/${userId}/${employer.id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error.response);
     }
   };
 
@@ -75,31 +81,21 @@ const Header = ({ employer, loggedIn, userType }) => {
       const response = await axios.get(
         `http://localhost:2900/api/users/${userId}/getUserRatingsAndFollowing`
       );
-      console.log(response.data);
-      setUserFollowingList(response.data.following);
-      setUserRatingsList(response.data.ratings);
+      const data = await response.data;
+      const followingList = data.following;
 
-      for (let item of userFollowingList) {
-        if (item._id === employer._id) {
+      for (const index in followingList) {
+        setFollowing(false);
+        console.log("listName", followingList[index].companyName);
+        console.log("employerName", employer.companyName);
+        if (followingList[index].companyName === employer.companyName) {
           setFollowing(true);
           break;
         }
-        console.log(following);
-        break;
       }
-      console.log(employer.id);
-      console.log(following);
     } catch (error) {
       console.log(error.respone);
     }
-    // for (const item of userRatingsList) {
-    //   if (item.companyName === employer.companyName) {
-    //     setRated(true);
-    //     setRatedValue(item.rating);
-    //     break;
-    //   }
-    //   break;
-    // }
   };
 
   useEffect(() => {
