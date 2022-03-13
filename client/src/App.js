@@ -18,7 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 const App = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(
+    localStorage.getItem("joblookupLoginToken")
+  );
 
   const checkIfLoggedIn = async () => {
     try {
@@ -43,11 +45,6 @@ const App = () => {
       }
     }
   };
-
-  useEffect(() => {
-    setToken(localStorage.getItem("joblookupLoginToken"));
-    console.log("state", state);
-  }, []);
 
   useMemo(() => {
     checkIfLoggedIn();
