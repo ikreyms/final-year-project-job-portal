@@ -20,6 +20,7 @@ import logo from "../../assets/logo.svg";
 import useStyles, { primaryBtnSxProps, secondaryBtnSxProps } from "./styles";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ employer, loggedIn, userType }) => {
   const classes = useStyles();
@@ -30,6 +31,7 @@ const Header = ({ employer, loggedIn, userType }) => {
 
   const [rated, setRated] = useState(false);
   const [ratedValue, setRatedValue] = useState(0);
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const pleaseLoginText = useRef();
@@ -72,7 +74,6 @@ const Header = ({ employer, loggedIn, userType }) => {
       pleaseLoginText.current.style.display = "block";
     } else if (userType === "Job Seeker") {
       ratingForm.current.style.display = "flex";
-      // need HTTP request to update user's rating values and employer ratings.
     }
   };
 
@@ -82,14 +83,24 @@ const Header = ({ employer, loggedIn, userType }) => {
         `http://localhost:2900/api/users/${userId}/getUserRatingsAndFollowing`
       );
       const data = await response.data;
+      console.log("getuserratingsandfollowing data: ", data);
       const followingList = data.following;
-
+      const ratingsList = data.ratings;
       for (const index in followingList) {
         setFollowing(false);
-        console.log("listName", followingList[index].companyName);
-        console.log("employerName", employer.companyName);
-        if (followingList[index].companyName === employer.companyName) {
+        if (followingList[index]._id === employer._id) {
           setFollowing(true);
+          break;
+        }
+      }
+
+      for (const index in ratingsList) {
+        setRated(false);
+        if (ratingsList[index]._id === employer._id) {
+          setRated(true);
+          console.log(ratingsList[index].value);
+          const value = Number(ratingsList[index].value);
+          setRatedValue(value);
           break;
         }
       }
@@ -104,13 +115,21 @@ const Header = ({ employer, loggedIn, userType }) => {
     }
   }, []);
 
+  const rateEmployer = async () => {
+    if (ratedValue === null && typeof ratedValue === "object") setRatedValue(0);
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:2900/api/users/rate/${userId}/${employer._id}/${ratedValue}`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   useEffect(() => {
-    //HTTP request required here to update ratings of user and employer on ratedValue change <= prepare when doing backend
-    //the function should basically check if its first rating or not;
-    //if it is first rating the employer name would not be available in user ratings list
-    //if first rating: update from employers update =>
-    // "totalRatings","rating"
-    // else update: "totalRatings" and "rating"
+    rateEmployer();
   }, [ratedValue]);
 
   return (
@@ -206,7 +225,7 @@ const Header = ({ employer, loggedIn, userType }) => {
                 sx={secondaryBtnSxProps}
                 onClick={addRatingActionHandler}
               >
-                {rated ? `You rated ${ratedValue.toFixed(1)}` : "Add a Rating"}
+                {rated ? `You rated ${ratedValue?.toFixed(1)}` : "Add a Rating"}
               </Button>
             </Box>
             <Typography
