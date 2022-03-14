@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema(
 
     following: { type: [mongoose.SchemaTypes.ObjectId], ref: "Employer" },
 
-    ratings: { type: [mongoose.SchemaTypes.ObjectId], ref: "Employer" },
+    ratings: { type: [mongoose.SchemaTypes.Map] },
 
     resetPasswordToken: String,
 
@@ -68,6 +68,13 @@ const userSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+// userSchema.virtual('ratings').get(function() {
+//   const ratingsMap = new Map()
+//   this.ratedEmployers.forEach(empId => {
+//     ratingsMap.set(empId, null)
+//   });
+// })
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
