@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
 
 exports.getOneUser = async (req, res, next) => {};
@@ -9,6 +10,7 @@ exports.getUserRatingsAndFollowing = async (req, res, next) => {
     const user = await User.findOne({ _id: id })
       .populate("ratings")
       .populate("following");
+    // console.log(user);
     if (user) {
       return responseToClient(res, 200, {
         following: user.following,
@@ -74,5 +76,83 @@ exports.unfollowNewEmployer = async (req, res, next) => {
     responseToClient(res, 200, { message: "You unfollowed the employer." });
   } catch (error) {
     responseToClient(res, 401, { error: error.message });
+  }
+};
+
+exports.rateEmployer = async (req, res, next) => {
+  const { userId, employerId, value } = req.params;
+
+  try {
+    const exists = await User.exists({ _id: userId });
+    if (!exists)
+      return responseToClient(res, 401, { error: "Invalid User Id" });
+
+    const user = await User.findOne({
+      _id: userId,
+      "ratings._id": { $in: [employerId] },
+      "ratings.value": { $in: [value] },
+    });
+
+    if (!user) {
+      await User.updateOne(
+        { _id: userId },
+        {
+          $set: {
+            ratings: {
+              _id: employerId,
+              value: value,
+            },
+          },
+        }
+      );
+
+      let incrementRatingsSubmittedBy = 1;
+      // const user2 = await User.findOne({
+      //   _id: userId,
+      //   "ratings._id": { $in: [employerId] },
+      // });
+
+      // if (user2?.ratings) {
+      //   for (const key in user2.ratings) {
+      //     if (key["_id"] === String(employerId)) {
+      //       console.log(key, employerId);
+      //       incrementRatingsSubmittedBy = 0;
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // console.log(incrementRatingsSubmittedBy);
+
+      await Employer.updateOne(
+        { _id: employerId },
+        {
+          $inc: {
+            totalRatings: value,
+            ratingsSubmitted: incrementRatingsSubmittedBy,
+          },
+        }
+      );
+
+      // const ratingData = await Employer.find(
+      //   { _id: employerId },
+      //   "totalRatings ratingsSubmitted"
+      // );
+
+      return responseToClient(res, 200, {
+        success: true,
+        message: {
+          userRatings: `You have rated the employer ${value} stars.`,
+          employerRating: "Employer totalRatings and ratingsSubmitted updated.",
+        },
+        // ratingData,
+      });
+    }
+    responseToClient(res, 400, {
+      success: false,
+      message: "You already have rated this employer with same rating.",
+    });
+  } catch (error) {
+    responseToClient(res, 401, { success: false, error: error.message });
   }
 };
