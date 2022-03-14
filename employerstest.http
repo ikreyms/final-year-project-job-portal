@@ -1,4 +1,4 @@
-GET http://localhost:2900/api/employers?sort=companyName&order=asc&page=1
+GET http://localhost:2900/api/employers?sort=rating&order=desc&page=1
 
 ###
 GET http://localhost:2900/api/employers?sector=Government&sort=companyName&order=asc&page=1
@@ -7,7 +7,8 @@ GET http://localhost:2900/api/employers?sector=Government&sort=companyName&order
 GET http://localhost:2900/api/employers?sector=Private&sort=companyName&order=asc&page=1
 
 ###
-GET http://localhost:2900/api/employers/search?term=health
+GET http://localhost:2900/api/employers/search?term=
+
 
 ###
 GET http://localhost:2900/api/employers/62266023813800af4efd9ec1

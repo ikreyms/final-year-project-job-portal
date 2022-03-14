@@ -6,3 +6,6 @@ PATCH  http://localhost:2900/api/users/follow/622cb7aa28a2d67491d7a36f/6227481c0
 
 ###
 PATCH  http://localhost:2900/api/users/unfollow/622cb7aa28a2d67491d7a36f/62266023813800af4efd9ec1
+
+###
+PATCH http://localhost:2900/api/users/rate/622cb7aa28a2d67491d7a36f/6227481c0267a5d1595a2f23/1
