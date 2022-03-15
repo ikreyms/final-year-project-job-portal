@@ -83,9 +83,9 @@ const Header = ({ employer, loggedIn, userType }) => {
         `http://localhost:2900/api/users/${userId}/getUserRatingsAndFollowing`
       );
       const data = await response.data;
-      console.log("getuserratingsandfollowing data: ", data);
       const followingList = data.following;
       const ratingsList = data.ratings;
+
       for (const index in followingList) {
         setFollowing(false);
         if (followingList[index]._id === employer._id) {
@@ -98,7 +98,6 @@ const Header = ({ employer, loggedIn, userType }) => {
         setRated(false);
         if (ratingsList[index]._id === employer._id) {
           setRated(true);
-          console.log(ratingsList[index].value);
           const value = Number(ratingsList[index].value);
           setRatedValue(value);
           break;
@@ -225,6 +224,7 @@ const Header = ({ employer, loggedIn, userType }) => {
                 sx={secondaryBtnSxProps}
                 onClick={addRatingActionHandler}
               >
+                {/* {rated? ():("Add a Rating")} */}
                 {rated ? `You rated ${ratedValue?.toFixed(1)}` : "Add a Rating"}
               </Button>
             </Box>
