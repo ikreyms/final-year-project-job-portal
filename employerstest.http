@@ -1,3 +1,6 @@
+GET http://localhost:2900/api/employers?sort=rating&order=desc&limit=6
+
+###
 GET http://localhost:2900/api/employers?sort=rating&order=desc&page=1
 
 ###
