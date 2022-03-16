@@ -57,6 +57,7 @@ const Employers = () => {
     setLoading(true);
     try {
       const response = await axios.get(
+        // cannot sort based on rating which is a virtual
         "http://localhost:2900/api/employers?sort=rating&order=desc&limit=6"
       );
       const data = await response.data.employers;
