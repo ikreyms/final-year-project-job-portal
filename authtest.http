@@ -12,8 +12,8 @@ POST http://localhost:2900/api/auth/login
 Content-Type: application/json
 
 {
-    "email":"info@hsbc.com.mv",
-    "password": "12345678"
+    "email":"ikreyms@gmail.com",
+    "password": "asdfasdf"
 }
 
 
@@ -23,7 +23,7 @@ POST http://localhost:2900/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "ikreyms.s@gmail.com",
+   "email": "ikreyms@gmail.com",
     "password": "asdfasdf"
 }
 
@@ -34,11 +34,11 @@ Content-Type: application/json
 
 {
     "accountType":"Employer",
-    "companyName": "HSBC",
-    "sector":"Private",
-    "email": "info@hsbc.com.mv",
-    "password": "12345678",
-    "repeatPassword":"12345678"
+    "companyName": "Ministry of Gender",
+    "sector":"Government",
+    "email": "info@gender.gov.mv",
+    "password": "asdfasdf",
+    "repeatPassword":"asdfasdf"
 }
 
 ###
@@ -51,7 +51,7 @@ Content-Type: application/json
     "firstName":"Mohamed",     
     "lastName":"Ikram",
     "nid":"A269390",
-    "email":"ikreyms.s@gmail.com",
+    "email":"ikreyms@gmail.com",
     "password":"asdfasdf",
     "repeatPassword":"asdfasdf"
 }
