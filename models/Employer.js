@@ -54,8 +54,6 @@ const employerSchema = new mongoose.Schema(
 
     ratingsSubmitted: { type: Number, default: 0 },
 
-    // rating: { type: Number, default: 0 },
-
     password: {
       type: String,
       required: [true, "Password is required."],
@@ -91,6 +89,11 @@ employerSchema.virtual("openings", {
   count: true,
 });
 
+employerSchema.virtual("rating").get(function () {
+  if (this.totalRatings === 0 || this.ratingsSubmitted === 0) return 0;
+  return this.totalRatings / this.ratingsSubmitted;
+});
+
 employerSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
@@ -99,21 +102,6 @@ employerSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-
-employerSchema.virtual("rating").get(function () {
-  if (this.totalRatings === 0 || this.ratingsSubmitted === 0) return 0;
-  return this.totalRatings / this.ratingsSubmitted;
-});
-
-// employerSchema.pre("save", async function (next) {
-//   this.rating = (this.totalRatings / this.ratingsSubmitted).toFixed(1);
-//   next();
-// });
-
-// employerSchema.post("updateOne", async function (doc, next) {
-//   this.rating = (this.totalRatings / this.ratingsSubmitted).toFixed(1);
-//   next();
-// });
 
 employerSchema.methods.getSignedToken = function () {
   return jwt.sign(
