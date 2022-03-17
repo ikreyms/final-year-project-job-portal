@@ -1,4 +1,4 @@
-GET http://localhost:2900/api/employers?limit=6&sort=rating&order=1
+GET http://localhost:2900/api/employers?limit=6&sort=ratingSort&order=-1
 
 ###
 GET http://localhost:2900/api/employers?sort=rating&order=desc&page=1

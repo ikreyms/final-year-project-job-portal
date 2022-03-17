@@ -14,4 +14,4 @@ PATCH http://localhost:2900/api/users/rate/622cb7aa28a2d67491d7a36f/622660238138
 PATCH http://localhost:2900/api/users/rate/622cb7aa28a2d67491d7a36f/6226606f813800af4efd9eca/3
 
 ###
-PATCH http://localhost:2900/api/users/rate/62320ec87395cd9735cc2b0f/62321548636e46e9088c07c9/3
+PATCH http://localhost:2900/api/users/rate/62320ec87395cd9735cc2b0f/62321548636e46e9088c07c9/4
