@@ -18,6 +18,8 @@ const jobSchema = new mongoose.Schema(
 
     dueDate: { type: Date },
 
+    salary: Number,
+
     //   "postDate": "2022-02-12T01:12:59"
   },
   { timestamps: true, timestamps: { createdAt: "postDate" } }
