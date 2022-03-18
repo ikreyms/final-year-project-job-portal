@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     ...theme.presetStyles.containerStyle,
   },
   searchControls: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
     width: "100%",
     display: "flex",
