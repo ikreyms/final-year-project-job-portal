@@ -10,7 +10,7 @@ GET http://localhost:2900/api/employers?sector=Government&sort=companyName&order
 GET http://localhost:2900/api/employers?sector=Private&sort=companyName&order=asc&page=1
 
 ###
-GET http://localhost:2900/api/employers/search?term=hsbc
+GET http://localhost:2900/api/employers/search?term=a
 
 
 ###

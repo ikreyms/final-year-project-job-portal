@@ -436,6 +436,7 @@
   "jobs": [
     {
       "id": 1,
+      "jobType": "Full-time",
       "postedBy": "Dhiraagu",
       "title": "Front-end Developer",
       "postDate": "2022-01-29T01:12:59",
