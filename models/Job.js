@@ -3,6 +3,16 @@ const Employer = require("./Employer");
 
 const jobSchema = new mongoose.Schema(
   {
+    jobType: {
+      required: [true, "Select a job type."],
+      type: String,
+      enum: {
+        values: ["Part-time", "Full-time", "Intern"],
+        message:
+          "Job type must of the following: Part-time, Full-time, Intern.",
+      },
+    },
+
     postedBy: {
       required: true,
       type: mongoose.SchemaTypes.ObjectId,
@@ -16,9 +26,12 @@ const jobSchema = new mongoose.Schema(
 
     description: String,
 
-    dueDate: { type: Date },
+    dueDate: {
+      required: [true, "Job's due date must be provided."],
+      type: Date,
+    },
 
-    salary: Number,
+    salary: { type: Number, required: [true, "Salary must be provided."] },
 
     //   "postDate": "2022-02-12T01:12:59"
   },
