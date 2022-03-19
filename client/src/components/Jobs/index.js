@@ -2,28 +2,39 @@ import React, { useState } from "react";
 import useStyles from "./styles";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import Intro from "./Intro";
+import { jobCategories, salaryRanges, jobTypes } from "../../assets/dataArrays";
+import axios from "axios";
 
 const Jobs = () => {
   const classes = useStyles();
 
   //Ui states
-  const sectors = ["All", "Government", "Private"];
-  const [sector, setSector] = useState(sectors[0]);
+  const [jobCategory, setJobCategory] = useState("All");
 
-  const jobTypes = ["All", "Part-time", "Full-time", "Intern"];
-  const [jobType, setJobType] = useState(jobTypes[0]);
+  const [jobType, setJobType] = useState("All");
 
-  const salaryRanges = [
-    "All ranges",
-    "1000-2999",
-    "3000-4999",
-    "5000-6999",
-    "7000-9999",
-    "10000-14999",
-    "15000-19999",
-    "20000+",
-  ];
-  const [salaryRange, setSalaryRange] = useState(salaryRanges[0]);
+  const [salaryRange, setSalaryRange] = useState("All");
+
+  // data states
+  const [jobs, setJobs] = useState([]);
+
+  const fetchJobsData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:2900/api/jobs?jobCategory=${jobCategory}&jobType=${jobType}&salaryRange=${salaryRange}`
+      );
+      setJobs(response.data);
+      console.log(response.data);
+      console.log(jobCategory, salaryRange, jobType);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  useState(() => {
+    fetchJobsData();
+    console.log("heheh");
+  }, [jobCategory, jobType, salaryRange]);
 
   return (
     <Box className={classes.section}>
@@ -34,19 +45,19 @@ const Jobs = () => {
         </Typography>
         <form className={classes.searchControls}>
           <TextField
-            name="sector"
+            name="jobCategory"
             type="text"
             select
-            label="Sector"
+            label="Category"
             variant="outlined"
             size="small"
-            value={sector}
-            onChange={(e) => setSector(e.target.value)}
-            sx={{ flexGrow: 1, flexBasis: 1 }}
+            value={jobCategory}
+            onChange={(e) => setJobCategory(e.target.value)}
+            sx={{ flexGrow: 2, flexBasis: 2 }}
           >
-            {sectors.map((sector) => (
-              <MenuItem key={sector} value={sector}>
-                {sector}
+            {jobCategories.map((jobCategory, index) => (
+              <MenuItem key={index} value={jobCategory}>
+                {jobCategory}
               </MenuItem>
             ))}
           </TextField>
