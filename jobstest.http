@@ -1,1 +1,30 @@
 POST http://localhost:2900/api/jobs/623210c8665f86576787e972/create
+Content-Type: application/json
+
+{
+    "jobType": "Full-time",
+    "postedBy": "623210c8665f86576787e972",
+    "title": "Administrative Officer",
+    "dueDate": "2022-03-30",
+    "salary": 7800
+}
+
+
+###
+
+POST http://localhost:2900/api/jobs/623210c8665f86576787e972/create
+Content-Type: application/json
+
+{
+    "jobType": "Full-time",
+    "jobCategory": "Information Technology",
+    "postedBy": "623210c8665f86576787e972",
+    "title": "Manager",
+    "dueDate": "2022-03-30",
+    "salary": 12000
+}
+
+###
+
+
+GET http://localhost:2900/api/jobs?jobCategory=Information Technology&jobType=Full-time&salaryRange=10000-14999
