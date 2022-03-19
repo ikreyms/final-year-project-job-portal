@@ -1,6 +1,20 @@
 const mongoose = require("mongoose");
 const Employer = require("./Employer");
 
+const jobCategories = [
+  "Agriculture, Food, and Natural Resources",
+  "Architecture and Construction",
+  "Arts, Audio/Video Technology, and Communication",
+  "Business and Finance",
+  "Education and Training",
+  "Government and Public Administration",
+  "Health Science",
+  "Information Technology",
+  "Law, Public Safety, Corrections, and Security",
+  "Marketing",
+  "Science, Technology, Engineering, and Math",
+];
+
 const jobSchema = new mongoose.Schema(
   {
     jobType: {
@@ -29,6 +43,15 @@ const jobSchema = new mongoose.Schema(
     dueDate: {
       required: [true, "Job's due date must be provided."],
       type: Date,
+    },
+
+    jobCategory: {
+      required: [true, "Please select a job category that matches the job."],
+      type: String,
+      enum: {
+        values: jobCategories,
+        message: "Please select a job category that matches the job.",
+      },
     },
 
     salary: { type: Number, required: [true, "Salary must be provided."] },
