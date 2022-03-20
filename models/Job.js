@@ -10,7 +10,7 @@ const jobCategories = [
   "Government and Public Administration",
   "Health Science",
   "Information Technology",
-  "Law, Public Safety, Corrections, and Security",
+  "Law, Corrections, and Security",
   "Marketing",
   "Science, Technology, Engineering, and Math",
 ];
