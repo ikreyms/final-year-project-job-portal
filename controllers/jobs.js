@@ -98,7 +98,10 @@ exports.filterJobs = async (req, res, next) => {
   console.log(searchObject);
 
   try {
-    const jobs = await Job.find(searchObject);
+    let jobs = await Job.find(searchObject, null, {
+      sort: "-postDate",
+      populate: { path: "postedBy" },
+    }).limit(12);
 
     if (!jobs)
       return responseToClient(res, 204, {
