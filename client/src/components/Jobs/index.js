@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import Intro from "./Intro";
 import { jobCategories, salaryRanges, jobTypes } from "../../assets/dataArrays";
 import axios from "axios";
+import JobResult from "./JobResult";
 
 const Jobs = () => {
   const classes = useStyles();
@@ -15,6 +16,13 @@ const Jobs = () => {
 
   const [salaryRange, setSalaryRange] = useState("All");
 
+  const clearFilters = (e) => {
+    e.preventDefault();
+    setJobCategory("All");
+    setJobType("All");
+    setSalaryRange("All");
+  };
+
   // data states
   const [jobs, setJobs] = useState([]);
 
@@ -23,17 +31,17 @@ const Jobs = () => {
       const response = await axios.get(
         `http://localhost:2900/api/jobs?jobCategory=${jobCategory}&jobType=${jobType}&salaryRange=${salaryRange}`
       );
-      setJobs(response.data);
-      console.log(response.data);
+      const data = response.data.jobs;
+      setJobs(data);
+      console.log(data);
       console.log(jobCategory, salaryRange, jobType);
     } catch (error) {
       console.log(error.response);
     }
   };
 
-  useState(() => {
+  useEffect(() => {
     fetchJobsData();
-    console.log("heheh");
   }, [jobCategory, jobType, salaryRange]);
 
   return (
@@ -95,10 +103,32 @@ const Jobs = () => {
               </MenuItem>
             ))}
           </TextField>
-          <Button variant="contained" disableElevation>
+          <Button variant="contained" disableElevation onClick={clearFilters}>
             Clear
           </Button>
         </form>
+        <Box className={classes.jobsContainer}>
+          <Box className={classes.numberOfResults}>
+            {jobs.length === 1 ? (
+              <Typography variant="h6" align="center" sx={{ color: "white" }}>
+                1 Open Job
+              </Typography>
+            ) : (
+              <Typography variant="h6" align="center" sx={{ color: "white" }}>
+                {`${jobs.length} Open Jobs`}
+              </Typography>
+            )}
+          </Box>
+          <Box className={classes.jobDisplay}>
+            {jobs?.length > 0 ? (
+              jobs.map((job) => <JobResult key={job._id} job={job} />)
+            ) : (
+              <Typography mt={2} align="center">
+                No jobs to show.
+              </Typography>
+            )}
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
