@@ -15,6 +15,22 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     gap: theme.spacing(2),
   },
+  jobsContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: theme.spacing(3),
+  },
+  numberOfResults: {
+    background: theme.palette.primary.main,
+    padding: theme.spacing(1),
+  },
+  jobDisplay: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: 1,
+  },
 }));
 
 export default useStyles;
