@@ -16,12 +16,12 @@ POST http://localhost:2900/api/jobs/623210c8665f86576787e972/create
 Content-Type: application/json
 
 {
-    "jobType": "Full-time",
-    "jobCategory": "Information Technology",
+    "jobType": "Part-time",
+    "jobCategory": "Law, Corrections, and Security",
     "postedBy": "623210c8665f86576787e972",
-    "title": "Manager",
-    "dueDate": "2022-03-30",
-    "salary": 12000
+    "title": "Lawyer",
+    "dueDate": "2022-04-02",
+    "salary": 18000
 }
 
 ###
