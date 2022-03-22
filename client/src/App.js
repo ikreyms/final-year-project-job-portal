@@ -3,6 +3,7 @@ import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Homepage from "./components/Homepage";
 import Jobs from "./components/Jobs";
+import Job from "./components/Job";
 import About from "./components/About";
 import Employers from "./components/Employers";
 import Employer from "./components/Employer";
@@ -56,6 +57,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="jobs" element={<Jobs />} />
+        <Route path="jobs/:id" element={<Job />} />
         <Route path="employers" element={<Employers />} />
         <Route path="employers/:id" element={<Employer />} />
 
