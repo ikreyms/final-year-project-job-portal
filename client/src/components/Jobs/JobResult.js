@@ -11,10 +11,10 @@ import moment from "moment";
 import logo from "../../assets/logo.svg";
 import useStyles from "./styles";
 
-const JobResult = ({ job }) => {
+const JobResult = ({ job, onClick }) => {
   const classes = useStyles();
   return (
-    <Card className={classes.jobResult} elevation={1}>
+    <Card className={classes.jobResult} elevation={1} onClick={onClick}>
       <CardActionArea
         sx={{ display: "flex", justifyContent: "flex-start", px: 2 }}
       >
