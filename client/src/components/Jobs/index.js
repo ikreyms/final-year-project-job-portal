@@ -3,11 +3,14 @@ import useStyles from "./styles";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import Intro from "./Intro";
 import { jobCategories, salaryRanges, jobTypes } from "../../assets/dataArrays";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import JobResult from "./JobResult";
 
 const Jobs = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   //Ui states
   const [jobCategory, setJobCategory] = useState("All");
@@ -121,7 +124,13 @@ const Jobs = () => {
           </Box>
           <Box className={classes.jobDisplay}>
             {jobs?.length > 0 ? (
-              jobs.map((job) => <JobResult key={job._id} job={job} />)
+              jobs.map((job) => (
+                <JobResult
+                  key={job._id}
+                  job={job}
+                  onClick={() => navigate(`${location.pathname}/${job._id}`)}
+                />
+              ))
             ) : (
               <Typography mt={2} align="center">
                 No jobs to show.
