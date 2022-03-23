@@ -37,7 +37,6 @@ const Jobs = () => {
       const data = response.data.jobs;
       setJobs(data);
       console.log(data);
-      console.log(jobCategory, salaryRange, jobType);
     } catch (error) {
       console.log(error.response);
     }
@@ -64,7 +63,8 @@ const Jobs = () => {
             size="small"
             value={jobCategory}
             onChange={(e) => setJobCategory(e.target.value)}
-            sx={{ flexGrow: 2, flexBasis: 2 }}
+            className={classes.control}
+            sx={{ flexGrow: 1, flexBasis: 1 }}
           >
             {jobCategories.map((jobCategory, index) => (
               <MenuItem key={index} value={jobCategory}>
@@ -81,7 +81,8 @@ const Jobs = () => {
             size="small"
             value={jobType}
             onChange={(e) => setJobType(e.target.value)}
-            sx={{ flexGrow: 1, flexBasis: 1 }}
+            className={classes.control}
+            sx={{ flexGrow: 0.5, flexBasis: 0.5 }}
           >
             {jobTypes.map((jobType) => (
               <MenuItem key={jobType} value={jobType}>
@@ -98,7 +99,8 @@ const Jobs = () => {
             size="small"
             value={salaryRange}
             onChange={(e) => setSalaryRange(e.target.value)}
-            sx={{ flexGrow: 1, flexBasis: 1 }}
+            className={classes.control}
+            sx={{ flexGrow: 0.5, flexBasis: 0.5 }}
           >
             {salaryRanges.map((salaryRange) => (
               <MenuItem key={salaryRange} value={salaryRange}>
