@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Employer = require("./Employer");
 
 const jobCategories = [
   "Agriculture, Food, and Natural Resources",
@@ -53,6 +52,10 @@ const jobSchema = new mongoose.Schema(
         message: "Please select a job category that matches the job.",
       },
     },
+
+    jobDescription: String,
+
+    qualification: String,
 
     salary: { type: Number, required: [true, "Salary must be provided."] },
 
