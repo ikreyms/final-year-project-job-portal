@@ -51,6 +51,10 @@ const App = () => {
     checkIfLoggedIn();
   }, [token]);
 
+  const theme = useTheme();
+
+  console.log(theme);
+
   return (
     <Router>
       <NavBar />
