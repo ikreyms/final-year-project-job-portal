@@ -1,7 +1,9 @@
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
-  section: { background: "red" },
+  container: {
+    ...theme.presetStyles.containerStyle,
+  },
 }));
 
 export default useStyles;
