@@ -13,8 +13,13 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
     alignItems: "center",
     flexWrap: "wrap",
-    gap: theme.spacing(2),
+    gap: theme.spacing(1),
+    [theme.breakpoints.down(712)]: {
+      flexDirection: "column",
+      gap: theme.spacing(2),
+    },
   },
+  control: { width: "100%" },
   jobsContainer: {
     width: "100%",
     display: "flex",
@@ -24,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
   numberOfResults: {
     background: theme.palette.primary.main,
     padding: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    borderRadius: theme.shape.borderRadius,
   },
   jobDisplay: {
     width: "100%",
