@@ -28,3 +28,6 @@ Content-Type: application/json
 
 
 GET http://localhost:2900/api/jobs?jobCategory=Information Technology&jobType=Full-time&salaryRange=10000-14999
+
+###
+GET http://localhost:2900/api/jobs?jobCategory=All&jobType=All&salaryRange=All&empId=62321057341ed8fb740ac2ba
