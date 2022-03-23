@@ -26,18 +26,14 @@ const Body = ({ employer }) => {
 
   const getJobData = async () => {
     const response = await axios.get(
-      `http://localhost:4000/jobs?postedBy=${employer.name}`
+      `http://localhost:2900/api/jobs?jobCategory=All&jobType=All&salaryRange=All&empId=${employer._id}`
     );
-    const jobsArray = await response.data;
-    const filteredJobsData = jobsArray.filter((job) => {
-      const dueDate = job.dueDate;
-      return moment().isSameOrBefore(dueDate);
-    });
-    setJobs(filteredJobsData);
+    const jobsArray = await response.data.jobs;
+    setJobs(jobsArray);
   };
 
   useEffect(() => {
-    // getJobData();
+    getJobData();
   }, []);
 
   return (
@@ -77,7 +73,7 @@ const Body = ({ employer }) => {
       <Accordion
         sx={{ width: 1, my: 0.5 }}
         square
-        disabled={jobs.length !== 0 ? false : true}
+        disabled={employer.openings === 0 && true}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -88,9 +84,6 @@ const Body = ({ employer }) => {
                 width: "1.55rem",
                 height: "1.55rem",
                 bgcolor: "primary.dark",
-                ...(employer.openings === 0 && {
-                  display: "none",
-                }),
               }}
             >
               {employer.openings}
@@ -110,7 +103,7 @@ const Body = ({ employer }) => {
             <TableBody>
               {jobs.map((job) => (
                 <TableRow
-                  key={job.id}
+                  key={job._id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
