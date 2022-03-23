@@ -73,7 +73,7 @@ exports.createJob = async (req, res, next) => {
 };
 
 exports.filterJobs = async (req, res, next) => {
-  const { jobCategory, jobType, salaryRange } = req.query;
+  const { jobCategory, jobType, salaryRange, empId } = req.query;
 
   let salaryLowerBound;
   let salaryUpperBound;
@@ -86,6 +86,7 @@ exports.filterJobs = async (req, res, next) => {
   if (salaryRange === "20000+") salaryLowerBound = 20000;
 
   const searchObject = {
+    ...(empId && { postedBy: empId }),
     ...(jobCategory !== "All" && { jobCategory }),
     ...(jobType !== "All" && { jobType }),
     ...(salaryRange !== "All" && salaryRange !== "20000+"
