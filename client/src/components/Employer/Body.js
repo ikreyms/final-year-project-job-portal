@@ -16,11 +16,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React, { useEffect, useState } from "react";
 import useStyles from "./styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 moment().format();
 
 const Body = ({ employer }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const [jobs, setJobs] = useState([]);
 
@@ -116,7 +118,15 @@ const Body = ({ employer }) => {
                     {moment(job.dueDate).format("DD-MM-YYYY")}
                   </TableCell>
                   <TableCell>
-                    <Button variant="contained" size="small" disableElevation>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      disableElevation
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(`/jobs/${job._id}`);
+                      }}
+                    >
                       View
                     </Button>
                   </TableCell>
