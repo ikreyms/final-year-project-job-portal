@@ -49,10 +49,7 @@ const JobResult = ({ job, onClick }) => {
             }}
           >
             <Typography variant="caption">
-              Posted: {moment(job.postDate).fromNow()}
-            </Typography>
-            <Typography variant="caption">
-              Due on: {moment(job.dueDate).format("DD/MM/YYYY")}
+              {moment(job.postDate).fromNow()}
             </Typography>
           </Box>
         </CardContent>
