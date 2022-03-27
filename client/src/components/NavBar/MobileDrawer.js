@@ -75,19 +75,19 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
         <List>
           <ListItem onClick={() => onDrawerClose("jobs")}>
             <ListItemIcon>
-              <JobsIcon />
+              <JobsIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Jobs</ListItemText>
           </ListItem>
           <ListItem onClick={() => onDrawerClose("employers")}>
             <ListItemIcon>
-              <EmployersIcon />
+              <EmployersIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Employers</ListItemText>
           </ListItem>
           <ListItem onClick={() => onDrawerClose("about")}>
             <ListItemIcon>
-              <AboutIcon />
+              <AboutIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>About</ListItemText>
           </ListItem>
@@ -97,7 +97,7 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
             <Divider />
             <ListItem onClick={() => onDrawerClose("auth")}>
               <ListItemIcon>
-                <LoginIcon />
+                <LoginIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Login</ListItemText>
             </ListItem>
@@ -107,19 +107,19 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
             <Divider />
             <ListItem>
               <ListItemIcon>
-                <PostIcon />
+                <PostIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Post A Job</ListItemText>
             </ListItem>
             <ListItem>
               <ListItemIcon>
-                <ProfileIcon />
+                <ProfileIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Profile</ListItemText>
             </ListItem>
             <ListItem onClick={() => onDrawerClose("logout")}>
               <ListItemIcon>
-                <LogoutIcon />
+                <LogoutIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Logout</ListItemText>
             </ListItem>
@@ -129,13 +129,13 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
             <Divider />
             <ListItem>
               <ListItemIcon>
-                <ProfileIcon />
+                <ProfileIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Profile</ListItemText>
             </ListItem>
             <ListItem onClick={() => onDrawerClose("logout")}>
               <ListItemIcon>
-                <LogoutIcon />
+                <LogoutIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Logout</ListItemText>
             </ListItem>
