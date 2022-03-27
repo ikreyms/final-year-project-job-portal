@@ -114,3 +114,49 @@ exports.filterJobs = async (req, res, next) => {
     responseToClient(res, 400, { success: false, error: error.message });
   }
 };
+
+exports.getOneJob = async (req, res, next) => {
+  const { id } = req.params;
+  if (id) {
+    try {
+      const job = await Job.findOne({ _id: id }).populate("postedBy");
+      if (!job)
+        return responseToClient(res, 400, {
+          success: false,
+          error: "No job found.",
+        });
+      return res
+        .set("total-doc-count", job.length)
+        .status(200)
+        .json({ success: true, job });
+    } catch (error) {
+      return responseToClient(res, 400, {
+        success: false,
+        error: "No job found.",
+      });
+    }
+  }
+  responseToClient(res, 400, {
+    success: false,
+    error: "No job found.",
+  });
+};
+
+exports.getSimilarJobs = async (req, res, next) => {
+  const { jobId } = req.params;
+  try {
+    const job = await Job.findOne({ _id: jobId });
+    if (!job)
+      return responseToClient(res, 404, {
+        success: false,
+        message: "Invalid Job Id.",
+      });
+    const similarJobs = await Job.find({
+      jobCategory: job.jobCategory,
+      _id: { $nin: [jobId] },
+    }).populate("postedBy");
+    responseToClient(res, 200, { success: true, similarJobs });
+  } catch (error) {
+    responseToClient(res, 400, { success: false, error: error.message });
+  }
+};
