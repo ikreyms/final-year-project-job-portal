@@ -16,12 +16,12 @@ POST http://localhost:2900/api/jobs/623210c8665f86576787e972/create
 Content-Type: application/json
 
 {
-    "jobType": "Part-time",
+    "jobType": "Full-time",
     "jobCategory": "Law, Corrections, and Security",
     "postedBy": "623210c8665f86576787e972",
-    "title": "Lawyer",
-    "dueDate": "2022-04-02",
-    "salary": 18000
+    "title": "Paralegal",
+    "dueDate": "2022-03-28",
+    "salary": 11000
 }
 
 ###
@@ -30,4 +30,4 @@ Content-Type: application/json
 GET http://localhost:2900/api/jobs?jobCategory=Information Technology&jobType=Full-time&salaryRange=10000-14999
 
 ###
-GET http://localhost:2900/api/jobs?jobCategory=All&jobType=All&salaryRange=All&empId=62321057341ed8fb740ac2ba
+GET http://localhost:2900/api/jobs?empId=62321057341ed8fb740ac2ba
