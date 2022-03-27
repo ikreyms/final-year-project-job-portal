@@ -53,9 +53,13 @@ const jobSchema = new mongoose.Schema(
       },
     },
 
+    location: String,
+
+    noOfPositions: { type: Number, default: 1 },
+
     jobDescription: String,
 
-    qualification: String,
+    qualification: { type: String, default: "Basic education." },
 
     salary: { type: Number, required: [true, "Salary must be provided."] },
 
