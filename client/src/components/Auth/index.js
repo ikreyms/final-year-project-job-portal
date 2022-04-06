@@ -61,9 +61,7 @@ const Auth = () => {
       setServerResponse(data);
       setTokenOnStorage(data);
       dispatch(login(data.user));
-      navigate("/jobs");
-      //navigate to jobs if job seeker else if employer employer profile or if admin admin profile
-      // for now leave as navigate('/jobs');
+      navigate(`/profile/${data.user.id}`);
     } catch (error) {
       if (error.response) {
         const errorData = error.response.data;
