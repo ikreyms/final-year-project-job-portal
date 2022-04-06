@@ -25,3 +25,21 @@ exports.jobCategories = [
   "Marketing",
   "Science, Technology, Engineering, and Math",
 ];
+
+exports.employerProfileTabs = [
+  "Dashboard",
+  "Branding",
+  "Jobs",
+  "Applications",
+  "Interviews",
+];
+
+exports.jobSeekerProfileTabs = [
+  "Dashboard",
+  "Resume",
+  "Applied Jobs",
+  "Saved Jobs",
+  "Notifications",
+];
+
+exports.adminProfileTabs = ["Dashboard", "Notifications"];
