@@ -11,22 +11,25 @@ const JobSeekerNavLinks = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const profileId = useSelector((state) => state.user?.id);
   const state = useSelector((state) => state);
-
-  const gotoProfile = () => {
-    console.log("redux state", state);
-  };
 
   const logoutUser = () => {
     dispatch(logout());
     navigate("/");
     localStorage.clear();
-    console.log("reduxstate on logout", state);
   };
 
   return (
     <Stack direction="row" className={classes.navlinks}>
-      <Link underline="none" className={classes.navlink} onClick={gotoProfile}>
+      <Link
+        underline="none"
+        className={classes.navlink}
+        onClick={() => {
+          console.log(state);
+          navigate(`profile/${profileId}`);
+        }}
+      >
         Profile
       </Link>
       <Link underline="none" className={classes.navlink} onClick={logoutUser}>

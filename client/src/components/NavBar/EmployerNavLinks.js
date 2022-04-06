@@ -12,17 +12,12 @@ const EmployerNavLinks = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const state = useSelector((state) => state);
-
-  const gotoProfile = () => {
-    console.log("redux state", state);
-  };
+  const profileId = useSelector((state) => state.user?.id);
 
   const logoutUser = () => {
     dispatch(logout());
     navigate("/");
     localStorage.clear();
-    console.log("reduxstate on logout", state);
   };
 
   return (
@@ -34,7 +29,11 @@ const EmployerNavLinks = () => {
         Post a Job
       </Link>
       <Divider orientation="vertical" />
-      <Link underline="none" className={classes.navlink} onClick={gotoProfile}>
+      <Link
+        underline="none"
+        className={classes.navlink}
+        onClick={() => navigate(`profile/${profileId}`)}
+      >
         Profile
       </Link>
       <Link underline="none" className={classes.navlink} onClick={logoutUser}>
