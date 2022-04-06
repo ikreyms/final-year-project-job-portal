@@ -28,7 +28,7 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const profileId = useSelector((state) => state.user?.id);
 
   const onDrawerClose = (text) => {
     setIsDrawerOpen(false);
@@ -42,6 +42,9 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
       case "about":
         navigate("/about");
         break;
+      case "profile":
+        navigate(`/profile/${profileId}`);
+        break;
       case "auth":
         navigate("/auth");
         break;
@@ -49,7 +52,6 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
         dispatch(logout());
         navigate("/");
         localStorage.clear();
-        console.log("reduxstate on logout", state);
         break;
       default:
         return;
@@ -111,7 +113,7 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
               </ListItemIcon>
               <ListItemText>Post A Job</ListItemText>
             </ListItem>
-            <ListItem>
+            <ListItem onClick={() => onDrawerClose("profile")}>
               <ListItemIcon>
                 <ProfileIcon fontSize="small" />
               </ListItemIcon>
@@ -127,7 +129,7 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
         ) : loggedIn && accountType === "jobseeker" ? (
           <>
             <Divider />
-            <ListItem>
+            <ListItem onClick={() => onDrawerClose("profile")}>
               <ListItemIcon>
                 <ProfileIcon fontSize="small" />
               </ListItemIcon>
@@ -143,13 +145,13 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
         ) : (
           <>
             <Divider />
-            <ListItem>
+            <ListItem onClick={() => onDrawerClose("profile")}>
               <ListItemIcon>
                 <ProfileIcon />
               </ListItemIcon>
               <ListItemText>Profile</ListItemText>
             </ListItem>
-            <ListItem>
+            <ListItem onClick={() => onDrawerClose("logout")}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
