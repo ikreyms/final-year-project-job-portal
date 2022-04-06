@@ -15,6 +15,7 @@ import { useTheme } from "@mui/styles";
 import axios from "axios";
 import { login, logout } from "./redux/actionCreators";
 import { useDispatch, useSelector } from "react-redux";
+import Profile from "./components/Profile";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ const App = () => {
           path="auth/resetPassword/:resetToken"
           element={<PasswordReset />}
         />
+        <Route path="profile/:id" element={<Profile />} />
       </Routes>
       <Footer />
     </Router>
