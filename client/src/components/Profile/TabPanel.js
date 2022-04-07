@@ -1,8 +1,15 @@
+import { Box } from "@mui/material";
+
 const TabPanel = ({ children, value, index, ...other }) => {
   return (
-    <div role="tabpanel" hidden={value !== index} {...other}>
+    <Box
+      role="tabpanel"
+      hidden={value !== index}
+      {...other}
+      sx={{ width: "100%" }}
+    >
       {value === index && <>{children}</>}
-    </div>
+    </Box>
   );
 };
 
