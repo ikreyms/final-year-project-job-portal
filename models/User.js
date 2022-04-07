@@ -65,6 +65,17 @@ const userSchema = new mongoose.Schema(
     resetPasswordToken: String,
 
     resetPasswordExpiry: Date,
+
+    // resume
+
+    contact: Number,
+    address: String,
+    about: String,
+    previousEmployer: String,
+    previousDesignation: String,
+    previousJobDescription: String,
+    previousJobYears: Number,
+    skills: String,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
