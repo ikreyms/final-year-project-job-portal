@@ -38,7 +38,6 @@ exports.jobSeekerProfileTabs = [
   "Dashboard",
   "Resume",
   "Applied Jobs",
-  "Saved Jobs",
   "Notifications",
 ];
 
