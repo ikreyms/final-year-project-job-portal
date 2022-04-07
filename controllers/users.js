@@ -2,7 +2,24 @@ const User = require("../models/User");
 const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
 
-exports.getOneUser = async (req, res, next) => {};
+exports.getOneUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findOne({ _id: id });
+    if (!user)
+      return responseToClient(res, 404, {
+        success: false,
+        error: "Job seeker not found.",
+      });
+
+    responseToClient(res, 200, { success: true, user });
+  } catch (error) {
+    responseToClient(res, 400, {
+      success: false,
+      error: "Job seeker not found.",
+    });
+  }
+};
 
 exports.getUserRatingsAndFollowing = async (req, res, next) => {
   const { id } = req.params;
