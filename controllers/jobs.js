@@ -53,6 +53,10 @@ exports.createJob = async (req, res, next) => {
       salary,
       postedBy: employerId,
     });
+    await Employer.findOneAndUpdate(
+      { _id: employerId },
+      { $inc: { totalJobsPosted: 1 } }
+    );
     responseToClient(res, 201, {
       success: true,
       message: "New job created.",
