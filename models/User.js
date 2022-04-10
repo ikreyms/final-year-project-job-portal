@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const qualificationSchema = require("./qualificationSchema");
+const experienceSchema = require("./experienceSchema");
 
 const userSchema = new mongoose.Schema(
   {
@@ -69,13 +71,17 @@ const userSchema = new mongoose.Schema(
     // resume
 
     contact: Number,
-    address: String,
+    gender: String,
+    dob: Date,
+    maritalStatus: String,
+    qualifications: {
+      children: [qualificationSchema],
+    },
+    experiences: {
+      children: [experienceSchema],
+    },
     about: String,
-    previousEmployer: String,
-    previousDesignation: String,
-    previousJobDescription: String,
-    previousJobYears: Number,
-    skills: String,
+    skills: [String],
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
