@@ -10,6 +10,24 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[4],
     display: "flex",
     margin: `${theme.spacing(4)} 0 ${theme.spacing(4)}`,
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+      padding: `0 ${theme.spacing(1)}`,
+    },
+  },
+  tabs: {
+    borderRight: `1px solid ${theme.palette.divider}`,
+    width: 180,
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
+  },
+  panelWrapper: {
+    padding: theme.spacing(4),
+    [theme.breakpoints.down("xxs")]: {
+      paddingRight: theme.spacing(1),
+      paddingLeft: theme.spacing(1),
+    },
   },
 
   //dashboard
@@ -17,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+    [theme.breakpoints.down(770)]: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+    },
   },
   headerMain: {
     display: "flex",
@@ -27,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    [theme.breakpoints.down(770)]: {
+      marginRight: 0,
+      paddingTop: theme.spacing(2),
+      alignItems: "flex-start",
+    },
   },
   profilePic: {
     height: 100,
@@ -36,11 +63,13 @@ const useStyles = makeStyles((theme) => ({
   statPacks: {
     display: "flex",
     justifyContent: "space-evenly",
+    flexWrap: "wrap",
   },
   statPack: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    margin: `0 ${theme.spacing(1)}`,
   },
   statCircle: {
     color: theme.palette.primary.dark,
@@ -51,6 +80,25 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  // resume
+  resumeHeadings: {
+    color: theme.palette.primary.dark,
+    fontSize: "0.9rem !important",
+    fontWeight: "400",
+    textTransform: "uppercase",
+  },
+  formControl: {
+    margin: `${theme.spacing(1)} 0 ${theme.spacing(1)} !important`,
+  },
+  formSection: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: theme.spacing(3),
+    [theme.breakpoints.down(490)]: {
+      flexDirection: "column",
+    },
   },
 }));
 
