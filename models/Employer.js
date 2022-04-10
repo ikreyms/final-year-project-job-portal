@@ -62,6 +62,11 @@ const employerSchema = new mongoose.Schema(
       select: false,
     },
 
+    totalJobsPosted: {
+      type: Number,
+      default: 0,
+    },
+
     resetPasswordToken: String,
 
     resetPasswordExpiry: Date,
