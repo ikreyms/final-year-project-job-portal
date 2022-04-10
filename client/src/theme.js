@@ -15,6 +15,7 @@ let theme = createTheme({
       sm: 740,
       xs: 635,
       xxs: 340,
+      z: 0,
     },
   },
   components: {
