@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Box, Button, Divider, Link, Typography } from "@mui/material";
+import { Box, Divider, Link, Typography } from "@mui/material";
 import ExclamationMark from "@mui/icons-material/ErrorOutline";
 import logo from "../../assets/logo.svg";
 import useStyles from "./styles";
@@ -30,7 +30,7 @@ const DashboardJobSeeker = ({ resumeRef }) => {
   }, []);
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box className={classes.panelWrapper}>
       <Box className={classes.header}>
         <Box className={classes.headerMain}>
           <img
