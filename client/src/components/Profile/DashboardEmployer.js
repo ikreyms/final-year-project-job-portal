@@ -31,7 +31,7 @@ const DashboardEmployer = ({ brandingRef }) => {
     console.log(profileData);
   }, []);
   return (
-    <Box sx={{ p: 4 }}>
+    <Box className={classes.panelWrapper}>
       <Box className={classes.header}>
         <Box className={classes.headerMain}>
           <img
