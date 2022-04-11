@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     width: 180,
     [theme.breakpoints.down("xs")]: {
       width: "100%",
+      borderRight: "none",
     },
   },
   panelWrapper: {
@@ -57,7 +58,11 @@ const useStyles = makeStyles((theme) => ({
   },
   profilePic: {
     height: 100,
+    width: 100,
+    borderRadius: "50%",
     cursor: "pointer !important",
+    overflow: "hidden",
+    objectFit: "cover",
   },
   headerMainTextWrapper: { marginLeft: theme.spacing(3) },
   statPacks: {
