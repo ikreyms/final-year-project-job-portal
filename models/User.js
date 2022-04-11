@@ -74,12 +74,8 @@ const userSchema = new mongoose.Schema(
     gender: String,
     dob: Date,
     maritalStatus: String,
-    qualifications: {
-      children: [qualificationSchema],
-    },
-    experiences: {
-      children: [experienceSchema],
-    },
+    qualifications: [qualificationSchema],
+    experiences: [experienceSchema],
     about: String,
     skills: [String],
   },
