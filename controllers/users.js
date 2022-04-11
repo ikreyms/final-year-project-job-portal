@@ -166,3 +166,7 @@ exports.rateEmployer = async (req, res, next) => {
     responseToClient(res, 401, { success: false, error: error.message });
   }
 };
+
+exports.updateResume = async (req, res, next) => {
+  const { userId } = req.params;
+};
