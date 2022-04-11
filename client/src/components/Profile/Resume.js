@@ -7,42 +7,73 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
-import React, { useState } from "react";
-import logo from "../../assets/logo.svg";
-import Experience from "./Experience";
-import Qualification from "./Qualification";
+import React, { useEffect, useState } from "react";
 import useStyles from "./styles";
+import Qualification from "./Qualification";
+import Experience from "./Experience";
+import {
+  qualificationFields,
+  experienceFields,
+} from "../../assets/dataObjects";
+import { useSelector } from "react-redux";
+import ProfilePicUpload from "./ProfilePicUpload";
+import axios from "axios";
 
 const Resume = () => {
   const classes = useStyles();
 
-  const [basicInfo, setBasicInfo] = useState({
-    image: "",
-    firstName: "",
-    lastName: "",
-    nid: "",
-    email: "",
-    contact: "",
-    gender: "",
-    dob: "",
-    maritalStatus: "",
-    about: "",
-  });
+  const id = useSelector((state) => state.user?.id);
+
+  const [image, setImage] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [nid, setNid] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [about, setAbout] = useState("");
+
   const [qualifications, setQualifications] = useState([]);
+
   const [experiences, setExperiences] = useState([]);
 
-  const handleBasicInfo = (x) => (e) => {
-    const key = x;
-    setBasicInfo((prevBasicInfo) => ({
-      ...prevBasicInfo,
-      [key]: e.target.value,
-    }));
-    console.log(basicInfo);
-  };
+  const [skills, setSkills] = useState([]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log("image", image);
+    console.log("qualifications:", qualifications);
+    console.log("experiences:", experiences);
   };
+
+  const loadUserResume = async () => {
+    try {
+      const response = await axios.get(`http://localhost:2900/api/users/${id}`);
+      const { user } = response.data;
+      setImage(user.image ? user.image : "");
+      setFirstName(user.firstName ? user.firstName : "");
+      setLastName(user.lastName ? user.lastName : "");
+      setNid(user.nid ? user.nid : "");
+      setDob(user.dob ? user.dob : "");
+      setGender(user.gender ? user.gender : "");
+      setMaritalStatus(user.maritalStatus ? user.maritalStatus : "");
+      setContact(user.contact ? user.contact : "");
+      setEmail(user.email ? user.email : "");
+      setAbout(user.about ? user.about : "");
+
+      user.qualifications.length > 0 && setQualifications(user.qualifications);
+      user.experiences.length > 0 && setExperiences(user.experiences);
+      user.skills.length > 0 && setSkills(user.skills);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadUserResume();
+  }, []);
 
   return (
     <Box className={classes.panelWrapper}>
@@ -54,13 +85,7 @@ const Resume = () => {
           Basic Information
         </Typography>
         <Box className={classes.formSection}>
-          <img
-            src={logo}
-            // src={profileData.image ? profileData.image : logo}
-            alt="profilePic"
-            className={classes.profilePic}
-          />
-          <input type="file" style={{ display: "none" }} />
+          <ProfilePicUpload image={image} setImage={setImage} />
           <Grid
             container
             spacing={{ z: 1 }}
@@ -74,8 +99,9 @@ const Resume = () => {
                 className={classes.formControl}
                 label="First Name"
                 margin="dense"
-                value={basicInfo.firstName}
-                onChange={handleBasicInfo("firstName")}
+                name="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -85,8 +111,9 @@ const Resume = () => {
                 className={classes.formControl}
                 label="Last Name"
                 margin="dense"
-                value={basicInfo.lastName}
-                onChange={handleBasicInfo("lastName")}
+                name="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -96,8 +123,9 @@ const Resume = () => {
                 className={classes.formControl}
                 label="National ID No."
                 margin="dense"
-                value={basicInfo.nid}
-                onChange={handleBasicInfo("nid")}
+                name="nid"
+                value={nid}
+                onChange={(e) => setNid(e.target.value)}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -107,8 +135,9 @@ const Resume = () => {
                 className={classes.formControl}
                 label="Date of Birth"
                 margin="dense"
-                value={basicInfo.dob}
-                onChange={handleBasicInfo("dob")}
+                name="dob"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -119,11 +148,16 @@ const Resume = () => {
                 label="Gender"
                 margin="dense"
                 select
-                value={basicInfo.gender}
-                onChange={handleBasicInfo("gender")}
+                name="gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
               >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Male" key="0">
+                  Male
+                </MenuItem>
+                <MenuItem value="Female" key="1">
+                  Female
+                </MenuItem>
               </TextField>
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -134,11 +168,16 @@ const Resume = () => {
                 label="Marital Status"
                 margin="dense"
                 select
-                value={basicInfo.maritalStatus}
-                onChange={handleBasicInfo("maritalStatus")}
+                name="maritalStatus"
+                value={maritalStatus}
+                onChange={(e) => setMaritalStatus(e.target.value)}
               >
-                <MenuItem value="Single">Single</MenuItem>
-                <MenuItem value="Married">Married</MenuItem>
+                <MenuItem value="Single" key="0">
+                  Single
+                </MenuItem>
+                <MenuItem value="Married" key="1">
+                  Married
+                </MenuItem>
               </TextField>
             </Grid>
             <Grid item xxs={1} xs={4}>
@@ -148,8 +187,9 @@ const Resume = () => {
                 className={classes.formControl}
                 label="Contact No."
                 margin="dense"
-                value={basicInfo.contact}
-                onChange={handleBasicInfo("contact")}
+                name="contact"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
               />
             </Grid>
             <Grid item xxs={1} xs={4}>
@@ -159,8 +199,9 @@ const Resume = () => {
                 className={classes.formControl}
                 label="Email"
                 margin="dense"
-                value={basicInfo.email}
-                onChange={handleBasicInfo("email")}
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xxs={1} xs={4}>
@@ -172,8 +213,9 @@ const Resume = () => {
                 margin="dense"
                 multiline
                 maxRows={5}
-                value={basicInfo.about}
-                onChange={handleBasicInfo("about")}
+                name="about"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -182,19 +224,22 @@ const Resume = () => {
         <Typography className={classes.resumeHeadings} color="primary" mt={3}>
           Qualifications
         </Typography>
-        {qualifications.map((_, index) => (
-          <Qualification no={index + 1} key={index} />
-        ))}
+        {qualifications &&
+          qualifications.map((_, index) => (
+            <Qualification
+              qualifications={qualifications}
+              setQualifications={setQualifications}
+              no={index + 1}
+              key={index}
+            />
+          ))}
         <Button
           sx={{ mt: 1, textTransform: "capitalize", fontWeight: 400 }}
           onClick={() => {
-            setQualifications((prevState) => [
-              ...prevState,
+            setQualifications((prev) => [
+              ...prev,
               {
-                institute: "",
-                completedOn: "",
-                level: "",
-                courseName: "",
+                ...qualificationFields,
               },
             ]);
           }}
@@ -205,27 +250,32 @@ const Resume = () => {
         <Typography className={classes.resumeHeadings} color="primary" mt={3}>
           Work experience
         </Typography>
-        {experiences.map((_, index) => (
-          <Experience no={index + 1} key={index} />
-        ))}
+        {experiences &&
+          experiences.map((_, index) => (
+            <Experience
+              experiences={experiences}
+              setExperiences={setExperiences}
+              no={index + 1}
+              key={index}
+            />
+          ))}
         <Button
           sx={{ mt: 1, textTransform: "capitalize", fontWeight: 400 }}
           onClick={() => {
-            setExperiences((prevState) => [
-              ...prevState,
+            setExperiences((prev) => [
+              ...prev,
               {
-                employer: "",
-                jobTitle: "",
-                duration: "",
-                from: "",
-                to: "",
-                category: "",
+                ...experienceFields,
               },
             ]);
           }}
         >
           + Add Experience
         </Button>
+        <Typography className={classes.resumeHeadings} color="primary" mt={3}>
+          Skills
+        </Typography>
+
         <Divider sx={{ my: 3 }} />
         <Button
           disableElevation
