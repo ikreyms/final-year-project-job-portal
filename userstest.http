@@ -15,3 +15,23 @@ PATCH http://localhost:2900/api/users/rate/622cb7aa28a2d67491d7a36f/6226606f8138
 
 ###
 PATCH http://localhost:2900/api/users/rate/62320ec87395cd9735cc2b0f/62321548636e46e9088c07c9/4
+
+###
+PATCH http://localhost:2900/api/users/resume/62320ec87395cd9735cc2b0f
+Content-Type: application/json
+
+{
+     "image":"",
+    "firstName":"Mohamed",
+    "lastName":"",
+    "nid":"",
+    "dob":"",
+    "gender":"",
+    "maritalStatus":"",
+    "contact":"",
+    "email":"",
+    "about":"",
+    "qualifications":[],
+    "experiences":[],
+    "skills":[]
+}

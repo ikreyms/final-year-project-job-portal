@@ -48,10 +48,10 @@ Content-Type: application/json
 
 {
    "accountType":"Job Seeker",
-    "firstName":"Mohamed",     
+    "firstName":"Test",     
     "lastName":"Ikram",
-    "nid":"A269390",
-    "email":"ikreyms@gmail.com",
+    "nid":"A269190",
+    "email":"test@gmail.com",
     "password":"asdfasdf",
     "repeatPassword":"asdfasdf"
 }
