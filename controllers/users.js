@@ -220,3 +220,10 @@ exports.updateResume = async (req, res, next) => {
     }
   }
 };
+
+exports.removeQualification = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.find({ _id: userId }).qualifications.pull({});
+  } catch (error) {}
+};
