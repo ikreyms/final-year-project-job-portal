@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
+const equals = require("../utils/equals");
 
 exports.getOneUser = async (req, res, next) => {
   const { id } = req.params;
@@ -169,4 +170,53 @@ exports.rateEmployer = async (req, res, next) => {
 
 exports.updateResume = async (req, res, next) => {
   const { userId } = req.params;
+
+  const {
+    image,
+    firstName,
+    lastName,
+    nid,
+    dob,
+    gender,
+    maritalStatus,
+    contact,
+    email,
+    about,
+    qualifications,
+    experiences,
+    skills,
+  } = req.body;
+
+  try {
+    let user = await User.findOne({ _id: userId });
+
+    user.firstName !== firstName && (user.firstName = firstName);
+    user.lastName !== lastName && (user.lastName = lastName);
+    user.nid !== nid && (user.nid = nid);
+    user.dob !== dob && (user.dob = dob);
+    user.gender !== gender && (user.gender = gender);
+    user.maritalStatus !== maritalStatus &&
+      (user.maritalStatus = maritalStatus);
+    user.contact !== contact && (user.contact = contact);
+    user.email !== email && (user.email = email);
+    user.about !== about && (user.about = about);
+
+    !equals(user.qualifications, qualifications) &&
+      (user.qualifications = qualifications);
+    !equals(user.experiences, experiences) && (user.experiences = experiences);
+    !equals(user.skills, skills) && (user.skills = skills);
+
+    await user.save();
+    responseToClient(res, 200, { success: true, user });
+  } catch (error) {
+    let errorMessage = {};
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errorMessage[key] = error.errors[key].message;
+      });
+      responseToClient(res, 400, { success: false, error: errorMessage });
+    } else {
+      responseToClient(res, 500, { success: false, error: error.message });
+    }
+  }
 };
