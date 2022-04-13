@@ -57,3 +57,19 @@ exports.jobSeekerProfileTabs = [
 ];
 
 exports.adminProfileTabs = ["Dashboard", "Notifications"];
+
+exports.certificateLevels = [
+  "",
+  "Basic Education",
+  "O Level",
+  "Certificate 1",
+  "Certificate 2",
+  "Certificate 3",
+  "A Level",
+  "Diploma",
+  "Advanced Diploma",
+  "Associates Degree",
+  "Bachelors Degree",
+  "Masters Degree",
+  "PHD",
+];
