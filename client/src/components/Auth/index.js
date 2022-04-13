@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import GoogleLogin from "react-google-login";
+import { isObjectEmpty } from "../../assets/utils";
 import AuthLogo from "./AuthLogo";
 import useStyles from "./styles";
 import axios from "axios";
@@ -136,9 +137,6 @@ const Auth = () => {
   const googleLoginFailure = (failedResult) => {
     console.log(failedResult);
   };
-
-  const isObjectEmpty = (obj) =>
-    Object.keys(obj).length === 0 && obj.constructor === Object;
 
   useEffect(() => {
     clearFields();
