@@ -85,7 +85,11 @@ const Qualification = ({
             label="Year"
             margin="dense"
             name="completedOn"
-            value={moment(qualifications[no - 1].completedOn).format("YYYY")}
+            value={
+              qualifications[no - 1].completedOn
+                ? moment(qualifications[no - 1].completedOn).format("YYYY")
+                : ""
+            }
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
