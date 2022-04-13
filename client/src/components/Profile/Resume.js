@@ -8,6 +8,7 @@ import {
   Divider,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import useStyles from "./styles";
 import Qualification from "./Qualification";
 import Experience from "./Experience";
@@ -15,9 +16,11 @@ import {
   qualificationFields,
   experienceFields,
 } from "../../assets/dataObjects";
+import { isObjectEmpty } from "../../assets/utils";
 import { useSelector } from "react-redux";
 import ProfilePicUpload from "./ProfilePicUpload";
 import axios from "axios";
+import Skill from "./Skill";
 
 const Resume = () => {
   const classes = useStyles();
@@ -41,31 +44,75 @@ const Resume = () => {
 
   const [skills, setSkills] = useState([]);
 
-  const submitHandler = (e) => {
+  const [errorResponse, setErrorResponse] = useState({});
+
+  const updateAllStates = (user) => {
+    setImage(user.image ? user.image : "");
+    setFirstName(user.firstName ? user.firstName : "");
+    setLastName(user.lastName ? user.lastName : "");
+    setNid(user.nid ? user.nid : "");
+    setDob(user.dob ? user.dob : "");
+    setGender(user.gender ? user.gender : "");
+    setMaritalStatus(user.maritalStatus ? user.maritalStatus : "");
+    setContact(user.contact ? user.contact : "");
+    setEmail(user.email ? user.email : "");
+    setAbout(user.about ? user.about : "");
+
+    user.qualifications.length > 0 && setQualifications(user.qualifications);
+    user.experiences.length > 0 && setExperiences(user.experiences);
+    user.skills.length > 0 && setSkills(user.skills);
+  };
+
+  const submitHandler = async (e) => {
     e.preventDefault();
     console.log("image", image);
+    console.log("firstName", firstName);
+    console.log("lastName", lastName);
+    console.log("nid", nid);
+    console.log("dob", dob);
+    console.log("gender", gender);
+    console.log("maritalStatus", maritalStatus);
+    console.log("contact", contact);
+    console.log("email", email);
     console.log("qualifications:", qualifications);
     console.log("experiences:", experiences);
+    console.log("skills:", skills);
+
+    const formData = {
+      image,
+      firstName,
+      lastName,
+      nid,
+      dob,
+      gender,
+      maritalStatus,
+      contact,
+      email,
+      qualifications,
+      experiences,
+      skills,
+    };
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:2900/api/users/resume/${id}`,
+        formData
+      );
+      const { user } = response.data;
+      updateAllStates(user);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      console.log(error.response);
+      setErrorResponse(error.response.data);
+    }
   };
 
   const loadUserResume = async () => {
     try {
       const response = await axios.get(`http://localhost:2900/api/users/${id}`);
       const { user } = response.data;
-      setImage(user.image ? user.image : "");
-      setFirstName(user.firstName ? user.firstName : "");
-      setLastName(user.lastName ? user.lastName : "");
-      setNid(user.nid ? user.nid : "");
-      setDob(user.dob ? user.dob : "");
-      setGender(user.gender ? user.gender : "");
-      setMaritalStatus(user.maritalStatus ? user.maritalStatus : "");
-      setContact(user.contact ? user.contact : "");
-      setEmail(user.email ? user.email : "");
-      setAbout(user.about ? user.about : "");
-
-      user.qualifications.length > 0 && setQualifications(user.qualifications);
-      user.experiences.length > 0 && setExperiences(user.experiences);
-      user.skills.length > 0 && setSkills(user.skills);
+      updateAllStates(user);
     } catch (error) {
       console.log(error);
     }
@@ -102,6 +149,14 @@ const Resume = () => {
                 name="firstName"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                error={
+                  !isObjectEmpty(errorResponse)
+                    ? errorResponse.error?.firstName
+                      ? true
+                      : false
+                    : false
+                }
+                helperText={errorResponse?.error?.firstName}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -114,6 +169,14 @@ const Resume = () => {
                 name="lastName"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                error={
+                  !isObjectEmpty(errorResponse)
+                    ? errorResponse.error?.lastName
+                      ? true
+                      : false
+                    : false
+                }
+                helperText={errorResponse?.error?.lastName}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -126,6 +189,14 @@ const Resume = () => {
                 name="nid"
                 value={nid}
                 onChange={(e) => setNid(e.target.value)}
+                error={
+                  !isObjectEmpty(errorResponse)
+                    ? errorResponse.error?.nid
+                      ? true
+                      : false
+                    : false
+                }
+                helperText={errorResponse?.error?.nid}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
@@ -136,7 +207,7 @@ const Resume = () => {
                 label="Date of Birth"
                 margin="dense"
                 name="dob"
-                value={dob}
+                value={moment(dob).format("DD/MM/YYYY")}
                 onChange={(e) => setDob(e.target.value)}
               />
             </Grid>
@@ -202,6 +273,14 @@ const Resume = () => {
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                error={
+                  !isObjectEmpty(errorResponse)
+                    ? errorResponse.error?.email
+                      ? true
+                      : false
+                    : false
+                }
+                helperText={errorResponse?.error?.email}
               />
             </Grid>
             <Grid item xxs={1} xs={4}>
@@ -221,7 +300,12 @@ const Resume = () => {
           </Grid>
         </Box>
 
-        <Typography className={classes.resumeHeadings} color="primary" mt={3}>
+        <Typography
+          className={classes.resumeHeadings}
+          color="primary"
+          mt={3}
+          mb={1}
+        >
           Qualifications
         </Typography>
         {qualifications &&
@@ -229,6 +313,7 @@ const Resume = () => {
             <Qualification
               qualifications={qualifications}
               setQualifications={setQualifications}
+              errorResponse={errorResponse}
               no={index + 1}
               key={index}
             />
@@ -247,7 +332,12 @@ const Resume = () => {
           + Add Qualification
         </Button>
 
-        <Typography className={classes.resumeHeadings} color="primary" mt={3}>
+        <Typography
+          className={classes.resumeHeadings}
+          color="primary"
+          mt={3}
+          mb={1}
+        >
           Work experience
         </Typography>
         {experiences &&
@@ -255,6 +345,7 @@ const Resume = () => {
             <Experience
               experiences={experiences}
               setExperiences={setExperiences}
+              errorResponse={errorResponse}
               no={index + 1}
               key={index}
             />
@@ -272,9 +363,32 @@ const Resume = () => {
         >
           + Add Experience
         </Button>
-        <Typography className={classes.resumeHeadings} color="primary" mt={3}>
+        <Typography
+          className={classes.resumeHeadings}
+          color="primary"
+          mt={3}
+          mb={1}
+        >
           Skills
         </Typography>
+        {skills &&
+          skills.map((_, index) => (
+            <Skill
+              skills={skills}
+              setSkills={setSkills}
+              errorResponse={errorResponse}
+              no={index + 1}
+              key={index}
+            />
+          ))}
+        <Button
+          sx={{ mt: 1, textTransform: "capitalize", fontWeight: 400 }}
+          onClick={() => {
+            setSkills((prev) => [...prev, { name: "" }]);
+          }}
+        >
+          + Add Skill
+        </Button>
 
         <Divider sx={{ my: 3 }} />
         <Button
