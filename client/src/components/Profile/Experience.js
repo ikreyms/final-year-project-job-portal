@@ -1,8 +1,18 @@
-import { Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import useStyles from "./styles";
+import DeleteIcon from "@mui/icons-material/Close";
+import { experienceCategories } from "../../assets/dataArrays";
+import { isObjectEmpty } from "../../assets/utils";
 
-const Experience = ({ no, experiences, setExperiences }) => {
+const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
   const classes = useStyles();
 
   const handleChange = (e) => {
@@ -18,9 +28,20 @@ const Experience = ({ no, experiences, setExperiences }) => {
 
   return (
     <>
-      <Typography mt={2} mb={1}>
-        Experience {no}
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography mt={2} mb={1}>
+          Experience {no}{" "}
+        </Typography>
+        <IconButton sx={{ mt: 1 }}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Box>
       <Grid
         container
         spacing={{ z: 1 }}
@@ -37,6 +58,16 @@ const Experience = ({ no, experiences, setExperiences }) => {
             name="employer"
             value={experiences[no - 1].employer}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`experiences.${no - 1}.employer`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`experiences.${no - 1}.employer`]
+            }
           />
         </Grid>
         <Grid item z={2}>
@@ -49,6 +80,16 @@ const Experience = ({ no, experiences, setExperiences }) => {
             name="jobTitle"
             value={experiences[no - 1].jobTitle}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`experiences.${no - 1}.jobTitle`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`experiences.${no - 1}.jobTitle`]
+            }
           />
         </Grid>
         <Grid item z={1} xs={1}>
@@ -61,6 +102,14 @@ const Experience = ({ no, experiences, setExperiences }) => {
             name="from"
             value={experiences[no - 1].from}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`experiences.${no - 1}.from`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={errorResponse?.error?.[`experiences.${no - 1}.from`]}
           />
         </Grid>
         <Grid item z={1} xs={1}>
@@ -73,6 +122,14 @@ const Experience = ({ no, experiences, setExperiences }) => {
             name="to"
             value={experiences[no - 1].to}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`experiences.${no - 1}.to`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={errorResponse?.error?.[`experiences.${no - 1}.to`]}
           />
         </Grid>
         <Grid item z={1} xs={1}>
@@ -85,6 +142,16 @@ const Experience = ({ no, experiences, setExperiences }) => {
             name="duration"
             value={experiences[no - 1].duration}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`experiences.${no - 1}.duration`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`experiences.${no - 1}.duration`]
+            }
           />
         </Grid>
         <Grid item z={2}>
@@ -95,9 +162,30 @@ const Experience = ({ no, experiences, setExperiences }) => {
             label="Job Category"
             margin="dense"
             name="category"
-            value={experiences[no - 1].category}
+            value={
+              experiences[no - 1].category
+                ? experiences[no - 1].category
+                : experienceCategories[0]
+            }
             onChange={handleChange}
-          />
+            select
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`experiences.${no - 1}.category`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`experiences.${no - 1}.category`]
+            }
+          >
+            {experienceCategories.map((category, index) => (
+              <MenuItem value={category} key={index}>
+                {category}
+              </MenuItem>
+            ))}
+          </TextField>
         </Grid>
       </Grid>
     </>
