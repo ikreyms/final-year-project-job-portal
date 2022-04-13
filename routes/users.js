@@ -16,6 +16,6 @@ router.get("/:id/getUserRatingsAndFollowing", getUserRatingsAndFollowing);
 router.patch("/follow/:userId/:employerId", followNewEmployer);
 router.patch("/unfollow/:userId/:employerId", unfollowNewEmployer);
 router.patch("/rate/:userId/:employerId/:value", rateEmployer);
-router.patch("resume/:userId", updateResume);
+router.patch("/resume/:userId", updateResume);
 
 module.exports = router;
