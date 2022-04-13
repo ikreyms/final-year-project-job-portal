@@ -9,11 +9,11 @@ const Skill = ({ no, skills, setSkills, errorResponse }) => {
 
   const handleChange = (e) => {
     setSkills((prev) =>
-      prev.map((skill, index) => {
+      prev.map((obj, index) => {
         if (index === no - 1) {
-          return e.target.value;
+          return { ...obj, [e.target.name]: e.target.value };
         }
-        return skill;
+        return obj;
       })
     );
   };
@@ -42,7 +42,7 @@ const Skill = ({ no, skills, setSkills, errorResponse }) => {
         label="Skill"
         margin="dense"
         name="name"
-        value={skills[no - 1]}
+        value={skills[no - 1].name}
         onChange={handleChange}
         error={
           !isObjectEmpty(errorResponse)
