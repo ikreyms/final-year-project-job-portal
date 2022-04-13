@@ -1,8 +1,17 @@
-import { Grid, TextField, Typography, IconButton, Box } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Typography,
+  IconButton,
+  Box,
+  MenuItem,
+} from "@mui/material";
 import React from "react";
 import useStyles from "./styles";
+import moment from "moment";
 import DeleteIcon from "@mui/icons-material/Close";
 import { isObjectEmpty } from "../../assets/utils";
+import { certificateLevels } from "../../assets/dataArrays";
 
 const Qualification = ({
   no,
@@ -76,7 +85,7 @@ const Qualification = ({
             label="Year"
             margin="dense"
             name="completedOn"
-            value={qualifications[no - 1].completedOn}
+            value={moment(qualifications[no - 1].completedOn).format("YYYY")}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -98,7 +107,12 @@ const Qualification = ({
             label="Level"
             margin="dense"
             name="level"
-            value={qualifications[no - 1].level}
+            select
+            value={
+              qualifications[no - 1].level
+                ? qualifications[no - 1].level
+                : certificateLevels[0]
+            }
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -110,7 +124,13 @@ const Qualification = ({
             helperText={
               errorResponse?.error?.[`qualifications.${no - 1}.level`]
             }
-          />
+          >
+            {certificateLevels.map((level, index) => (
+              <MenuItem value={level} key={index}>
+                {level}
+              </MenuItem>
+            ))}
+          </TextField>
         </Grid>
         <Grid item z={2}>
           <TextField
