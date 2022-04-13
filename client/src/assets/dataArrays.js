@@ -26,6 +26,21 @@ exports.jobCategories = [
   "Science, Technology, Engineering, and Math",
 ];
 
+exports.experienceCategories = [
+  "",
+  "Agriculture, Food, and Natural Resources",
+  "Architecture and Construction",
+  "Arts, Audio/Video Technology, and Communication",
+  "Business and Finance",
+  "Education and Training",
+  "Government and Public Administration",
+  "Health Science",
+  "Information Technology",
+  "Law, Corrections, and Security",
+  "Marketing",
+  "Science, Technology, Engineering, and Math",
+];
+
 exports.employerProfileTabs = [
   "Dashboard",
   "Branding",
