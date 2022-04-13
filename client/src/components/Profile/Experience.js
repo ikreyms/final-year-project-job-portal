@@ -9,6 +9,7 @@ import {
 import React from "react";
 import useStyles from "./styles";
 import DeleteIcon from "@mui/icons-material/Close";
+import moment from "moment";
 import { experienceCategories } from "../../assets/dataArrays";
 import { isObjectEmpty } from "../../assets/utils";
 
@@ -100,7 +101,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="From"
             margin="dense"
             name="from"
-            value={experiences[no - 1].from}
+            value={moment(experiences[no - 1].from).format("YYYY")}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -120,7 +121,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="To"
             margin="dense"
             name="to"
-            value={experiences[no - 1].to}
+            value={moment(experiences[no - 1].to).format("YYYY")}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -140,6 +141,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="Duration"
             margin="dense"
             name="duration"
+            type="number"
             value={experiences[no - 1].duration}
             onChange={handleChange}
             error={
