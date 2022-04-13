@@ -101,7 +101,11 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="From"
             margin="dense"
             name="from"
-            value={moment(experiences[no - 1].from).format("YYYY")}
+            value={
+              experiences[no - 1].from
+                ? moment(experiences[no - 1].from).format("YYYY")
+                : ""
+            }
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -121,7 +125,11 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="To"
             margin="dense"
             name="to"
-            value={moment(experiences[no - 1].to).format("YYYY")}
+            value={
+              experiences[no - 1].to
+                ? moment(experiences[no - 1].to).format("YYYY")
+                : ""
+            }
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -164,13 +172,13 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="Job Category"
             margin="dense"
             name="category"
+            select
             value={
               experiences[no - 1].category
                 ? experiences[no - 1].category
                 : experienceCategories[0]
             }
             onChange={handleChange}
-            select
             error={
               !isObjectEmpty(errorResponse)
                 ? errorResponse.error?.[`experiences.${no - 1}.category`]
