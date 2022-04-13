@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const qualificationSchema = require("./qualificationSchema");
 const experienceSchema = require("./experienceSchema");
+const skillsSchema = require("./skillsSchema");
 
 const userSchema = new mongoose.Schema(
   {
@@ -77,17 +78,10 @@ const userSchema = new mongoose.Schema(
     qualifications: [qualificationSchema],
     experiences: [experienceSchema],
     about: String,
-    skills: [String],
+    skills: [skillsSchema],
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
-
-// userSchema.virtual('ratings').get(function() {
-//   const ratingsMap = new Map()
-//   this.ratedEmployers.forEach(empId => {
-//     ratingsMap.set(empId, null)
-//   });
-// })
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
