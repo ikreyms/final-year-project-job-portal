@@ -1,8 +1,15 @@
-import { Grid, TextField, Typography } from "@mui/material";
+import { Grid, TextField, Typography, IconButton, Box } from "@mui/material";
 import React from "react";
 import useStyles from "./styles";
+import DeleteIcon from "@mui/icons-material/Close";
+import { isObjectEmpty } from "../../assets/utils";
 
-const Qualification = ({ no, qualifications, setQualifications }) => {
+const Qualification = ({
+  no,
+  qualifications,
+  setQualifications,
+  errorResponse,
+}) => {
   const classes = useStyles();
 
   const handleChange = (e) => {
@@ -18,9 +25,21 @@ const Qualification = ({ no, qualifications, setQualifications }) => {
 
   return (
     <>
-      <Typography mt={2} mb={1}>
-        Qualification {no}
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography mt={2} mb={1}>
+          Qualification {no}{" "}
+        </Typography>
+        <IconButton sx={{ mt: 1 }}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
       <Grid
         container
         spacing={{ z: 1 }}
@@ -37,6 +56,16 @@ const Qualification = ({ no, qualifications, setQualifications }) => {
             name="institute"
             value={qualifications[no - 1].institute}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`qualifications.${no - 1}.institute`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`qualifications.${no - 1}.institute`]
+            }
           />
         </Grid>
         <Grid item z={2} xs={1}>
@@ -49,6 +78,16 @@ const Qualification = ({ no, qualifications, setQualifications }) => {
             name="completedOn"
             value={qualifications[no - 1].completedOn}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`qualifications.${no - 1}.completedOn`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`qualifications.${no - 1}.completedOn`]
+            }
           />
         </Grid>
         <Grid item z={2} xs={1}>
@@ -61,6 +100,16 @@ const Qualification = ({ no, qualifications, setQualifications }) => {
             name="level"
             value={qualifications[no - 1].level}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`qualifications.${no - 1}.level`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`qualifications.${no - 1}.level`]
+            }
           />
         </Grid>
         <Grid item z={2}>
@@ -73,6 +122,16 @@ const Qualification = ({ no, qualifications, setQualifications }) => {
             name="courseName"
             value={qualifications[no - 1].courseName}
             onChange={handleChange}
+            error={
+              !isObjectEmpty(errorResponse)
+                ? errorResponse.error?.[`qualifications.${no - 1}.courseName`]
+                  ? true
+                  : false
+                : false
+            }
+            helperText={
+              errorResponse?.error?.[`qualifications.${no - 1}.courseName`]
+            }
           />
         </Grid>
       </Grid>
