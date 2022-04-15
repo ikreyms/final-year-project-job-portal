@@ -5,7 +5,7 @@ const ExperiencePreview = ({ experience }) => {
   return (
     <Grid container alignItems="center">
       <Grid item sx={{ width: 80 }}>
-        <Typography variant="caption">
+        <Typography variant="body2">
           {experience.from}-{experience.to}
         </Typography>
       </Grid>
