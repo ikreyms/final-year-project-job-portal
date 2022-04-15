@@ -4,6 +4,7 @@ const Job = require("./Job");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const whyWorkWithUsSchema = require("./whyWorkWithUsSchema");
 
 const employerSchema = new mongoose.Schema(
   {
@@ -30,7 +31,7 @@ const employerSchema = new mongoose.Schema(
 
     about: String,
 
-    whyWorkWithUs: String,
+    whyWorkWithUs: [whyWorkWithUsSchema],
 
     mission: String,
 
