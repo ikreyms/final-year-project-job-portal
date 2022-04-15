@@ -190,6 +190,7 @@ exports.updateResume = async (req, res, next) => {
   try {
     let user = await User.findOne({ _id: userId });
 
+    user.image !== image && (user.image = image);
     user.firstName !== firstName && (user.firstName = firstName);
     user.lastName !== lastName && (user.lastName = lastName);
     user.nid !== nid && (user.nid = nid);
@@ -219,11 +220,4 @@ exports.updateResume = async (req, res, next) => {
       responseToClient(res, 500, { success: false, error: error.message });
     }
   }
-};
-
-exports.removeQualification = async (req, res, next) => {
-  const { userId } = req.params;
-  try {
-    const user = await User.find({ _id: userId }).qualifications.pull({});
-  } catch (error) {}
 };
