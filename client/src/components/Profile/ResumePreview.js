@@ -9,7 +9,7 @@ const ResumePreview = ({ profileData, resumeRef }) => {
   const classes = useStyles();
   return (
     <>
-      <Divider sx={{ mt: 4, mb: 4 }} />
+      <Divider sx={{ mt: 4 }} />
       {profileData.about && (
         <>
           <Box
@@ -124,7 +124,7 @@ const ResumePreview = ({ profileData, resumeRef }) => {
           </Box>
           {profileData.skills.map((skill, index) => (
             <Typography variant="body2" key={index}>
-              - {skill.name}
+              &#8226; {skill.name}
             </Typography>
           ))}
         </>
