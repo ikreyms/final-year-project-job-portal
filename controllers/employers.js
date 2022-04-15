@@ -139,5 +139,6 @@ exports.updateBranding = async (req, res, next) => {
     } else {
       responseToClient(res, 500, { success: false, error: error.message });
     }
+    // console.log(error);
   }
 };
