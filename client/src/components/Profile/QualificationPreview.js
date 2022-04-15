@@ -5,7 +5,7 @@ const QualificationPreview = ({ qualification }) => {
   return (
     <Grid container alignItems="center">
       <Grid item sx={{ width: 80 }}>
-        <Typography variant="caption">{qualification.completedOn}</Typography>
+        <Typography variant="body2">{qualification.completedOn}</Typography>
       </Grid>
       <Grid item>
         <Typography variant="body2" fontWeight="400">
