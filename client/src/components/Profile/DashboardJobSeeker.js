@@ -89,13 +89,12 @@ const DashboardJobSeeker = ({ resumeRef }) => {
         <StatPack stat={123} caption="Interviews" color="success" />
         <StatPack stat={123} caption="Rejected" color="error" />
       </Box>
-
-      {profileData.about ||
+      {(profileData.about ||
         profileData.qualifications?.length > 0 ||
         profileData.experiences?.length > 0 ||
-        (profileData.skills?.length > 0 && (
-          <ResumePreview profileData={profileData} resumeRef={resumeRef} />
-        ))}
+        profileData.skills?.length > 0) && (
+        <ResumePreview profileData={profileData} resumeRef={resumeRef} />
+      )}
     </Box>
   );
 };
