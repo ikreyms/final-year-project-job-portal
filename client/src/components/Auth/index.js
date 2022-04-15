@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import GoogleLogin from "react-google-login";
 import { isObjectEmpty } from "../../assets/utils";
 import AuthLogo from "./AuthLogo";
 import useStyles from "./styles";
@@ -422,21 +421,6 @@ const Auth = () => {
             <Divider textAlign="left" sx={{ mb: 1 }}>
               <Typography variant="body2">OR</Typography>
             </Divider>
-            {/* <Button
-              variant="outlined"
-              size="large"
-              className={classes.submitButton}
-              disableElevation
-            >
-              Login with Google
-            </Button> */}
-            <GoogleLogin
-              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-              buttonText="Login with Google"
-              onSuccess={googleLoginSuccess}
-              onFailure={googleLoginFailure}
-              cookiePolicy="single_host_origin"
-            />
           </form>
           <Box display="flex" gap={1} flexWrap="wrap" mt={1}>
             <Typography variant="caption">
