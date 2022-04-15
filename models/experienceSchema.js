@@ -29,11 +29,11 @@ const experienceSchema = new mongoose.Schema(
       required: [true, "Please provide the duration of your employment."],
     },
     from: {
-      type: Date,
+      type: Number,
       required: [true, "Provide the employment start year."],
     },
     to: {
-      type: Date,
+      type: Number,
       required: [true, "Provide the employment termination year."],
     },
     category: {
