@@ -247,7 +247,7 @@ exports.forgotPassword = async (req, res, next) => {
       throw { success: false, error: "Failed to send email." };
     }
   } catch (error) {
-    console.log(error);
+    responseToClient(res, 500, { error: error.message });
   }
 };
 
