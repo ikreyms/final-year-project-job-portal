@@ -1,4 +1,4 @@
-import { Box, Divider, Link, Typography } from "@mui/material";
+import { Box, Divider, Link, Rating, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import logo from "../../assets/logo.svg";
 import ExclamationMark from "@mui/icons-material/ErrorOutline";
 import useStyles from "./styles";
 import StatPack from "./StatPack";
+import BrandingPreview from "./BrandingPreview";
 
 const DashboardEmployer = ({ brandingRef }) => {
   const classes = useStyles();
@@ -21,6 +22,7 @@ const DashboardEmployer = ({ brandingRef }) => {
       );
       const employer = response.data.employer;
       setProfileData(employer);
+      console.log(employer);
     } catch (error) {
       console.log(error.response);
     }
@@ -30,6 +32,7 @@ const DashboardEmployer = ({ brandingRef }) => {
     loadProfileData();
     console.log(profileData);
   }, []);
+
   return (
     <Box className={classes.panelWrapper}>
       <Box className={classes.header}>
@@ -43,7 +46,12 @@ const DashboardEmployer = ({ brandingRef }) => {
             <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
               {profileData.companyName}
             </Typography>
-            <Typography variant="body2">{profileData.email}</Typography>
+            <Rating
+              value={profileData.rating}
+              readOnly
+              size="small"
+              precision={0.5}
+            />
           </Box>
         </Box>
         <Box
@@ -51,9 +59,12 @@ const DashboardEmployer = ({ brandingRef }) => {
           sx={{
             display:
               !(
+                !profileData.image ||
                 !profileData.about ||
                 !profileData.whyWorkWithUs ||
-                !profileData.mission
+                !profileData.mission ||
+                !profileData.location ||
+                !profileData.contact
               ) && "none",
           }}
         >
@@ -76,37 +87,22 @@ const DashboardEmployer = ({ brandingRef }) => {
           </Typography>
         </Box>
       </Box>
-      {profileData.about && (
-        <>
-          <Typography variant="h6" mt={3} mb={1}>
-            About
-          </Typography>
-          <Typography variant="body2">{profileData.about}</Typography>
-        </>
-      )}
 
-      {profileData.mission && (
-        <>
-          <Typography variant="h6" mt={3} mb={1}>
-            Mission
-          </Typography>
-          <Typography variant="body2">{profileData.mission}</Typography>
-        </>
-      )}
-      {profileData.whyWorkWithUs && (
-        <>
-          <Typography variant="h6" mt={3} mb={1}>
-            Why work with us?
-          </Typography>
-          <Typography variant="body2">{profileData.whyWorkWithUs}</Typography>
-        </>
-      )}
-      <Divider sx={{ mt: 4, mb: 5 }} />
+      <Divider sx={{ mt: 4, mb: 4 }} />
       <Box className={classes.statPacks}>
         <StatPack stat={123} caption="Received Applications" color="info" />
         <StatPack stat={123} caption="Job Posts" color="info" />
         <StatPack stat={123} caption="Interviews Scheduled" color="info" />
       </Box>
+
+      {!profileData.about ||
+        !profileData.whyWorkWithUs ||
+        (!profileData.mission && (
+          <BrandingPreview
+            profileData={profileData}
+            brandingRef={brandingRef}
+          />
+        ))}
     </Box>
   );
 };
