@@ -6,9 +6,9 @@ import {
   Button,
   MenuItem,
   Divider,
+  Snackbar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import useStyles from "./styles";
 import Qualification from "./Qualification";
 import Experience from "./Experience";
@@ -45,6 +45,8 @@ const Resume = () => {
   const [skills, setSkills] = useState([]);
 
   const [errorResponse, setErrorResponse] = useState({});
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const updateAllStates = (user) => {
     setImage(user.image ? user.image : "");
@@ -101,6 +103,7 @@ const Resume = () => {
       );
       const { user } = response.data;
       updateAllStates(user);
+      setSnackbarOpen(true);
       setErrorResponse({});
       console.log(response.data);
     } catch (error) {
@@ -287,6 +290,7 @@ const Resume = () => {
                     : false
                 }
                 helperText={errorResponse?.error?.email}
+                disabled
               />
             </Grid>
             <Grid item xxs={1} xs={4}>
@@ -405,6 +409,18 @@ const Resume = () => {
         >
           Update
         </Button>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          message="Resume updated."
+          onClose={(e, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setSnackbarOpen(false);
+          }}
+          sx={{ m: 2 }}
+        />
       </form>
     </Box>
   );
