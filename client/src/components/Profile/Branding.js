@@ -1,10 +1,20 @@
-import { Box, Grid, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  MenuItem,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { isObjectEmpty } from "../../assets/utils";
 import ProfilePicUpload from "./ProfilePicUpload";
 import useStyles from "./styles";
+import WhyWorkWithUs from "./WhyWorkWithUs";
 
 const Branding = () => {
   const classes = useStyles();
@@ -18,10 +28,12 @@ const Branding = () => {
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [about, setAbout] = useState("");
-  const [whyWorkWithUs, setWhyWorkWithUs] = useState("");
+  const [whyWorkWithUs, setWhyWorkWithUs] = useState([]);
   const [mission, setMission] = useState("");
 
   const [errorResponse, setErrorResponse] = useState({});
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const updateAllStates = (employer) => {
     setImage(employer.image ? employer.image : "");
@@ -68,6 +80,7 @@ const Branding = () => {
       );
       const { employer } = response.data;
       updateAllStates(employer);
+      setSnackbarOpen(true);
       setErrorResponse({});
       console.log(response.data);
     } catch (error) {
@@ -96,7 +109,7 @@ const Branding = () => {
 
   return (
     <Box className={classes.panelWrapper}>
-      <Typography variant="h5">My Resume</Typography>
+      <Typography variant="h5">Branding</Typography>
       <Typography variant="body1" mb={2}>
         Your branding information will be visible to Job Seekers. Include
         contact details, benefits, and other information.
@@ -118,7 +131,7 @@ const Branding = () => {
                 fullWidth
                 size="small"
                 className={classes.formControl}
-                label="Name of Organization/Business"
+                label="Name of Business/Organization"
                 margin="dense"
                 name="companyName"
                 value={companyName}
@@ -199,15 +212,37 @@ const Branding = () => {
                 helperText={errorResponse?.error?.contact}
               />
             </Grid>
+            <Grid item xxs={1} xs={4}>
+              <TextField
+                fullWidth
+                size="small"
+                className={classes.formControl}
+                label="Email"
+                margin="dense"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={
+                  !isObjectEmpty(errorResponse)
+                    ? errorResponse.error?.email
+                      ? true
+                      : false
+                    : false
+                }
+                helperText={errorResponse?.error?.email}
+                disabled
+              />
+            </Grid>
           </Grid>
         </Box>
+
         <Typography
           className={classes.resumeHeadings}
           color="primary"
           mt={3}
           mb={1}
         >
-          Branding Information
+          About
         </Typography>
         <Grid
           container
@@ -237,6 +272,22 @@ const Branding = () => {
               helperText={errorResponse?.error?.about}
             />
           </Grid>
+        </Grid>
+
+        <Typography
+          className={classes.resumeHeadings}
+          color="primary"
+          mt={3}
+          mb={1}
+        >
+          Mission
+        </Typography>
+        <Grid
+          container
+          spacing={{ z: 1 }}
+          columns={{ z: 1, xs: 2 }}
+          sx={{ flexGrow: 1 }}
+        >
           <Grid item xxs={1} xs={4}>
             <TextField
               fullWidth
@@ -260,6 +311,61 @@ const Branding = () => {
             />
           </Grid>
         </Grid>
+
+        <Typography
+          className={classes.resumeHeadings}
+          color="primary"
+          mt={3}
+          mb={1}
+        >
+          Why Work With Us
+        </Typography>
+        {whyWorkWithUs &&
+          whyWorkWithUs.map((_, index) => (
+            <WhyWorkWithUs
+              whyWorkWithUs={whyWorkWithUs}
+              setWhyWorkWithUs={setWhyWorkWithUs}
+              errorResponse={errorResponse}
+              no={index + 1}
+              key={index}
+            />
+          ))}
+        <Button
+          sx={{ mt: 1, textTransform: "capitalize", fontWeight: 400 }}
+          onClick={() => {
+            setWhyWorkWithUs((prev) => [
+              ...prev,
+              {
+                heading: "",
+                body: "",
+              },
+            ]);
+          }}
+        >
+          + Add Benefit
+        </Button>
+
+        <Divider sx={{ my: 3 }} />
+        <Button
+          disableElevation
+          sx={{ display: "block" }}
+          type="submit"
+          variant="contained"
+        >
+          Update
+        </Button>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          message="Branding updated."
+          onClose={(e, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setSnackbarOpen(false);
+          }}
+          sx={{ m: 2 }}
+        />
       </form>
     </Box>
   );
