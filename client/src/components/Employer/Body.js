@@ -18,6 +18,7 @@ import useStyles from "./styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import WhyWorkWithUsPreview from "../Profile/WhyWorkWithUsPreview";
 moment().format();
 
 const Body = ({ employer }) => {
@@ -68,7 +69,13 @@ const Body = ({ employer }) => {
           <Typography variant="h6">Why work with us?</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>{employer.whyWorkWithUs}</Typography>
+          {employer.whyWorkWithUs.map((benefit, index) => (
+            <WhyWorkWithUsPreview
+              index={index}
+              benefit={benefit}
+              variant="body1"
+            />
+          ))}
         </AccordionDetails>
       </Accordion>
 
