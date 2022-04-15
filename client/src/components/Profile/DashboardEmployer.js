@@ -14,6 +14,7 @@ const DashboardEmployer = ({ brandingRef }) => {
   const id = useSelector((state) => state.user?.id);
 
   const [profileData, setProfileData] = useState({});
+  const [rating, setRating] = useState(0);
 
   const loadProfileData = async () => {
     try {
@@ -22,6 +23,7 @@ const DashboardEmployer = ({ brandingRef }) => {
       );
       const employer = response.data.employer;
       setProfileData(employer);
+      setRating(employer.rating);
       console.log(employer);
     } catch (error) {
       console.log(error.response);
@@ -46,11 +48,17 @@ const DashboardEmployer = ({ brandingRef }) => {
             <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
               {profileData.companyName}
             </Typography>
+            <Typography variant="caption">
+              {profileData.followers !== 1
+                ? `${profileData.followers} Followers`
+                : `${profileData.followers} Follower`}
+            </Typography>
             <Rating
-              value={profileData.rating}
+              value={rating}
               readOnly
               size="small"
               precision={0.5}
+              sx={{ ml: "-3px" }}
             />
           </Box>
         </Box>
@@ -61,7 +69,7 @@ const DashboardEmployer = ({ brandingRef }) => {
               !(
                 !profileData.image ||
                 !profileData.about ||
-                !profileData.whyWorkWithUs ||
+                !profileData.whyWorkWithUs.length > 0 ||
                 !profileData.mission ||
                 !profileData.location ||
                 !profileData.contact
@@ -91,18 +99,18 @@ const DashboardEmployer = ({ brandingRef }) => {
       <Divider sx={{ mt: 4, mb: 4 }} />
       <Box className={classes.statPacks}>
         <StatPack stat={123} caption="Received Applications" color="info" />
-        <StatPack stat={123} caption="Job Posts" color="info" />
+        <StatPack
+          stat={profileData.totalJobsPosted}
+          caption="Total Jobs Posted"
+          color="info"
+        />
         <StatPack stat={123} caption="Interviews Scheduled" color="info" />
       </Box>
-
-      {!profileData.about ||
-        !profileData.whyWorkWithUs ||
-        (!profileData.mission && (
-          <BrandingPreview
-            profileData={profileData}
-            brandingRef={brandingRef}
-          />
-        ))}
+      {(profileData.about ||
+        profileData.mission ||
+        profileData.whyWorkWithUs?.length > 0) && (
+        <BrandingPreview profileData={profileData} brandingRef={brandingRef} />
+      )}
     </Box>
   );
 };
