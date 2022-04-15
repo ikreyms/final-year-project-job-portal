@@ -18,6 +18,14 @@ const Skill = ({ no, skills, setSkills, errorResponse }) => {
     );
   };
 
+  const removeHandler = (e) => {
+    e.preventDefault();
+    const newSkills = skills.filter((skill, index) => {
+      return index !== no - 1;
+    });
+    setSkills(newSkills);
+  };
+
   return (
     <>
       <Box
@@ -30,7 +38,7 @@ const Skill = ({ no, skills, setSkills, errorResponse }) => {
         <Typography mt={3} mb={1} variant="caption">
           Skill {no}
         </Typography>
-        <IconButton sx={{ mt: 1 }}>
+        <IconButton onClick={removeHandler} sx={{ mt: 1 }}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Box>
