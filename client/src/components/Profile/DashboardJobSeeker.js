@@ -6,6 +6,7 @@ import ExclamationMark from "@mui/icons-material/ErrorOutline";
 import logo from "../../assets/logo.svg";
 import useStyles from "./styles";
 import StatPack from "./StatPack";
+import ResumePreview from "./ResumePreview";
 
 const DashboardJobSeeker = ({ resumeRef }) => {
   const classes = useStyles();
@@ -50,9 +51,14 @@ const DashboardJobSeeker = ({ resumeRef }) => {
           sx={{
             display:
               !(
+                !profileData.image ||
                 !profileData.contact ||
-                !profileData.address ||
+                !profileData.gender ||
+                !profileData.dob ||
+                !profileData.maritalStatus ||
                 !profileData.about ||
+                !profileData.qualifications ||
+                !profileData.experiences ||
                 !profileData.skills
               ) && "none",
           }}
@@ -76,23 +82,20 @@ const DashboardJobSeeker = ({ resumeRef }) => {
           </Typography>
         </Box>
       </Box>
-      {profileData.about && (
-        <Typography variant="body2" mt={3}>
-          {profileData.about}
-        </Typography>
-      )}
-      {/* <Typography variant="body2" mt={3}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
-      </Typography> */}
-      <Divider sx={{ mt: 4, mb: 5 }} />
+
+      <Divider sx={{ mt: 4, mb: 4 }} />
       <Box className={classes.statPacks}>
         <StatPack stat={123} caption="Jobs Applied" color="info" />
         <StatPack stat={123} caption="Interviews" color="success" />
         <StatPack stat={123} caption="Rejected" color="error" />
       </Box>
+
+      {profileData.about ||
+        profileData.qualifications?.length > 0 ||
+        profileData.experiences?.length > 0 ||
+        (profileData.skills?.length > 0 && (
+          <ResumePreview profileData={profileData} resumeRef={resumeRef} />
+        ))}
     </Box>
   );
 };
