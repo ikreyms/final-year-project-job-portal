@@ -2,12 +2,13 @@ import { Box, Divider, IconButton, Typography } from "@mui/material";
 import React from "react";
 import useStyles from "./styles";
 import EditIcon from "@mui/icons-material/Edit";
+import WhyWorkWithUsPreview from "./WhyWorkWithUsPreview";
 
 const BrandingPreview = ({ profileData, brandingRef }) => {
   const classes = useStyles();
   return (
     <>
-      <Divider sx={{ mt: 4, mb: 4 }} />
+      <Divider sx={{ mt: 4 }} />
       {profileData.about && (
         <>
           <Box
@@ -64,7 +65,7 @@ const BrandingPreview = ({ profileData, brandingRef }) => {
         </>
       )}
 
-      {profileData.whyWorkWithUs && (
+      {profileData.whyWorkWithUs?.length > 0 && (
         <>
           <Box
             sx={{
@@ -88,7 +89,13 @@ const BrandingPreview = ({ profileData, brandingRef }) => {
               <EditIcon fontSize="small" />
             </IconButton>
           </Box>
-          <Typography variant="body2">{profileData.whyWorkWithUs}</Typography>
+          {profileData.whyWorkWithUs.map((benefit, index) => (
+            <WhyWorkWithUsPreview
+              key={index}
+              benefit={benefit}
+              variant="body2"
+            />
+          ))}
         </>
       )}
     </>
