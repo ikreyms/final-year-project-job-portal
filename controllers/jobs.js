@@ -115,7 +115,7 @@ exports.filterJobs = async (req, res, next) => {
 
     responseToClient(res, 200, { success: true, jobs });
   } catch (error) {
-    responseToClient(res, 400, { success: false, error: error.message });
+    responseToClient(res, 500, { success: false, error: error.message });
   }
 };
 
@@ -134,9 +134,9 @@ exports.getOneJob = async (req, res, next) => {
         .status(200)
         .json({ success: true, job });
     } catch (error) {
-      return responseToClient(res, 400, {
+      return responseToClient(res, 500, {
         success: false,
-        error: "No job found.",
+        error: error.message,
       });
     }
   }
@@ -161,6 +161,22 @@ exports.getSimilarJobs = async (req, res, next) => {
     }).populate("postedBy");
     responseToClient(res, 200, { success: true, similarJobs });
   } catch (error) {
-    responseToClient(res, 400, { success: false, error: error.message });
+    responseToClient(res, 500, { success: false, error: error.message });
+  }
+};
+
+exports.getJobsByEmployer = async (req, res, next) => {
+  const { empId } = req.params;
+  try {
+    const jobs = await Job.find({ postedBy: empId });
+    if (jobs.length === 0)
+      return responseToClient(res, 404, {
+        success: false,
+        message: "No jobs to show.",
+      });
+    console.log(jobs);
+    responseToClient(res, 200, { success: true, jobs });
+  } catch (error) {
+    responseToClient(res, 500, { success: false, error: error.message });
   }
 };
