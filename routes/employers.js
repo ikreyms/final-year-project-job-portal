@@ -12,6 +12,6 @@ const router = express.Router();
 router.get("/", filterEmployers);
 router.get("/search", searchEmployers);
 router.get("/:id", getOneEmployer);
-router.get("/branding/:id", updateBranding);
+router.patch("/branding/:id", updateBranding);
 
 module.exports = router;
