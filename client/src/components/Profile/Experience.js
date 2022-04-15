@@ -9,7 +9,6 @@ import {
 import React from "react";
 import useStyles from "./styles";
 import DeleteIcon from "@mui/icons-material/Close";
-import moment from "moment";
 import { experienceCategories } from "../../assets/dataArrays";
 import { isObjectEmpty } from "../../assets/utils";
 
@@ -27,6 +26,14 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
     );
   };
 
+  const removeHandler = (e) => {
+    e.preventDefault();
+    const newExperiences = experiences.filter((experience, index) => {
+      return index !== no - 1;
+    });
+    setExperiences(newExperiences);
+  };
+
   return (
     <>
       <Box
@@ -39,7 +46,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
         <Typography mt={2} mb={1}>
           Experience {no}{" "}
         </Typography>
-        <IconButton sx={{ mt: 1 }}>
+        <IconButton onClick={removeHandler} sx={{ mt: 1 }}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Box>
@@ -101,11 +108,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="From"
             margin="dense"
             name="from"
-            value={
-              experiences[no - 1].from
-                ? moment(experiences[no - 1].from).format("YYYY")
-                : ""
-            }
+            value={experiences[no - 1].from}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -125,11 +128,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="To"
             margin="dense"
             name="to"
-            value={
-              experiences[no - 1].to
-                ? moment(experiences[no - 1].to).format("YYYY")
-                : ""
-            }
+            value={experiences[no - 1].to}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
