@@ -32,6 +32,14 @@ const Qualification = ({
     );
   };
 
+  const removeHandler = (e) => {
+    e.preventDefault();
+    const newQualifications = qualifications.filter((qualification, index) => {
+      return index !== no - 1;
+    });
+    setQualifications(newQualifications);
+  };
+
   return (
     <>
       <Box
@@ -44,7 +52,7 @@ const Qualification = ({
         <Typography mt={2} mb={1}>
           Qualification {no}{" "}
         </Typography>
-        <IconButton sx={{ mt: 1 }}>
+        <IconButton onClick={removeHandler} sx={{ mt: 1 }}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Box>
@@ -85,11 +93,7 @@ const Qualification = ({
             label="Year"
             margin="dense"
             name="completedOn"
-            value={
-              qualifications[no - 1].completedOn
-                ? moment(qualifications[no - 1].completedOn).format("YYYY")
-                : ""
-            }
+            value={qualifications[no - 1].completedOn}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
