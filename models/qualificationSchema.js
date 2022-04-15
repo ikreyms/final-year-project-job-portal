@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-exports.certificateLevels = [
+const certificateLevels = [
   "",
   "Basic Education",
   "O Level",
@@ -23,14 +23,14 @@ const qualificationSchema = new mongoose.Schema(
       required: [true, "Please provide the name of the educational institute."],
     },
     completedOn: {
-      type: Date,
+      type: Number,
       required: [true, "Please provide the year of completion."],
     },
     level: {
       type: String,
       required: [true, "Please provide the level of course."],
       enum: {
-        values: this.certificateLevels,
+        values: certificateLevels,
         message: "Please select certificate level of the course.",
       },
     },
