@@ -1,4 +1,5 @@
 const Employer = require("../models/Employer");
+const equals = require("../utils/equals");
 const responseToClient = require("../utils/responseToClient");
 
 exports.filterEmployers = async (req, res, next) => {
@@ -93,4 +94,50 @@ exports.getOneEmployer = async (req, res, next) => {
     success: false,
     error: "No employer found.",
   });
+};
+
+exports.updateBranding = async (req, res, next) => {
+  const { id } = req.params;
+
+  const {
+    image,
+    companyName,
+    sector,
+    location,
+    contact,
+    email,
+    about,
+    mission,
+    whyWorkWithUs,
+  } = req.body;
+
+  try {
+    let employer = await Employer.findOne({ _id: id });
+
+    employer.image !== image && (employer.image = image);
+    employer.companyName !== companyName &&
+      (employer.companyName = companyName);
+    employer.sector !== sector && (employer.sector = sector);
+    employer.location !== location && (employer.location = location);
+    employer.contact !== contact && (employer.contact = contact);
+    employer.email !== email && (employer.email = email);
+    employer.about !== about && (employer.about = about);
+    employer.mission !== mission && (employer.mission = mission);
+
+    !equals(employer.whyWorkWithUs, whyWorkWithUs) &&
+      (employer.whyWorkWithUs = whyWorkWithUs);
+
+    await employer.save();
+    responseToClient(res, 200, { success: true, employer });
+  } catch (error) {
+    let errorMessage = {};
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errorMessage[key] = error.errors[key].message;
+      });
+      responseToClient(res, 400, { success: false, error: errorMessage });
+    } else {
+      responseToClient(res, 500, { success: false, error: error.message });
+    }
+  }
 };
