@@ -45,7 +45,7 @@ exports.filterEmployers = async (req, res, next) => {
       .status(200)
       .json({ success: true, employers: query });
   } catch (error) {
-    responseToClient(res, 400, { success: false, error: error.message });
+    responseToClient(res, 500, { success: false, error: error.message });
   }
 };
 
@@ -139,6 +139,5 @@ exports.updateBranding = async (req, res, next) => {
     } else {
       responseToClient(res, 500, { success: false, error: error.message });
     }
-    // console.log(error);
   }
 };
