@@ -88,6 +88,7 @@ const Resume = () => {
       maritalStatus,
       contact,
       email,
+      about,
       qualifications,
       experiences,
       skills,
@@ -100,6 +101,7 @@ const Resume = () => {
       );
       const { user } = response.data;
       updateAllStates(user);
+      setErrorResponse({});
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -113,6 +115,7 @@ const Resume = () => {
       const response = await axios.get(`http://localhost:2900/api/users/${id}`);
       const { user } = response.data;
       updateAllStates(user);
+      console.log("loadUserResume", user);
     } catch (error) {
       console.log(error);
     }
@@ -124,8 +127,10 @@ const Resume = () => {
 
   return (
     <Box className={classes.panelWrapper}>
-      <Typography variant="h5" mb={2}>
-        My Resume
+      <Typography variant="h5">My Resume</Typography>
+      <Typography variant="body1" mb={2}>
+        Your resume information will be included in your job application. Make
+        sure the all the information is provided.
       </Typography>
       <form onSubmit={submitHandler}>
         <Typography className={classes.resumeHeadings} color="primary" mb={2}>
@@ -207,7 +212,8 @@ const Resume = () => {
                 label="Date of Birth"
                 margin="dense"
                 name="dob"
-                value={moment(dob).format("DD/MM/YYYY")}
+                placeholder="dd/mm/yyyy"
+                value={dob}
                 onChange={(e) => setDob(e.target.value)}
               />
             </Grid>
