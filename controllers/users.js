@@ -15,9 +15,9 @@ exports.getOneUser = async (req, res, next) => {
 
     responseToClient(res, 200, { success: true, user });
   } catch (error) {
-    responseToClient(res, 400, {
+    responseToClient(res, 500, {
       success: false,
-      error: "Job seeker not found.",
+      error: error.message,
     });
   }
 };
@@ -37,7 +37,7 @@ exports.getUserRatingsAndFollowing = async (req, res, next) => {
     }
     responseToClient(res, 404, { error: "User not found." });
   } catch (error) {
-    responseToClient(res, 400, { error: error.message });
+    responseToClient(res, 500, { error: error.message });
   }
 };
 
@@ -67,7 +67,7 @@ exports.followNewEmployer = async (req, res, next) => {
       message: "You already follow this employer.",
     });
   } catch (error) {
-    responseToClient(res, 401, { error: error.message });
+    responseToClient(res, 500, { error: error.message });
   }
 };
 
@@ -93,7 +93,7 @@ exports.unfollowNewEmployer = async (req, res, next) => {
     await User.updateOne({ _id: userId }, { $pull: { following: employerId } });
     responseToClient(res, 200, { message: "You unfollowed the employer." });
   } catch (error) {
-    responseToClient(res, 401, { error: error.message });
+    responseToClient(res, 500, { error: error.message });
   }
 };
 
@@ -164,7 +164,7 @@ exports.rateEmployer = async (req, res, next) => {
       message: `You have added a new rating of ${value} stars for this employer.`,
     });
   } catch (error) {
-    responseToClient(res, 401, { success: false, error: error.message });
+    responseToClient(res, 500, { success: false, error: error.message });
   }
 };
 
