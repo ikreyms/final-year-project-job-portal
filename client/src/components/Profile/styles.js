@@ -64,11 +64,19 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     objectFit: "cover",
   },
-  headerMainTextWrapper: { marginLeft: theme.spacing(3) },
+  headerMainTextWrapper: {
+    marginLeft: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
   statPacks: {
     display: "flex",
     justifyContent: "space-evenly",
     flexWrap: "wrap",
+    [theme.breakpoints.down(510)]: {
+      gap: theme.spacing(3),
+    },
   },
   statPack: {
     display: "flex",
