@@ -1,66 +1,59 @@
 const mongoose = require("mongoose");
 const Employer = require("../models/Employer");
 const Job = require("../models/Job");
+const equals = require("../utils/equals");
 const responseToClient = require("../utils/responseToClient");
 
 exports.createJob = async (req, res, next) => {
   const { employerId } = req.params;
-  const { jobType, jobCategory, title, description, dueDate, salary } =
-    req.body;
+  const {
+    title,
+    jobType,
+    noOfPositions,
+    location,
+    dueDate,
+    salary,
+    minQualification,
+    jobCategory,
+    description,
+    responsibilities,
+    criteria,
+  } = req.body;
 
   try {
-    const exists = await Employer.exists({ _id: employerId });
-    if (!exists)
-      return responseToClient(res, 400, {
+    const employer = Employer.findOne({ _id: employerId });
+    if (!employer)
+      return responseToClient(res, 404, {
         success: false,
-        error: "Invalid employerId.",
+        error: "Invalid employer Id.",
       });
-  } catch (error) {
-    responseToClient(res, 500, { success: false, error: error.message });
-  }
 
-  const reqMap = new Map();
-
-  reqMap.set(["jobType", "Job type"], jobType);
-  reqMap.set(["title", "Title"], title);
-  reqMap.set(["dueDate", "Due date"], dueDate);
-  reqMap.set(["salary", "Email"], salary);
-
-  let errorObj = {};
-
-  for (let [key, value] of reqMap.entries()) {
-    if (value === "") {
-      errorObj[key[0]] = `${key[1]} is required.`;
-    }
-  }
-
-  if (
-    !(Object.keys(errorObj).length === 0 && errorObj.constructor === Object)
-  ) {
-    return responseToClient(res, 400, {
-      success: false,
-      error: errorObj,
-    });
-  }
-
-  try {
-    const newJob = await Job.create({
-      jobType,
-      jobCategory,
+    const job = new Job({
+      postedBy: employerId,
       title,
-      description,
+      jobType,
+      noOfPositions,
+      location,
       dueDate,
       salary,
-      postedBy: employerId,
+      minQualification,
+      jobCategory,
+      description,
     });
+    !equals(job.responsibilities, responsibilities) &&
+      (job.responsibilities = responsibilities);
+    !equals(job.criteria, criteria) && (job.criteria = criteria);
+
+    await job.save();
+
     await Employer.findOneAndUpdate(
       { _id: employerId },
       { $inc: { totalJobsPosted: 1 } }
     );
     responseToClient(res, 201, {
       success: true,
+      job,
       message: "New job created.",
-      newJob,
     });
   } catch (error) {
     let errorMessage = {};
@@ -168,7 +161,10 @@ exports.getSimilarJobs = async (req, res, next) => {
 exports.getJobsByEmployer = async (req, res, next) => {
   const { empId } = req.params;
   try {
-    const jobs = await Job.find({ postedBy: empId });
+    const jobs = await Job.find({ postedBy: empId }, null, {
+      sort: "-postDate",
+      populate: { path: "postedBy" },
+    });
     if (jobs.length === 0)
       return responseToClient(res, 404, {
         success: false,
@@ -178,5 +174,57 @@ exports.getJobsByEmployer = async (req, res, next) => {
     responseToClient(res, 200, { success: true, jobs });
   } catch (error) {
     responseToClient(res, 500, { success: false, error: error.message });
+  }
+};
+
+exports.updateJob = async (req, res, next) => {
+  const { jobId } = req.params;
+  const {
+    title,
+    jobType,
+    noOfPositions,
+    location,
+    dueDate,
+    salary,
+    minQualification,
+    jobCategory,
+    description,
+    responsibilities,
+    criteria,
+  } = req.body;
+
+  try {
+    let job = await Job.findOne({ _id: jobId });
+
+    console.log(job);
+
+    job.title !== title && (job.title = title);
+    job.jobType !== jobType && (job.jobType = jobType);
+    job.noOfPositions !== noOfPositions && (job.noOfPositions = noOfPositions);
+    job.location !== location && (job.location = location);
+    job.dueDate !== dueDate && (job.dueDate = dueDate);
+    job.salary !== salary && (job.salary = salary);
+    job.minQualification !== minQualification &&
+      (job.minQualification = minQualification);
+    job.jobCategory !== jobCategory && (job.jobCategory = jobCategory);
+    job.description !== description && (job.description = description);
+
+    !equals(job.responsibilities, responsibilities) &&
+      (job.responsibilities = responsibilities);
+    !equals(job.criteria, criteria) && (job.criteria = criteria);
+
+    await job.save();
+    responseToClient(res, 200, { success: true, job });
+  } catch (error) {
+    let errorMessage = {};
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errorMessage[key] = error.errors[key].message;
+      });
+      responseToClient(res, 400, { success: false, error: errorMessage });
+    } else {
+      responseToClient(res, 500, { success: false, error: error.message });
+      console.log(error);
+    }
   }
 };
