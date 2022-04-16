@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const criteriaSchema = require("./criteriaSchema");
+const responsibilitySchema = require("./responsibilitySchema");
 
 const jobCategories = [
   "Agriculture, Food, and Natural Resources",
@@ -12,6 +14,21 @@ const jobCategories = [
   "Law, Corrections, and Security",
   "Marketing",
   "Science, Technology, Engineering, and Math",
+];
+
+const certificateLevels = [
+  "Basic Education",
+  "O Level",
+  "Certificate 1",
+  "Certificate 2",
+  "Certificate 3",
+  "A Level",
+  "Diploma",
+  "Advanced Diploma",
+  "Associates Degree",
+  "Bachelors Degree",
+  "Masters Degree",
+  "PHD",
 ];
 
 const jobSchema = new mongoose.Schema(
@@ -37,8 +54,6 @@ const jobSchema = new mongoose.Schema(
       type: String,
     },
 
-    description: String,
-
     dueDate: {
       required: [true, "Job's due date must be provided."],
       type: Date,
@@ -57,11 +72,21 @@ const jobSchema = new mongoose.Schema(
 
     noOfPositions: { type: Number, default: 1 },
 
-    jobDescription: String,
-
-    qualification: { type: String, default: "Basic education." },
-
     salary: { type: Number, required: [true, "Salary must be provided."] },
+
+    minQualification: {
+      type: String,
+      enum: {
+        values: certificateLevels,
+        message: "Please select a valid certificate level.",
+      },
+    },
+
+    description: String,
+
+    responsibilities: [responsibilitySchema],
+
+    criteria: [criteriaSchema],
 
     //   "postDate": "2022-02-12T01:12:59"
   },
