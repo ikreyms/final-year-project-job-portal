@@ -43,18 +43,10 @@ const Notice = ({ job }) => {
       </Typography>
       <Typography variant="body2" mt={2}>
         <span style={{ fontWeight: "bold" }}>Qualifications:</span>{" "}
-        {job.qualifications ? job.qualifications : "Basic education."}
+        {job.minQualification ? job.minQualification : "Basic education."}
       </Typography>
       <Typography variant="body2" mt={2}>
-        <span style={{ fontWeight: "bold" }}>Job Description:</span>{" "}
-        {job.description ? (
-          job.description
-        ) : (
-          <span style={{ fontStyle: "italic" }}>No description provided.</span>
-        )}
-      </Typography>
-      <Typography variant="body2" mt={2}>
-        <span style={{ fontWeight: "bold" }}>Gross Salary: </span>
+        <span style={{ fontWeight: "bold" }}>Salary: </span>
         MVR{" "}
         {
           <NumberFormat
@@ -72,6 +64,14 @@ const Notice = ({ job }) => {
           <span style={{ fontStyle: "italic" }}>
             Job location not provided.
           </span>
+        )}
+      </Typography>
+      <Typography variant="body2" mt={2}>
+        <span style={{ fontWeight: "bold" }}>Job Description:</span>{" "}
+        {job.description ? (
+          job.description
+        ) : (
+          <span style={{ fontStyle: "italic" }}>No description provided.</span>
         )}
       </Typography>
     </Paper>
