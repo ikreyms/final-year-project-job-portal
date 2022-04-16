@@ -73,7 +73,7 @@ const userSchema = new mongoose.Schema(
 
     contact: Number,
     gender: String,
-    dob: String,
+    dob: Date,
     maritalStatus: String,
     qualifications: [qualificationSchema],
     experiences: [experienceSchema],
