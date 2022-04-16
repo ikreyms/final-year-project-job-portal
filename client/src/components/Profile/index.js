@@ -3,17 +3,17 @@ import { Tabs, Tab, Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import useStyles from "./styles";
 import TabPanel from "./TabPanel";
-import DashboardJobSeeker from "./DashboardJobSeeker";
+import DashboardJobSeeker from "./JobSeeker/DashboardJobSeeker";
 import {
   employerProfileTabs,
   jobSeekerProfileTabs,
   adminProfileTabs,
 } from "../../assets/dataArrays";
-import DashboardEmployer from "./DashboardEmployer";
-import Resume from "./Resume";
+import DashboardEmployer from "./Employer/DashboardEmployer";
+import Resume from "./JobSeeker/Resume";
 import { useTheme } from "@mui/styles";
-import Branding from "./Branding";
-import JobPosts from "./JobPosts";
+import Branding from "./Employer/Branding";
+import JobPosts from "./Employer/JobPosts";
 
 const Profile = () => {
   const classes = useStyles();
