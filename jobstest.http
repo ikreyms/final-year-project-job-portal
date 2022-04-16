@@ -12,16 +12,21 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:2900/api/jobs/623210c8665f86576787e972/create
+POST http://localhost:2900/api/jobs/62594df4cd4534524e899389/create
 Content-Type: application/json
 
 {
-    "jobType": "Full-time",
-    "jobCategory": "Law, Corrections, and Security",
-    "postedBy": "623210c8665f86576787e972",
-    "title": "Paralegal",
-    "dueDate": "2022-05-28",
-    "salary": 11000
+    "title":"",
+    "jobType": "",
+    "noOfPositions":"",
+    "location":"",
+    "dueDate":"",
+    "salary":"",
+    "minQualification":"",
+    "jobCategory":"",
+    "description":"",
+    "responsibilities":[],
+    "criteria":[]
 }
 
 ###
