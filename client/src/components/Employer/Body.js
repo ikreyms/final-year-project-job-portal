@@ -18,7 +18,7 @@ import useStyles from "./styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import WhyWorkWithUsPreview from "../Profile/WhyWorkWithUsPreview";
+import WhyWorkWithUsPreview from "../Profile/Employer/WhyWorkWithUsPreview";
 moment().format();
 
 const Body = ({ employer }) => {
