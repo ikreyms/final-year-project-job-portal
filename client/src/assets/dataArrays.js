@@ -1,4 +1,5 @@
 exports.jobTypes = ["All", "Part-time", "Full-time", "Intern"];
+exports.jobPostJobTypes = ["Part-time", "Full-time", "Intern"];
 
 exports.salaryRanges = [
   "All",
@@ -27,7 +28,7 @@ exports.jobCategories = [
 ];
 
 exports.experienceCategories = [
-  "",
+  // "",
   "Agriculture, Food, and Natural Resources",
   "Architecture and Construction",
   "Arts, Audio/Video Technology, and Communication",
@@ -59,7 +60,7 @@ exports.jobSeekerProfileTabs = [
 exports.adminProfileTabs = ["Dashboard", "Notifications"];
 
 exports.certificateLevels = [
-  "",
+  // "",
   "Basic Education",
   "O Level",
   "Certificate 1",
