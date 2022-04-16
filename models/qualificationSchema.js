@@ -23,7 +23,7 @@ const qualificationSchema = new mongoose.Schema(
       required: [true, "Please provide the name of the educational institute."],
     },
     completedOn: {
-      type: Number,
+      type: Date,
       required: [true, "Please provide the year of completion."],
     },
     level: {
