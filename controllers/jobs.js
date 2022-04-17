@@ -228,3 +228,16 @@ exports.updateJob = async (req, res, next) => {
     }
   }
 };
+
+exports.deleteJob = async (req, res, next) => {
+  const { jobId } = req.params;
+  try {
+    await Job.deleteOne({ _id: jobId });
+    responseToClient(res, 204, {
+      success: true,
+      message: "Job deleted.",
+    });
+  } catch (error) {
+    responseToClient(res, 500, { error: error.message });
+  }
+};
