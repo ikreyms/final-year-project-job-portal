@@ -5,6 +5,7 @@ const authRoutes = require("./routes/auth");
 const employerRoutes = require("./routes/employers");
 const userRoutes = require("./routes/users");
 const jobRoutes = require("./routes/jobs");
+const applicationRoutes = require("./routes/applications");
 const connectDB = require("./config/db");
 
 connectDB();
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/employers", employerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use("/api/applications", applicationRoutes);
 
 app.listen(process.env.PORT || 2900, () =>
   console.log(`Server running on port ${process.env.PORT}`)
