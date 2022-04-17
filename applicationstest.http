@@ -1,0 +1,5 @@
+POST http://localhost:2900/api/applications/625931868559d230c1443c10/62594df4cd4534524e899389/create
+
+###
+
+GET http://localhost:2900/api/applications/625931868559d230c1443c10
