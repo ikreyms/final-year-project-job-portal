@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
@@ -12,16 +13,21 @@ import axios from "axios";
 import useStyles from "./styles";
 import Notice from "./Notice";
 import SimilarJob from "./SimilarJob";
+import { useSelector } from "react-redux";
 
 const Job = () => {
   const { id: jobId } = useParams();
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const [checked, setChecked] = useState(false);
+  const seekerId = useSelector((state) => state.user?.id);
 
   const [job, setJob] = useState({});
   const [similarJobs, setSimilarJobs] = useState({});
+
+  const [checked, setChecked] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const loadJob = async (jobId) => {
     try {
@@ -43,6 +49,26 @@ const Job = () => {
       console.log(response.data);
     } catch (error) {
       console.log(error.response);
+    }
+  };
+
+  const applyToJob = async (e) => {
+    e.preventDefault();
+    console.log(seekerId);
+    if (!seekerId) {
+      setSnackbarMessage("You must be logged in to apply for the job.");
+      setSnackbarOpen(true);
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `http://localhost:2900/api/applications/${seekerId}/${job._id}/create`
+      );
+      setSnackbarMessage(response.data.message);
+      setSnackbarOpen(true);
+    } catch (error) {
+      setSnackbarMessage(error.response.data.message);
+      setSnackbarOpen(true);
     }
   };
 
@@ -85,6 +111,7 @@ const Job = () => {
                 disableElevation
                 className={classes.btn}
                 disabled={!checked}
+                onClick={applyToJob}
               >
                 Apply
               </Button>
@@ -117,6 +144,18 @@ const Job = () => {
             </Box>
           </Box>
         )}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          message={snackbarMessage}
+          onClose={(e, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setSnackbarOpen(false);
+          }}
+          sx={{ m: 2 }}
+        />
       </Box>
     </Box>
   );
