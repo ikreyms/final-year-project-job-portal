@@ -74,6 +74,7 @@ const Body = ({ employer }) => {
               index={index}
               benefit={benefit}
               variant="body1"
+              key={index}
             />
           ))}
         </AccordionDetails>
