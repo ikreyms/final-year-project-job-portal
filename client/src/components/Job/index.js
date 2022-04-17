@@ -1,4 +1,11 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -10,6 +17,8 @@ const Job = () => {
   const { id: jobId } = useParams();
   const classes = useStyles();
   const navigate = useNavigate();
+
+  const [checked, setChecked] = useState(false);
 
   const [job, setJob] = useState({});
   const [similarJobs, setSimilarJobs] = useState({});
@@ -52,17 +61,30 @@ const Job = () => {
           <Notice job={job} />
           <Box className={classes.actionArea}>
             <Typography variant="subtitle2" paragraph>
-              For now we only accept online applications. So please make sure
-              have updated your CV/Profile because those information will be
-              included in your job application. Once you have pressed 'APPLY'
-              you cannot undo the application.
+              Make sure you have updated your resume because those information
+              will be included in your job application. Once you have pressed
+              'APPLY' you cannot undo the application.
             </Typography>
+
+            <FormControlLabel
+              checked={checked}
+              onChange={() => setChecked(!checked)}
+              control={<Checkbox size="small" />}
+              label="I have updated my resume."
+              sx={{
+                mb: 1,
+                ".MuiFormControlLabel-label": {
+                  fontSize: "14px",
+                },
+              }}
+            />
 
             <Box className={classes.btnSet}>
               <Button
                 variant="contained"
                 disableElevation
                 className={classes.btn}
+                disabled={!checked}
               >
                 Apply
               </Button>
