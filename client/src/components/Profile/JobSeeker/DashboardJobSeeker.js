@@ -40,10 +40,18 @@ const DashboardJobSeeker = ({ resumeRef }) => {
             className={classes.profilePic}
           />
           <Box className={classes.headerMainTextWrapper}>
-            <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
+            <Typography
+              variant="body1"
+              sx={{ textTransform: "uppercase", fontWeight: 500 }}
+            >
               {profileData.firstName} {profileData.lastName}
             </Typography>
-            <Typography variant="body2">{profileData.email}</Typography>
+            <Typography variant="caption" sx={{ textTransform: "uppercase" }}>
+              {profileData.following?.length} Following
+            </Typography>
+            <Typography variant="caption" sx={{ textTransform: "uppercase" }}>
+              {profileData.email}
+            </Typography>
           </Box>
         </Box>
         <Box
