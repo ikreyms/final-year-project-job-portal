@@ -14,6 +14,7 @@ import Resume from "./JobSeeker/Resume";
 import { useTheme } from "@mui/styles";
 import Branding from "./Employer/Branding";
 import JobPosts from "./Employer/JobPosts";
+import AppliedJobs from "./JobSeeker/AppliedJobs";
 
 const Profile = () => {
   const classes = useStyles();
@@ -59,7 +60,7 @@ const Profile = () => {
                 <Resume />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                Applied Jobs
+                <AppliedJobs />
               </TabPanel>
               <TabPanel value={value} index={3}>
                 Notifications
