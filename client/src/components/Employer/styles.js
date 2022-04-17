@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     height: 70,
     width: 70,
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: "50%",
     objectFit: "cover",
     marginRight: theme.spacing(2),
   },
