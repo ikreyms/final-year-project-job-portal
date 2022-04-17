@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: { flexDirection: "column" },
   },
   actionArea: {
-    width: "45%",
+    width: "80%",
     padding: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
       width: "100%",
@@ -33,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     flexGrow: 1,
     [theme.breakpoints.down("xs")]: { flexBasis: 1 },
+  },
+  resumeHeadings: {
+    color: theme.palette.primary.dark,
+    fontSize: "0.9rem !important",
+    fontWeight: "400",
+    textTransform: "uppercase",
   },
 }));
 
