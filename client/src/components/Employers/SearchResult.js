@@ -21,7 +21,7 @@ const SearchResult = ({ employer, onClick }) => {
           component="img"
           image={employer.image ? employer.image : logo}
           height="40"
-          sx={{ maxWidth: 40, borderRadius: 1, cursor: "pointer" }}
+          sx={{ maxWidth: 40, borderRadius: "50%", cursor: "pointer" }}
           alt="employer logo"
           onClick={onClick}
         />
@@ -64,7 +64,7 @@ const SearchResult = ({ employer, onClick }) => {
           sx={{ flexBasis: 300, flexGrow: 1 }}
           className={classes.about}
         >
-          {employer.about}
+          {employer.about?.slice(0, 100)}...
         </Typography>
         <Box
           sx={{

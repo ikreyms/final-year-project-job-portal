@@ -24,7 +24,7 @@ const PopularEmployerCard = ({ employer, onClick }) => {
           component="img"
           image={employer.image ? employer.image : logo}
           height="40"
-          sx={{ width: 40, borderRadius: 1 }}
+          sx={{ width: 40, borderRadius: "50%" }}
           alt="employer logo"
         />
         <Box>

@@ -20,7 +20,7 @@ const SimilarJob = ({ job, onClick }) => {
           component="img"
           image={job.postedBy.image ? job.postedBy.image : logo}
           height="40"
-          sx={{ maxWidth: 40, borderRadius: 1, cursor: "pointer" }}
+          sx={{ maxWidth: 40, borderRadius: "50%", cursor: "pointer" }}
           alt="employer logo"
         />
         <CardContent
