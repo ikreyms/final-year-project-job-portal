@@ -67,6 +67,22 @@ const JobPostForm = ({
     setCriteria(selectedJob.criteria);
   };
 
+  const deleteJob = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:2900/api/jobs/${selectedJob?._id}`
+      );
+      console.log("delete", response.data);
+      setIsShowForm(false);
+      setSnackbarMessage("Job deleted.");
+      setSnackbarOpen(true);
+      setErrorResponse({});
+    } catch (error) {
+      setErrorResponse(error.response);
+      console.log(error);
+    }
+  };
+
   const updateJob = async () => {
     const formData = {
       title,
@@ -146,6 +162,7 @@ const JobPostForm = ({
 
     if (e.target.name === "post") await postJob();
     else if (e.target.name === "update") await updateJob();
+    else if (e.target.name === "delete") await deleteJob();
   };
 
   useEffect(() => {
