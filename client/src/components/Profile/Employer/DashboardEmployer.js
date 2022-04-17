@@ -45,10 +45,13 @@ const DashboardEmployer = ({ brandingRef }) => {
             className={classes.profilePic}
           />
           <Box className={classes.headerMainTextWrapper}>
-            <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
+            <Typography
+              variant="body1"
+              sx={{ textTransform: "uppercase", fontWeight: 500 }}
+            >
               {profileData.companyName}
             </Typography>
-            <Typography variant="caption">
+            <Typography variant="caption" sx={{ textTransform: "uppercase" }}>
               {profileData.followers !== 1
                 ? `${profileData.followers} Followers`
                 : `${profileData.followers} Follower`}
