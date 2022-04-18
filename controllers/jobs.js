@@ -93,7 +93,7 @@ exports.filterJobs = async (req, res, next) => {
       : undefined),
   };
 
-  console.log(searchObject);
+  // console.log(searchObject);
 
   try {
     let jobs = await Job.find(searchObject, null, {
@@ -170,7 +170,7 @@ exports.getJobsByEmployer = async (req, res, next) => {
         success: false,
         message: "No jobs to show.",
       });
-    console.log(jobs);
+    // console.log(jobs);
     responseToClient(res, 200, { success: true, jobs });
   } catch (error) {
     responseToClient(res, 500, { success: false, error: error.message });
@@ -196,7 +196,7 @@ exports.updateJob = async (req, res, next) => {
   try {
     let job = await Job.findOne({ _id: jobId });
 
-    console.log(job);
+    // console.log(job);
 
     job.title !== title && (job.title = title);
     job.jobType !== jobType && (job.jobType = jobType);
