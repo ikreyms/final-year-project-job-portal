@@ -62,13 +62,15 @@ const Job = () => {
     }
     try {
       const response = await axios.post(
-        `http://localhost:2900/api/applications/${seekerId}/${job._id}/create`
+        `http://localhost:2900/api/applications/${seekerId}/${job._id}/${job.postedBy.id}/create`,
+        {}
       );
       setSnackbarMessage(response.data.message);
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarMessage(error.response.data.message);
       setSnackbarOpen(true);
+      console.log(error.response);
     }
   };
 
