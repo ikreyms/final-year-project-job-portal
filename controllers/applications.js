@@ -1,10 +1,11 @@
+const { application } = require("express");
 const Application = require("../models/Application");
 const responseToClient = require("../utils/responseToClient");
 
 exports.createApplication = async (req, res, next) => {
-  const { seekerId, jobId } = req.params;
+  const { seekerId, jobId, empId } = req.params;
   try {
-    const exists = await Application.find({ seekerId, jobId }).exec();
+    const exists = await Application.find({ seekerId, jobId, empId }).exec();
     if (exists.length > 0)
       return responseToClient(res, 400, {
         success: false,
@@ -13,6 +14,7 @@ exports.createApplication = async (req, res, next) => {
     const application = await Application.create({
       seekerId,
       jobId,
+      empId,
     });
     responseToClient(res, 200, {
       success: true,
@@ -27,16 +29,128 @@ exports.createApplication = async (req, res, next) => {
 exports.getApplicationsBySeeker = async (req, res, next) => {
   const { seekerId } = req.params;
   try {
-    const applications = await Application.find({ seekerId })
-      .populate("seekerId")
-      .populate("jobId")
+    const totalApplications = await Application.find({ seekerId }).count();
+    const applications = await Application.find({
+      seekerId,
+      hidden: false,
+    })
+      .populate({
+        path: "jobId",
+        model: "Job",
+        select: { dueDate: 1, title: 1, jobType: 1, postDate: 1 },
+        populate: {
+          path: "postedBy",
+          model: "Employer",
+          select: { companyName: 1 },
+        },
+      })
       .sort({ createdAt: -1 });
 
     if (applications.length === 0)
-      return responseToClient(res, 404, {
+      return responseToClient(res, 200, {
         success: false,
         message: "You have no job applications.",
+        applications: [],
+        totalApplications,
       });
+
+    responseToClient(res, 200, {
+      success: true,
+      applications,
+      totalApplications,
+    });
+  } catch (error) {
+    responseToClient(res, 500, { error: error.message });
+  }
+};
+
+exports.hideApplication = async (req, res, next) => {
+  const { seekerId, appId } = req.params;
+  try {
+    const application = await Application.findOne({ seekerId, _id: appId });
+    application.hidden = true;
+    await application.save();
+
+    const applications = await Application.find({ seekerId, hidden: false })
+      .populate({
+        path: "jobId",
+        model: "Job",
+        select: { dueDate: 1, title: 1, jobType: 1, postDate: 1 },
+        populate: {
+          path: "postedBy",
+          model: "Employer",
+          select: { companyName: 1 },
+        },
+      })
+      .sort({ createdAt: -1 });
+
+    responseToClient(res, 200, {
+      success: true,
+      applications,
+      message: "Application hidden.",
+    });
+  } catch (error) {
+    responseToClient(res, 500, { success: false, error: error.message });
+  }
+};
+
+exports.unhideAllApplications = async (req, res, next) => {
+  const { seekerId } = req.params;
+  try {
+    const totalApplications = await Application.find({ seekerId }).count();
+    const update = await Application.updateMany(
+      { seekerId, hidden: true },
+      { $set: { hidden: false } }
+    );
+    const applications = await Application.find({ seekerId, hidden: false })
+      .populate({
+        path: "jobId",
+        model: "Job",
+        select: { dueDate: 1, title: 1, jobType: 1, postDate: 1 },
+        populate: {
+          path: "postedBy",
+          model: "Employer",
+          select: { companyName: 1 },
+        },
+      })
+      .sort({ createdAt: -1 });
+
+    responseToClient(res, 200, {
+      success: true,
+      applications,
+      totalApplications,
+    });
+  } catch (error) {
+    responseToClient(res, 500, { error: error.message });
+  }
+};
+
+exports.getApplicationsCountBySeeker = async (req, res, next) => {
+  const { seekerId } = req.params;
+  try {
+    const count = await Application.find({ seekerId }).count();
+    responseToClient(res, 200, { success: true, count });
+  } catch (error) {
+    responseToClient(res, 500, { error: error.message });
+  }
+};
+
+exports.getApplicationsReceivedCount = async (req, res, next) => {
+  const { empId } = req.params;
+  try {
+    const count = await Application.find({ empId }).count();
+    responseToClient(res, 200, { success: true, count });
+  } catch (error) {
+    responseToClient(res, 500, { error: error.message });
+  }
+};
+
+exports.getApplicationsReceived = async (req, res, next) => {
+  const { empId } = req.params;
+  try {
+    const applications = await Application.find({ empId })
+      .populate("jobId")
+      .populate("seekerId");
 
     responseToClient(res, 200, { success: true, applications });
   } catch (error) {
