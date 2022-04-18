@@ -15,6 +15,7 @@ import { useTheme } from "@mui/styles";
 import Branding from "./Employer/Branding";
 import JobPosts from "./Employer/JobPosts";
 import AppliedJobs from "./JobSeeker/AppliedJobs";
+import ReceivedApplications from "./Employer/ReceivedApplications";
 
 const Profile = () => {
   const classes = useStyles();
@@ -91,7 +92,7 @@ const Profile = () => {
                 <JobPosts />
               </TabPanel>
               <TabPanel value={value} index={3}>
-                Applications
+                <ReceivedApplications />
               </TabPanel>
               <TabPanel value={value} index={4}>
                 Interviews
