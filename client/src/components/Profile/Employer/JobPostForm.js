@@ -121,7 +121,7 @@ const JobPostForm = ({
       jobType,
       noOfPositions,
       location,
-      dueDate,
+      dueDate: moment(dueDate, "DD/MM/YYYY").format(),
       salary,
       minQualification,
       jobCategory,
