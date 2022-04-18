@@ -12,6 +12,16 @@ const applicationSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Job",
     },
+    empId: {
+      required: true,
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Employer",
+    },
+    hidden: {
+      required: true,
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
