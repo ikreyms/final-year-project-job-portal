@@ -102,7 +102,11 @@ const JobPosts = () => {
       )}
 
       <Box
-        sx={{ display: isShowForm ? "none" : "flex", flexDirection: "column" }}
+        sx={{
+          display: isShowForm ? "none" : "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
       >
         {loading ? (
           <CircularProgress color="secondary" sx={{ m: 2 }} />
