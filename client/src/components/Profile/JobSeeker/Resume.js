@@ -7,6 +7,7 @@ import {
   MenuItem,
   Divider,
   Snackbar,
+  IconButton,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
@@ -40,6 +41,7 @@ const Resume = () => {
   const [about, setAbout] = useState("");
 
   const [qualifications, setQualifications] = useState([]);
+  console.log("qualifications", qualifications);
 
   const [experiences, setExperiences] = useState([]);
 
@@ -120,9 +122,15 @@ const Resume = () => {
       const { user } = response.data;
       updateAllStates(user);
       console.log("loadUserResume", user);
+      console.log(qualifications);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const addQualification = (e) => {
+    e.preventDefault();
+    setQualifications((prev) => [...prev, qualificationFields]);
   };
 
   useEffect(() => {
@@ -331,14 +339,7 @@ const Resume = () => {
           ))}
         <Button
           sx={{ mt: 1, textTransform: "capitalize", fontWeight: 400 }}
-          onClick={() => {
-            setQualifications((prev) => [
-              ...prev,
-              {
-                ...qualificationFields,
-              },
-            ]);
-          }}
+          onClick={addQualification}
         >
           + Add Qualification
         </Button>
