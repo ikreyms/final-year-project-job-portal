@@ -35,18 +35,6 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
     setExperiences(newExperiences);
   };
 
-  useEffect(() => {
-    const dobStyleChangedExperiences = experiences.map((obj, index) => {
-      if (index === no - 1)
-        return {
-          ...obj,
-          from: moment(obj.from).format("YYYY"),
-          to: moment(obj.to).format("YYYY"),
-        };
-    });
-    setExperiences(dobStyleChangedExperiences);
-  }, []);
-
   return (
     <>
       <Box
@@ -77,7 +65,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="Employer"
             margin="dense"
             name="employer"
-            value={experiences[no - 1].employer}
+            value={experiences[no - 1]?.employer}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -99,7 +87,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="Job Title"
             margin="dense"
             name="jobTitle"
-            value={experiences[no - 1].jobTitle}
+            value={experiences[no - 1]?.jobTitle}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -121,7 +109,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="From"
             margin="dense"
             name="from"
-            value={experiences[no - 1].from}
+            value={experiences[no - 1]?.from}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -141,7 +129,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="To"
             margin="dense"
             name="to"
-            value={experiences[no - 1].to}
+            value={experiences[no - 1]?.to}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -162,7 +150,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             margin="dense"
             name="duration"
             type="number"
-            value={experiences[no - 1].duration}
+            value={experiences[no - 1]?.duration}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -186,7 +174,7 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             name="category"
             select
             value={
-              experiences[no - 1].category
+              experiences[no - 1]?.category
                 ? experiences[no - 1].category
                 : experienceCategories[0]
             }

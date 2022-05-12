@@ -16,6 +16,7 @@ import Branding from "./Employer/Branding";
 import JobPosts from "./Employer/JobPosts";
 import AppliedJobs from "./JobSeeker/AppliedJobs";
 import ReceivedApplications from "./Employer/ReceivedApplications";
+import NotificationPanel from "./JobSeeker/NotificationPanel";
 
 const Profile = () => {
   const classes = useStyles();
@@ -64,7 +65,7 @@ const Profile = () => {
                 <AppliedJobs />
               </TabPanel>
               <TabPanel value={value} index={3}>
-                Notifications
+                <NotificationPanel />
               </TabPanel>
             </>
           ) : accountType === "Employer" ? (

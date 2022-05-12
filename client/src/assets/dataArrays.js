@@ -28,7 +28,7 @@ exports.jobCategories = [
 ];
 
 exports.experienceCategories = [
-  // "",
+  "Select Category",
   "Agriculture, Food, and Natural Resources",
   "Architecture and Construction",
   "Arts, Audio/Video Technology, and Communication",
@@ -59,6 +59,21 @@ exports.jobSeekerProfileTabs = [
 
 exports.adminProfileTabs = ["Dashboard", "Notifications"];
 
+exports.certificateLevelsResume = [
+  "Select Certificate Level",
+  "Basic Education",
+  "O Level",
+  "Certificate 1",
+  "Certificate 2",
+  "Certificate 3",
+  "A Level",
+  "Diploma",
+  "Advanced Diploma",
+  "Associates Degree",
+  "Bachelors Degree",
+  "Masters Degree",
+  "PHD",
+];
 exports.certificateLevels = [
   // "",
   "Basic Education",
