@@ -2,17 +2,19 @@ const User = require("../models/User");
 const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
 const equals = require("../utils/equals");
+const moment = require("moment");
 
 exports.getOneUser = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await User.findOne({ _id: id });
+    let user = await User.findOne({ _id: id });
     if (!user)
       return responseToClient(res, 404, {
         success: false,
         error: "Job seeker not found.",
       });
 
+    await user.save();
     responseToClient(res, 200, { success: true, user });
   } catch (error) {
     responseToClient(res, 500, {
