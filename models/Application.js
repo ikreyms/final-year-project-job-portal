@@ -22,6 +22,14 @@ const applicationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    status: {
+      default: "Pending",
+      type: String,
+      enum: {
+        values: ["Pending", "Rejected", "Accepted"],
+        message: "Select application status: Pending, Rejected, or Accepted.",
+      },
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
