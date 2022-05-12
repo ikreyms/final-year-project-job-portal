@@ -10,8 +10,8 @@ import React, { useEffect } from "react";
 import useStyles from "../styles";
 import moment from "moment";
 import DeleteIcon from "@mui/icons-material/Close";
+import { certificateLevelsResume } from "../../../assets/dataArrays";
 import { isObjectEmpty } from "../../../assets/utils";
-import { certificateLevels } from "../../../assets/dataArrays";
 
 const Qualification = ({
   no,
@@ -39,17 +39,6 @@ const Qualification = ({
     });
     setQualifications(newQualifications);
   };
-
-  useEffect(() => {
-    const dobStyleChangedQualifications = qualifications.map((obj, index) => {
-      if (index === no - 1)
-        return {
-          ...obj,
-          completedOn: moment(obj.completedOn).format("YYYY"),
-        };
-    });
-    setQualifications(dobStyleChangedQualifications);
-  }, []);
 
   return (
     <>
@@ -82,7 +71,7 @@ const Qualification = ({
             label="Institute"
             margin="dense"
             name="institute"
-            value={qualifications[no - 1].institute}
+            value={qualifications[no - 1]?.institute}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -104,7 +93,8 @@ const Qualification = ({
             label="Year"
             margin="dense"
             name="completedOn"
-            value={qualifications[no - 1].completedOn}
+            placeholder="YYYY"
+            value={qualifications[no - 1]?.completedOn}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
@@ -128,9 +118,9 @@ const Qualification = ({
             name="level"
             select
             value={
-              qualifications[no - 1].level
+              qualifications[no - 1]?.level
                 ? qualifications[no - 1].level
-                : certificateLevels[0]
+                : certificateLevelsResume[0]
             }
             onChange={handleChange}
             error={
@@ -144,7 +134,7 @@ const Qualification = ({
               errorResponse?.error?.[`qualifications.${no - 1}.level`]
             }
           >
-            {certificateLevels.map((level, index) => (
+            {certificateLevelsResume.map((level, index) => (
               <MenuItem value={level} key={index}>
                 {level}
               </MenuItem>
@@ -159,7 +149,7 @@ const Qualification = ({
             label="Course"
             margin="dense"
             name="courseName"
-            value={qualifications[no - 1].courseName}
+            value={qualifications[no - 1]?.courseName}
             onChange={handleChange}
             error={
               !isObjectEmpty(errorResponse)
