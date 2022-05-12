@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   CardContent,
+  Chip,
   ClickAwayListener,
   IconButton,
   Stack,
@@ -19,7 +20,7 @@ const SeekerApplicationPreview = ({ application, userId, setApplications }) => {
   const hideApplication = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:2900/api/applications/${application._id}/${userId}`
+        `http://localhost:2900/api/applications/seeker/${application.id}/${userId}/hide`
       );
       setApplications(response.data.applications);
       console.log(response.data);
@@ -31,21 +32,27 @@ const SeekerApplicationPreview = ({ application, userId, setApplications }) => {
   return (
     <Card elevation={1}>
       <CardContent>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="h6" color="primary">
-            {application.jobId?.title} ({application.jobId?.jobType})
-          </Typography>
-          <Tooltip
-            title="Hide"
-            open={toolTipOpen}
-            onClose={() => setToolTipOpen(false)}
-            onOpen={() => setToolTipOpen(true)}
-          >
-            <IconButton onClick={hideApplication}>
-              <HideIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Stack>
+        <Typography variant="h6" color="primary">
+          {application.jobId?.title} ({application.jobId?.jobType})
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ fontStyle: "uppercase !important" }}
+        >
+          <Chip
+            label={application.status}
+            sx={{ my: 0.5 }}
+            size="small"
+            variant="outlined"
+            color={
+              application.status === "Rejected"
+                ? "error"
+                : application.status === "Accepted"
+                ? "success"
+                : "primary"
+            }
+          />
+        </Typography>
         <Typography variant="body1">
           {application.jobId?.postedBy.companyName}
         </Typography>
