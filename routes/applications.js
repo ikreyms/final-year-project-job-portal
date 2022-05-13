@@ -8,8 +8,8 @@ const {
   getApplicationsCountBySeeker,
   getApplicationsReceivedCount,
   getApplicationsReceived,
-  rejectApplication,
-  acceptApplication,
+  rejectApplications,
+  acceptApplications,
   filterApplications,
 } = require("../controllers/applications");
 
@@ -24,10 +24,10 @@ router.get("/employer/count/:empId", getApplicationsReceivedCount);
 router.get("/:empId/employer", getApplicationsReceived);
 
 router.patch("/seeker/:appId/:seekerId/hide", hideApplication);
-router.patch("/:seekerId", unhideAllApplications);
+// router.patch("/:seekerId", unhideAllApplications);
 
-router.patch("/rejectApplication/:appId", rejectApplication);
-router.patch("/acceptApplication/:appId", acceptApplication);
+router.patch("/:empId/rejectApplications", rejectApplications);
+router.patch("/acceptApplication/:empId", acceptApplications);
 
 router.get("/filter/:seekerId/:status", filterApplications);
 
