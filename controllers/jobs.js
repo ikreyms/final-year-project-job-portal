@@ -151,7 +151,9 @@ exports.getSimilarJobs = async (req, res, next) => {
     const similarJobs = await Job.find({
       jobCategory: job.jobCategory,
       _id: { $nin: [jobId] },
-    }).populate("postedBy");
+    })
+      .populate("postedBy")
+      .sort("-postDate");
     responseToClient(res, 200, { success: true, similarJobs });
   } catch (error) {
     responseToClient(res, 500, { success: false, error: error.message });
