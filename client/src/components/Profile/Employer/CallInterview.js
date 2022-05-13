@@ -8,11 +8,15 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { isObjectEmpty } from "../../../assets/utils";
 import useStyles from "../styles";
+import moment from "moment";
 
-const CallInterview = ({ application }) => {
+const CallInterview = ({ selection, setSelection, setApplications }) => {
   const classes = useStyles();
+
+  const empId = useSelector((state) => state?.user?.id);
 
   const [venue, setVenue] = useState("");
   const [date, setDate] = useState("");
@@ -32,32 +36,59 @@ const CallInterview = ({ application }) => {
   const rejectHandler = async (e) => {
     e.preventDefault();
     try {
-      const rejectApplicationresponse = await axios.patch(
-        `http://localhost:2900/api/applications/rejectApplication/${application._id}`
+      const selectionInfo = { selectionList: [...selection] };
+      const rejectApplicationResponse = await axios.patch(
+        `http://localhost:2900/api/applications/${empId}/rejectApplications/`,
+        selectionInfo
       );
-      const data = {
-        subject: "Application Rejected",
-        body: `Your job application for ${application.jobId.title} was rejected by the employer (${application.empId.companyName})`,
-      };
 
-      const url = `http://localhost:2900/api/notifications/${application.seekerId._id}/${application.empId._id}/create`;
-      console.log(url);
       const createNotificationResponse = await axios.post(
-        `http://localhost:2900/api/notifications/${application.seekerId._id}/${application.empId.id}/create`,
-        data
+        `http://localhost:2900/api/notifications/createNotifications/${empId}`,
+        selectionInfo
       );
 
-      setSnackbarMessage("Application Rejected.");
-      snackbarOpen(true);
-      console.log(rejectApplicationresponse.data);
+      setApplications(rejectApplicationResponse.data.applications);
+      setSelection([]);
+      setSnackbarMessage("Application(s) Rejected.");
+      setSnackbarOpen(true);
+      console.log(rejectApplicationResponse.data);
       console.log(createNotificationResponse.data);
     } catch (error) {
+      console.log(error);
       console.log(error.response);
     }
   };
 
-  const callInterviewHandler = (e) => {
+  const callInterviewHandler = async (e) => {
     e.preventDefault();
+    const interviewData = {
+      venue,
+      date: moment(date, "DD/MM/YYYY").format(),
+      time: moment(time, "HH:mm").format(),
+      selectionList: [...selection],
+    };
+    console.log(interviewData);
+    //need to add accept application after that create interview date and then create notifications
+    try {
+      const acceptApplicationResponse = await axios.patch(
+        `http://localhost:2900/api/applications/acceptApplication/${empId}`,
+        interviewData
+      );
+      console.log(acceptApplicationResponse);
+
+      // const createInterviewResponse = await axios.post(
+      //   `http://localhost:2900/api/interviews/createInterview/${empId}`,
+      //   interviewData
+      // );
+      // console.log(createInterviewResponse);
+      setApplications(acceptApplicationResponse.data.applications);
+      setSelection([]);
+      setSnackbarMessage("Application(s) Accepted. Interview Dates Set.");
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.log(error.response);
+      setErrorResponse(error.response.data);
+    }
   };
 
   return (
@@ -142,33 +173,36 @@ const CallInterview = ({ application }) => {
 
       <Stack
         direction="row"
-        spacing={1}
-        sx={{ mb: 2 }}
+        alignItems="center"
+        justifyContent="space-between"
         ref={acceptRejectBtnSet}
       >
-        <Button
-          variant="contained"
-          size="small"
-          color="success"
-          disableElevation
-          onClick={(e) => {
-            e.preventDefault();
-            setIsShowForm(true);
-            callCancelBtnSet.current.style.display = "block";
-            acceptRejectBtnSet.current.style.display = "none";
-          }}
-        >
-          Accept
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          color="error"
-          disableElevation
-          onClick={rejectHandler}
-        >
-          Reject
-        </Button>
+        <Typography variant="caption" mt={0.1}>
+          Selected: {selection.length}
+        </Typography>
+        <Stack direction="row" spacing={1}>
+          <Button
+            size="small"
+            color="success"
+            disableElevation
+            onClick={(e) => {
+              e.preventDefault();
+              setIsShowForm(true);
+              callCancelBtnSet.current.style.display = "block";
+              acceptRejectBtnSet.current.style.display = "none";
+            }}
+          >
+            Accept
+          </Button>
+          <Button
+            size="small"
+            color="error"
+            disableElevation
+            onClick={rejectHandler}
+          >
+            Reject
+          </Button>
+        </Stack>
       </Stack>
 
       <Stack
@@ -195,7 +229,7 @@ const CallInterview = ({ application }) => {
             e.preventDefault();
             setIsShowForm(false);
             callCancelBtnSet.current.style.display = "none";
-            acceptRejectBtnSet.current.style.display = "block";
+            acceptRejectBtnSet.current.style.display = "flex";
           }}
         >
           Not Now
