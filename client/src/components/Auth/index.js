@@ -124,6 +124,7 @@ const Auth = () => {
     setSector("");
     setFirstName("");
     setLastName("");
+    setNid("");
     setEmail("");
     setPassword("");
     setRepeatPassword("");
