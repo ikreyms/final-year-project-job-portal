@@ -7,30 +7,35 @@ const interviewSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Employer",
     },
-    seekerId: {
+    appIds: {
       required: true,
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: "Application"
     },
-    jobId: {
-      required: true,
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "Job",
-    },
+    // seekerIds: {
+    //   required: true,
+    //   type: [mongoose.SchemaTypes.ObjectId],
+    //   ref: "User",
+    // },
+    // jobIds: {
+    //   required: true,
+    //   type: [mongoose.SchemaTypes.ObjectId],
+    //   ref: "Job",
+    // },
     venue: {
       required: [true, "Please enter the venue."],
       type: String,
     },
     interviewDate: {
-      required: [type, "Please enter the interview date."],
+      required: [true, "Please enter the interview date."],
       type: Date,
     },
     interviewTime: {
-      required: [type, "Please enter the interview time in 24Hrs format."],
+      required: [true, "Please enter the interview time in 24Hrs format."],
       type: Date,
     },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-module.exports = new mongoose.model("Application", interviewSchema);
+module.exports = new mongoose.model("Interview", interviewSchema);
