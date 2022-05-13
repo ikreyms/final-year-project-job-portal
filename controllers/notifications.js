@@ -1,17 +1,30 @@
+const Application = require("../models/Application");
 const Notification = require("../models/Notification");
 const responseToClient = require("../utils/responseToClient");
 
-exports.createNotification = async (req, res, next) => {
-  const { seekerId, empId } = req.params;
-  const { subject, body } = req.body;
+exports.createNotifications = async (req, res, next) => {
+  const { selectionList } = req.body;
+  const { empId } = req.params;
   try {
-    const notification = await Notification.create({
-      receivers: [seekerId],
-      subject,
-      body,
-      postedBy: empId,
+    const rejectedApplications = await Application.find({
+      _id: { $in: [...selectionList] },
+    })
+      .populate({ path: "jobId", select: "title" })
+      .populate({ path: "empId", select: "companyName" });
+
+    rejectedApplications.forEach(async (application) => {
+      await Notification.create({
+        receivers: [application.seekerId],
+        subject: "Application Rejected",
+        body: `Your job application for ${application?.jobId.title} was rejected by ${application?.empId.companyName}`,
+        postedBy: empId,
+      });
     });
-    responseToClient(res, 201, { success: true, notification });
+
+    responseToClient(res, 201, {
+      success: true,
+      message: "Notifications created",
+    });
   } catch (error) {
     responseToClient(res, 500, {
       success: false,
