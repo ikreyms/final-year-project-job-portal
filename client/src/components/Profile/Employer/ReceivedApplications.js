@@ -38,26 +38,15 @@ const ReceivedApplications = () => {
       <Typography variant="body1" mb={2}>
         Received applications are displayed here.
       </Typography>
-      {selection.length !== 0 && (
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography variant="caption">
-            Selected: {selection.length}
-          </Typography>
-          <Stack direction="row">
-            <Button size="small" color="success">
-              Accept
-            </Button>
-            <Button size="small" color="error">
-              Reject
-            </Button>
-          </Stack>
-        </Stack>
+
+      {selection.length > 0 && (
+        <CallInterview
+          selection={selection}
+          setSelection={setSelection}
+          setApplications={setApplications}
+        />
       )}
-      <CallInterview /> {/* needs to be edited */}
+
       <Divider sx={{ mt: 1, mb: 3 }} />
       {applications?.length > 0 ? (
         <Stack spacing={1}>
