@@ -7,10 +7,11 @@ import {
   TextField,
   Checkbox,
   Typography,
+  Chip,
 } from "@mui/material";
 import logo from "../../../assets/logo.svg";
 import HideIcon from "@mui/icons-material/Close";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmployerResumePreview from "./EmployerResumePreview";
@@ -18,6 +19,7 @@ import CallInterview from "./CallInterview";
 
 const EmployerApplicationPreview = ({
   application,
+  applications,
   selection,
   setSelection,
 }) => {
@@ -39,6 +41,10 @@ const EmployerApplicationPreview = ({
       setSelection(newSelection);
     }
   };
+
+  useEffect(() => {
+    setSelected(false);
+  }, [applications]);
 
   return (
     <Stack direction="row" sx={{ justifyContent: "space-between" }}>
@@ -64,9 +70,24 @@ const EmployerApplicationPreview = ({
               }}
             />
             <Stack>
-              <Typography variant="body1">
-                {application.jobId?.title}
-              </Typography>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="body1">
+                  {application.jobId?.title}
+                </Typography>
+                <Chip
+                  label={application.status}
+                  sx={{ my: 0.5 }}
+                  size="small"
+                  variant="outlined"
+                  color={
+                    application.status === "Rejected"
+                      ? "error"
+                      : application.status === "Accepted"
+                      ? "success"
+                      : "primary"
+                  }
+                />
+              </Stack>
               <Typography variant="caption">
                 Applicant: {application.seekerId?.firstName}{" "}
                 {application.seekerId?.lastName} ({application.seekerId?.nid})

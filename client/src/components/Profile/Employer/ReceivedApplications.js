@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
 import axios from "axios";
@@ -11,15 +19,17 @@ const ReceivedApplications = () => {
 
   const empId = useSelector((state) => state.user?.id);
 
+  const [applicationStatus, setApplicationStatus] = useState("Pending");
+
   const [applications, setApplications] = useState([]);
 
   const [selection, setSelection] = useState([]);
   console.log(selection);
 
-  const getReveivedApplications = async () => {
+  const getReveivedApplications = async (empId, applicationStatus) => {
     try {
       const response = await axios.get(
-        `http://localhost:2900/api/applications/${empId}/employer`
+        `http://localhost:2900/api/applications/${empId}/employer/${applicationStatus}`
       );
       setApplications(response.data.applications);
       console.log(response);
@@ -29,8 +39,8 @@ const ReceivedApplications = () => {
   };
 
   useEffect(() => {
-    getReveivedApplications();
-  }, []);
+    getReveivedApplications(empId, applicationStatus);
+  }, [applicationStatus]);
 
   return (
     <Box className={classes.panelWrapper}>
@@ -39,28 +49,50 @@ const ReceivedApplications = () => {
         Received applications are displayed here.
       </Typography>
 
+      <Typography variant="body2" mb={1}>
+        Filter by Status:
+      </Typography>
+      <TextField
+        fullWidth
+        select
+        size="small"
+        sx={{ mb: 2 }}
+        value={applicationStatus}
+        onChange={(e) => setApplicationStatus(e.target.value)}
+      >
+        <MenuItem value="All">All</MenuItem>
+        <MenuItem value="Pending">Pending</MenuItem>
+        <MenuItem value="Accepted">Accepted</MenuItem>
+        <MenuItem value="Rejected">Rejected</MenuItem>
+      </TextField>
+
       {selection.length > 0 && (
         <CallInterview
           selection={selection}
           setSelection={setSelection}
+          applications={applications}
           setApplications={setApplications}
+          applicationStatus={applicationStatus}
+          getReveivedApplications={getReveivedApplications}
         />
       )}
 
       <Divider sx={{ mt: 1, mb: 3 }} />
+
       {applications?.length > 0 ? (
         <Stack spacing={1}>
           {applications.map((application, index) => (
             <EmployerApplicationPreview
               key={index}
               application={application}
+              applications={applications}
               selection={selection}
               setSelection={setSelection}
             />
           ))}
         </Stack>
       ) : (
-        "You have no pending applications unattended."
+        "No applications to show."
       )}
     </Box>
   );

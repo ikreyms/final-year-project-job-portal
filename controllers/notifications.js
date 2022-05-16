@@ -3,6 +3,7 @@ const Notification = require("../models/Notification");
 const responseToClient = require("../utils/responseToClient");
 
 exports.createNotifications = async (req, res, next) => {
+  //not used
   const { selectionList } = req.body;
   const { empId } = req.params;
   try {
@@ -39,7 +40,11 @@ exports.getNotifications = async (req, res, next) => {
   try {
     const notifications = await Notification.find({
       reveivers: { $in: [seekerId] },
-    });
+    })
+      .populate({ path: "postedBy", model: "Employer", select: "companyName" })
+      .sort("-createdAt")
+      .limit(20);
+
     responseToClient(res, 200, { success: true, notifications });
   } catch (error) {
     responseToClient(res, 500, {

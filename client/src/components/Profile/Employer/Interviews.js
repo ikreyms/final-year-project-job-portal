@@ -1,9 +1,25 @@
-import { Box, Divider, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Divider,
+  Stack,
+  Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Snackbar,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
 import axios from "axios";
 import moment from "moment";
+
 import { useSelector } from "react-redux";
+import InterviewAccordion from "./InterviewAccordion";
 
 const Interviews = () => {
   const classes = useStyles();
@@ -12,6 +28,9 @@ const Interviews = () => {
 
   const [interviews, setInterviews] = useState([]);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const loadInterviewData = async () => {
     try {
       const response = await axios.get(
@@ -19,6 +38,7 @@ const Interviews = () => {
       );
       console.log(response);
       setInterviews(response.data.interviews);
+      console.log("interviews", response.data.interviews);
     } catch (error) {
       console.log(error.response);
       setInterviews([]);
@@ -31,22 +51,37 @@ const Interviews = () => {
 
   return (
     <Box className={classes.panelWrapper}>
+      <Typography variant="h5">Scheduled Interviews</Typography>
+      <Typography variant="body1" mb={2}>
+        The following are the details of the interviews scheduled.
+      </Typography>
+
+      <Divider sx={{ mt: 1, mb: 3 }} />
+
       {interviews.length > 0
         ? interviews.map((interview) => (
-            <>
-              <Box>empId: {interview.empId}</Box>
-              <Box>appIds: [{interview.appIds}]</Box>
-              <Box>venue: {interview.venue}</Box>
-              <Box>
-                date: {moment(interview.interviewDate).format("DD/MM/YYYY")}
-              </Box>
-              <Box>
-                time: {moment(interview.interviewTime).format("HH:mm")} hrs
-              </Box>
-              <Divider />
-            </>
+            <InterviewAccordion
+              interview={interview}
+              key={interview._id}
+              setInterviews={setInterviews}
+              loadInterviewData={loadInterviewData}
+              setSnackbarOpen={setSnackbarOpen}
+              setSnackbarMessage={setSnackbarMessage}
+            />
           ))
         : "No interviews scheduled."}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={(e, reason) => {
+          if (reason === "clickaway") {
+            return;
+          }
+          setSnackbarOpen(false);
+        }}
+        sx={{ m: 2 }}
+      />
     </Box>
   );
 };

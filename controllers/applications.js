@@ -168,9 +168,13 @@ exports.getApplicationsReceivedCount = async (req, res, next) => {
 };
 
 exports.getApplicationsReceived = async (req, res, next) => {
-  const { empId } = req.params;
+  const { empId, status } = req.params;
+
+  let searchObj = { empId, status };
+  if (status === "All") searchObj = { empId };
+
   try {
-    const applications = await Application.find({ empId, status: "Pending" })
+    const applications = await Application.find({ ...searchObj })
       .populate("jobId")
       .populate("seekerId")
       .populate("empId")
@@ -191,7 +195,10 @@ exports.rejectApplications = async (req, res, next) => {
   try {
     const applications = await Application.find({
       _id: { $in: [...selectionList] },
-    });
+    }).populate([
+      { path: "jobId", model: "Job" },
+      { path: "empId", model: "Employer" },
+    ]);
     if (applications.length === 0)
       return responseToClient(res, 404, {
         success: false,
@@ -204,16 +211,18 @@ exports.rejectApplications = async (req, res, next) => {
       { status: "Rejected" }
     );
 
-    const newApplications = await Application.find({ empId, status: "Pending" })
-      .populate("jobId")
-      .populate("seekerId")
-      .populate("empId")
-      .sort({ createdAt: -1 });
+    applications.forEach(async (application) => {
+      await Notification.create({
+        receivers: [application.seekerId],
+        subject: "Application Rejected",
+        body: `Your job application for ${application?.jobId.title} was REJECTED by ${application?.empId.companyName}.`,
+        postedBy: empId,
+      });
+    });
 
     responseToClient(res, 200, {
       success: true,
       message: "Applications rejected.",
-      applications: newApplications,
     });
   } catch (error) {
     responseToClient(res, 500, {
@@ -246,25 +255,6 @@ exports.acceptApplications = async (req, res, next) => {
       { status: "Accepted" }
     );
 
-    const newApplications = await Application.find({ empId, status: "Pending" })
-      .populate("jobId")
-      .populate("seekerId")
-      .populate("empId")
-      .sort({ createdAt: -1 });
-
-    // const x = await Application.aggregate([
-    //   { $group: { _id: "$jobId", seekerIds: { $push: { $seekerId } } } },
-    // ]);
-
-    // const seekerIds = await Application.find(
-    //   { _id: { $in: [...selectionList] } },
-    //   "seekerId"
-    // );
-    // const jobIds = await Application.find(
-    //   { _id: { $in: [...selectionList] } },
-    //   "jobId"
-    // );
-
     await Interview.create({
       empId,
       appIds: [...selectionList],
@@ -281,9 +271,9 @@ exports.acceptApplications = async (req, res, next) => {
           application?.jobId.title
         } was ACCEPTED by ${
           application?.empId.companyName
-        }. Interview is scheduled to ${moment(date).format(
+        }. Interview is scheduled on ${moment(date).format(
           "DD/MM/YYYY"
-        )} | ${moment(time).format("HH:mm")}`,
+        )} | ${moment(time).format("HH:mm")} at ${venue}.`,
         postedBy: empId,
       });
     });
@@ -292,7 +282,6 @@ exports.acceptApplications = async (req, res, next) => {
       success: true,
       message:
         "Applications accepted. Interview created. Notifications created.",
-      applications: newApplications,
     });
   } catch (error) {
     let errorMessage = {};
@@ -313,11 +302,6 @@ exports.acceptApplications = async (req, res, next) => {
         errorFrom: "acceptApplication",
       });
     }
-    // responseToClient(res, 500, {
-    //   success: false,
-    //   error: error,
-    //   errorFrom: "acceptApplication",
-    // });
   }
 };
 

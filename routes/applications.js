@@ -21,7 +21,7 @@ router.get("/:seekerId/count/seeker", getApplicationsCountBySeeker);
 router.get("/:seekerId/seeker", getApplicationsBySeeker);
 
 router.get("/employer/count/:empId", getApplicationsReceivedCount);
-router.get("/:empId/employer", getApplicationsReceived);
+router.get("/:empId/employer/:status", getApplicationsReceived);
 
 router.patch("/seeker/:appId/:seekerId/hide", hideApplication);
 // router.patch("/:seekerId", unhideAllApplications);

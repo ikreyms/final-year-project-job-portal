@@ -7,13 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { isObjectEmpty } from "../../../assets/utils";
 import useStyles from "../styles";
 import moment from "moment";
 
-const CallInterview = ({ selection, setSelection, setApplications }) => {
+const CallInterview = ({
+  selection,
+  setSelection,
+  applications,
+  setApplications,
+  applicationStatus,
+  getReveivedApplications,
+}) => {
   const classes = useStyles();
 
   const empId = useSelector((state) => state?.user?.id);
@@ -37,22 +44,23 @@ const CallInterview = ({ selection, setSelection, setApplications }) => {
     e.preventDefault();
     try {
       const selectionInfo = { selectionList: [...selection] };
-      const rejectApplicationResponse = await axios.patch(
+      const response = await axios.patch(
         `http://localhost:2900/api/applications/${empId}/rejectApplications/`,
         selectionInfo
       );
 
-      const createNotificationResponse = await axios.post(
-        `http://localhost:2900/api/notifications/createNotifications/${empId}`,
-        selectionInfo
-      );
+      // const createNotificationResponse = await axios.post(
+      //   `http://localhost:2900/api/notifications/createNotifications/${empId}`,
+      //   selectionInfo
+      // );
 
-      setApplications(rejectApplicationResponse.data.applications);
+      // setApplications(response.data.applications);
+      getReveivedApplications(empId, applicationStatus);
       setSelection([]);
       setSnackbarMessage("Application(s) Rejected.");
       setSnackbarOpen(true);
-      console.log(rejectApplicationResponse.data);
-      console.log(createNotificationResponse.data);
+      console.log(response.data);
+      // console.log(createNotificationResponse.data);
     } catch (error) {
       console.log(error);
       console.log(error.response);
@@ -70,18 +78,19 @@ const CallInterview = ({ selection, setSelection, setApplications }) => {
     console.log(interviewData);
     //need to add accept application after that create interview date and then create notifications
     try {
-      const acceptApplicationResponse = await axios.patch(
+      const response = await axios.patch(
         `http://localhost:2900/api/applications/acceptApplication/${empId}`,
         interviewData
       );
-      console.log(acceptApplicationResponse);
+      console.log(response);
 
       // const createInterviewResponse = await axios.post(
       //   `http://localhost:2900/api/interviews/createInterview/${empId}`,
       //   interviewData
       // );
       // console.log(createInterviewResponse);
-      setApplications(acceptApplicationResponse.data.applications);
+      // setApplications(response.data.applications);
+      getReveivedApplications(empId, applicationStatus);
       setSelection([]);
       setSnackbarMessage("Application(s) Accepted. Interview Dates Set.");
       setSnackbarOpen(true);

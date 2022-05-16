@@ -10,7 +10,7 @@ const interviewSchema = new mongoose.Schema(
     appIds: {
       required: true,
       type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Application"
+      ref: "Application",
     },
     // seekerIds: {
     //   required: true,
@@ -37,5 +37,7 @@ const interviewSchema = new mongoose.Schema(
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+interviewSchema.index({ interviewDate: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = new mongoose.model("Interview", interviewSchema);
