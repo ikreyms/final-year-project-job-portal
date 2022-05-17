@@ -25,7 +25,10 @@ import { useNavigate } from "react-router-dom";
 const Header = ({ employer, loggedIn, userType }) => {
   const classes = useStyles();
 
+  const navigate = useNavigate();
+
   const userId = useSelector((state) => state.user.id);
+  const accountType = useSelector((state) => state.user.accountType);
 
   const [following, setFollowing] = useState(false);
 
@@ -108,12 +111,6 @@ const Header = ({ employer, loggedIn, userType }) => {
     }
   };
 
-  useEffect(() => {
-    if (loggedIn) {
-      getUserRatingsAndFollowing();
-    }
-  }, []);
-
   const rateEmployer = async () => {
     if (ratedValue === null && typeof ratedValue === "object") setRatedValue(0);
 
@@ -126,6 +123,24 @@ const Header = ({ employer, loggedIn, userType }) => {
       console.log(error.response);
     }
   };
+
+  const removeEmployer = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:2900/api/employers/${employer._id}`
+      );
+      console.log(response.data);
+      navigate("/employers");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  useEffect(() => {
+    if (loggedIn) {
+      getUserRatingsAndFollowing();
+    }
+  }, []);
 
   useEffect(() => {
     rateEmployer();
@@ -209,24 +224,41 @@ const Header = ({ employer, loggedIn, userType }) => {
           </Box>
           <Box>
             <Box className={classes.headerActions}>
-              <Button
-                size="small"
-                variant="contained"
-                disableElevation
-                sx={primaryBtnSxProps}
-                onClick={followActionHandler}
-              >
-                {following ? "Following" : "Follow"}
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                sx={secondaryBtnSxProps}
-                onClick={addRatingActionHandler}
-              >
-                {/* {rated? ():("Add a Rating")} */}
-                {rated ? `You rated ${ratedValue?.toFixed(1)}` : "Add a Rating"}
-              </Button>
+              {accountType === "Admin" ? (
+                <Button
+                  size="small"
+                  variant="contained"
+                  disableElevation
+                  // sx={primaryBtnSxProps}
+                  color="error"
+                  onClick={removeEmployer}
+                >
+                  Remove Employer
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    sx={primaryBtnSxProps}
+                    onClick={followActionHandler}
+                  >
+                    {following ? "Following" : "Follow"}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    sx={secondaryBtnSxProps}
+                    onClick={addRatingActionHandler}
+                  >
+                    {/* {rated? ():("Add a Rating")} */}
+                    {rated
+                      ? `You rated ${ratedValue?.toFixed(1)}`
+                      : "Add a Rating"}
+                  </Button>
+                </>
+              )}
             </Box>
             <Typography
               variant="subtitle2"
