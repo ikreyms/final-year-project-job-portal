@@ -24,13 +24,6 @@ const EmployerNavLinks = () => {
     <Stack direction="row" className={classes.navlinks}>
       <Link
         underline="none"
-        className={clsx(classes.navlink, classes.navlinkSpecial)}
-      >
-        Post a Job
-      </Link>
-      <Divider orientation="vertical" />
-      <Link
-        underline="none"
         className={classes.navlink}
         onClick={() => navigate(`profile/${profileId}`)}
       >
