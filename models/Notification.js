@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema(
   {
-    receivers: {
-      type: [mongoose.SchemaTypes.ObjectId],
+    receiver: {
+      type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
       required: [true, "Please provide the receivers of this notification."],
     },
@@ -25,6 +25,9 @@ const notificationSchema = new mongoose.Schema(
         values: ["Read", "Unread"],
       },
       default: "Unread",
+    },
+    lastAttemptedChange: {
+      type: Date,
     },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
