@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
 const sendEmail = require("../utils/sendEmail");
+const Admin = require("../models/Admin");
 
 exports.signup = async (req, res, next) => {
   const {
@@ -148,11 +149,12 @@ exports.login = async (req, res, next) => {
 
   let jobSeeker;
   let employer;
-
+  let admin;
   try {
     jobSeeker = await User.findOne({ email }).select("+password");
     employer = await Employer.findOne({ email }).select("+password");
-    if (!jobSeeker && !employer) {
+    admin = await Admin.findOne({ email }).select("+password");
+    if (!jobSeeker && !employer && !admin) {
       return responseToClient(res, 401, {
         success: false,
         error: { credentials: "Invalid email/password." },
@@ -179,6 +181,17 @@ exports.login = async (req, res, next) => {
           error: { credentials: "Invalid email/password." },
         });
       }
+    } else if (admin) {
+      const isPasswordMatch = await admin.comparePasswords(password);
+      if (isPasswordMatch) {
+        sendAdminToken(admin, 200, res);
+      } else {
+        responseToClient(res, 401, {
+          success: false,
+          error: { credentials: "Invalid email/password" },
+          hey: "hey",
+        });
+      }
     }
   } catch (error) {
     let errorMessage = {};
@@ -198,8 +211,9 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     const jobSeeker = await User.findOne({ email });
     const employer = await Employer.findOne({ email });
+    const admin = await Admin.findOne({ email });
 
-    if (!jobSeeker && !employer) {
+    if (!jobSeeker && !employer && !admin) {
       return responseToClient(res, 404, {
         success: false,
         error: "Failed to send email.",
@@ -209,9 +223,8 @@ exports.forgotPassword = async (req, res, next) => {
     let user;
 
     if (jobSeeker) user = jobSeeker;
-    else user = employer;
-
-    console.log(user);
+    else if (employer) user = employer;
+    else if (admin) user = admin;
 
     const resetToken = user.setResetPasswordFields();
 
@@ -263,8 +276,9 @@ exports.resetPassword = async (req, res, next) => {
   try {
     const jobSeeker = await User.findOne({ resetPasswordToken });
     const employer = await Employer.findOne({ resetPasswordToken });
+    const admin = await Admin.findOne({ resetPasswordToken });
 
-    const user = jobSeeker || employer;
+    const user = jobSeeker || employer || admin;
 
     if (!user) {
       return responseToClient(res, 400, {
@@ -346,6 +360,19 @@ const sendEmployerToken = (employer, statusCode, res) => {
       email: employer.email,
       companyName: employer.companyName,
       accountType: employer.accountType,
+    },
+    token,
+  });
+};
+
+const sendAdminToken = (admin, statusCode, res) => {
+  const token = admin.getSignedToken();
+  res.status(statusCode).json({
+    success: true,
+    user: {
+      id: admin._id,
+      email: admin.email,
+      accountType: admin.accountType,
     },
     token,
   });
