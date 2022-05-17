@@ -1,4 +1,5 @@
 const Employer = require("../models/Employer");
+const Job = require("../models/Job");
 const equals = require("../utils/equals");
 const responseToClient = require("../utils/responseToClient");
 
@@ -139,5 +140,24 @@ exports.updateBranding = async (req, res, next) => {
     } else {
       responseToClient(res, 500, { success: false, error: error.message });
     }
+  }
+};
+
+exports.removeEmployer = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const employerDeletedCount = await Employer.deleteOne({ _id: id });
+    const jobDeletedCount = await Job.deleteMany({ postedBy: id });
+    responseToClient(res, 200, {
+      success: true,
+      employerDeletedCount,
+      jobDeletedCount,
+    });
+  } catch (error) {
+    responseToClient(res, 500, {
+      success: false,
+      error: "No employer found.",
+      errorFrom: "removeEmployer",
+    });
   }
 };
