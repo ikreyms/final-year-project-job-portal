@@ -41,7 +41,6 @@ const Resume = () => {
   const [about, setAbout] = useState("");
 
   const [qualifications, setQualifications] = useState([]);
-  console.log("qualifications", qualifications);
 
   const [experiences, setExperiences] = useState([]);
 
