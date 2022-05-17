@@ -182,18 +182,20 @@ const Employers = () => {
           <Typography variant="h6" mt={3}>
             Popular Employers
           </Typography>
-          <Box className={classes.popularEmployers}>
-            {!loading && popularEmployersData.length !== 0 ? (
-              popularEmployersData.map((emp) => (
-                <PopularEmployerCard
-                  key={emp.id}
-                  employer={emp}
-                  onClick={() => navigate(`${location.pathname}/${emp.id}`)}
-                />
-              ))
-            ) : (
-              <CircularProgress color="secondary" sx={{ m: 2 }} />
-            )}
+          <Box
+            className={classes.popularEmployers}
+            sx={{ display: "flex", flexDirection: "column" }}
+          >
+            {/* {loading && <CircularProgress color="secondary" sx={{ m: 2 }} />} */}
+            {popularEmployersData.length !== 0
+              ? popularEmployersData.map((emp) => (
+                  <PopularEmployerCard
+                    key={emp.id}
+                    employer={emp}
+                    onClick={() => navigate(`${location.pathname}/${emp.id}`)}
+                  />
+                ))
+              : "No employers registered."}
           </Box>
         </Box>
 
