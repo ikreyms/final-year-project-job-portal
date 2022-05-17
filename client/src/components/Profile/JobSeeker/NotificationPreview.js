@@ -91,7 +91,7 @@ const NotificationPreview = ({
                 // ref={notificationSummary}
               >
                 {/* {notification.body.substring(0, 45)}... */}
-                From: {notification.postedBy.companyName}
+                From: {notification?.postedBy?.companyName}
               </Typography>
             </Stack>
             <Typography
