@@ -63,7 +63,17 @@ const employerSchema = new mongoose.Schema(
       select: false,
     },
 
+    totalReceivedApplications: {
+      type: Number,
+      default: 0,
+    },
+
     totalJobsPosted: {
+      type: Number,
+      default: 0,
+    },
+
+    totalInterviewsScheduled: {
       type: Number,
       default: 0,
     },
