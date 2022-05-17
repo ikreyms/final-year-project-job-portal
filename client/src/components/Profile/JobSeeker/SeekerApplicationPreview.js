@@ -55,7 +55,7 @@ const SeekerApplicationPreview = ({ application, userId, setApplications }) => {
             />
           </Typography>
           <Typography variant="caption">
-            {application.jobId?.postedBy.companyName}
+            {application.jobId?.postedBy?.companyName}
           </Typography>
         </Stack>
         <Stack direction="row" spacing={2}>
