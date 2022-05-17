@@ -8,6 +8,7 @@ const jobRoutes = require("./routes/jobs");
 const applicationRoutes = require("./routes/applications");
 const notificationRoutes = require("./routes/notifications");
 const interviewRoutes = require("./routes/interviews");
+const adminRoutes = require("./routes/admin");
 const connectDB = require("./config/db");
 
 connectDB();
@@ -30,6 +31,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/interviews", interviewRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(process.env.PORT || 2900, () =>
   console.log(`Server running on port ${process.env.PORT}`)
