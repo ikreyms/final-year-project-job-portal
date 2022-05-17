@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { isObjectEmpty } from "../../../assets/utils";
 import useStyles from "../styles";
@@ -16,8 +16,6 @@ import moment from "moment";
 const CallInterview = ({
   selection,
   setSelection,
-  applications,
-  setApplications,
   applicationStatus,
   getReveivedApplications,
 }) => {
@@ -75,21 +73,13 @@ const CallInterview = ({
       time: moment(time, "HH:mm").format(),
       selectionList: [...selection],
     };
-    console.log(interviewData);
-    //need to add accept application after that create interview date and then create notifications
+
     try {
       const response = await axios.patch(
         `http://localhost:2900/api/applications/acceptApplication/${empId}`,
         interviewData
       );
-      console.log(response);
-
-      // const createInterviewResponse = await axios.post(
-      //   `http://localhost:2900/api/interviews/createInterview/${empId}`,
-      //   interviewData
-      // );
-      // console.log(createInterviewResponse);
-      // setApplications(response.data.applications);
+      console.log(response.data);
       getReveivedApplications(empId, applicationStatus);
       setSelection([]);
       setSnackbarMessage("Application(s) Accepted. Interview Dates Set.");

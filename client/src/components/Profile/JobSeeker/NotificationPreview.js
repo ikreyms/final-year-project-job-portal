@@ -6,15 +6,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
+import axios from "axios";
 
 const NotificationPreview = ({
   notification,
-  notifications,
   selection,
   setSelection,
+  getNotifications,
+  clearPressed,
 }) => {
+  const checkbox = useRef();
+
   const [selected, setSelected] = useState(false);
 
   const selectionChangeHandler = () => {
@@ -34,9 +38,27 @@ const NotificationPreview = ({
     }
   };
 
+  const changeStatus = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:2900/api/notifications/${notification._id}/readOne`
+      );
+      console.log(response.data);
+      getNotifications();
+      setSelection([]);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  useEffect(() => {
+    setSelected(false);
+  }, [notification.lastAttemptedChange, clearPressed]);
+
   return (
     <Stack direction="row" sx={{ justifyContent: "space-between" }}>
       <Checkbox
+        ref={checkbox}
         checked={selected}
         sx={{ alignSelf: "flex-start", mt: 1.9, mr: 2 }}
         onChange={selectionChangeHandler}
@@ -46,6 +68,9 @@ const NotificationPreview = ({
         square
         key={notification._id}
         // onClick={onNotificationClick}
+        onClick={() => {
+          if (notification.status !== "Read") return changeStatus();
+        }}
       >
         <AccordionSummary>
           <Stack direction="row" justifyContent="space-between" width={1}>
@@ -81,6 +106,13 @@ const NotificationPreview = ({
         </AccordionSummary>
         <AccordionDetails sx={{ pt: 0 }}>
           <Typography variant="caption">{notification.body}</Typography>
+          <br />
+          <br />
+          <Typography variant="caption">
+            Notification Received @{" "}
+            {moment(notification.createdAt).format("DD/MM/YYYY")} |{" "}
+            {moment(notification.createdAt).format("HH:mm")} hrs
+          </Typography>
         </AccordionDetails>
       </Accordion>
     </Stack>
