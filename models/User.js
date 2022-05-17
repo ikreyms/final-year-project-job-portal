@@ -79,6 +79,10 @@ const userSchema = new mongoose.Schema(
     experiences: [experienceSchema],
     about: String,
     skills: [skillsSchema],
+
+    jobsApplied: { type: Number, default: 0 },
+    applicationsAccepted: { type: Number, default: 0 },
+    applicationsRejected: { type: Number, default: 0 },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
