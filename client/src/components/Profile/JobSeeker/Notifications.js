@@ -1,19 +1,8 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Checkbox,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Checkbox, Divider, Typography } from "@mui/material";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import useStyles from "../styles";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useTheme } from "@mui/system";
-import moment from "moment";
 import NotificationPreview from "./NotificationPreview";
 import NotificationActions from "./NotificationActions";
 
@@ -25,6 +14,8 @@ const NotificationPanel = () => {
   const [notifications, setNotifications] = useState([]);
 
   const [selection, setSelection] = useState([]);
+
+  const [clearPressed, setClearPressed] = useState(false);
 
   const getNotifications = async () => {
     try {
@@ -42,26 +33,33 @@ const NotificationPanel = () => {
     getNotifications();
   }, []);
 
-  const theme = useTheme();
-  console.log(theme);
   return (
     <Box className={classes.panelWrapper}>
       <Typography variant="h5" mb={2}>
         Notifications
       </Typography>
 
-      {selection.length > 0 && <NotificationActions selection={selection} />}
+      <NotificationActions
+        selection={selection}
+        setSelection={setSelection}
+        notifications={notifications}
+        getNotifications={getNotifications}
+        clearPressed={clearPressed}
+        setClearPressed={setClearPressed}
+      />
 
       <Divider sx={{ mt: 1, mb: 3 }} />
 
       {notifications.length > 0
-        ? notifications.map((notification) => (
+        ? notifications.map((notification, i) => (
             <NotificationPreview
               key={notification._id}
               notification={notification}
               notifications={notifications}
               selection={selection}
               setSelection={setSelection}
+              getNotifications={getNotifications}
+              clearPressed={clearPressed}
             />
           ))
         : "You have no notifications."}
