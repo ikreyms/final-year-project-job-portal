@@ -69,18 +69,6 @@ const Resume = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("image", image);
-    console.log("firstName", firstName);
-    console.log("lastName", lastName);
-    console.log("nid", nid);
-    console.log("dob", dob);
-    console.log("gender", gender);
-    console.log("maritalStatus", maritalStatus);
-    console.log("contact", contact);
-    console.log("email", email);
-    console.log("qualifications:", qualifications);
-    console.log("experiences:", experiences);
-    console.log("skills:", skills);
 
     const formData = {
       image,
