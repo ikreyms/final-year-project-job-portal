@@ -2,10 +2,13 @@ const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema(
   {
+    adminReceiver: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Admin",
+    },
     receiver: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
-      required: [true, "Please provide the receivers of this notification."],
     },
     subject: {
       type: String,
