@@ -13,8 +13,6 @@ exports.getOneUser = async (req, res, next) => {
         success: false,
         error: "Job seeker not found.",
       });
-
-    await user.save();
     responseToClient(res, 200, { success: true, user });
   } catch (error) {
     responseToClient(res, 500, {
