@@ -26,12 +26,20 @@ const NavBar = () => {
           className={classes.navlinks}
           style={{ marginRight: "auto" }}
         >
-          <Link href="/jobs" underline="none" className={classes.navlink}>
-            Jobs
-          </Link>
-          <Link href="/employers" underline="none" className={classes.navlink}>
-            Employers
-          </Link>
+          {accountType !== "Employer" && (
+            <>
+              <Link href="/jobs" underline="none" className={classes.navlink}>
+                Jobs
+              </Link>
+              <Link
+                href="/employers"
+                underline="none"
+                className={classes.navlink}
+              >
+                Employers
+              </Link>
+            </>
+          )}
           <Link href="/about" underline="none" className={classes.navlink}>
             About
           </Link>
