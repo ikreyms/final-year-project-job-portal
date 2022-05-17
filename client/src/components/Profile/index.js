@@ -18,6 +18,7 @@ import AppliedJobs from "./JobSeeker/AppliedJobs";
 import ReceivedApplications from "./Employer/ReceivedApplications";
 import Notifications from "./JobSeeker/Notifications";
 import Interviews from "./Employer/Interviews";
+import DashboardAdmin from "./Admin/DashboardAdmin";
 
 const Profile = () => {
   const classes = useStyles();
@@ -114,7 +115,7 @@ const Profile = () => {
                 ))}
               </Tabs>
               <TabPanel value={value} index={0}>
-                Admin not done
+                <DashboardAdmin />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 Admin not done
