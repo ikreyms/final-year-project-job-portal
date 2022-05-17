@@ -49,7 +49,7 @@ exports.getInterviews = async (req, res, next) => {
 exports.cancelInterview = async (req, res, next) => {
   const { interviewId, empId } = req.params;
   try {
-    const interview = await Interview.findOne({ interviewId })
+    const interview = await Interview.findOne({ _id: interviewId })
       .populate({
         path: "appIds",
         model: "Application",
@@ -62,26 +62,26 @@ exports.cancelInterview = async (req, res, next) => {
 
     await Interview.deleteOne({ _id: interviewId });
 
-    let receivers = [];
+    const receivers = interview.appIds.map((appId) => appId.seekerId);
 
-    interview.appIds.forEach((appId) => {
-      receivers.push(appId.seekerId);
-    });
-
-    await Notification.create({
-      receivers: [...receivers],
-      subject: "Interview Cancelled",
-      body: `The interview scheduled on ${moment(
-        interview.interviewDate
-      ).format("DD/MM/YYYY")} | ${moment(interview.interviewTime).format(
-        "HH:mm"
-      )} hrs was cancelled by ${interview.empId.companyName}`,
-      postedBy: empId,
-    });
+    for (const receiver of receivers) {
+      await Notification.create({
+        receiver: receiver,
+        subject: "Interview Cancelled",
+        body: `The interview scheduled on ${moment(
+          interview.interviewDate
+        ).format("DD/MM/YYYY")} | ${moment(interview.interviewTime).format(
+          "HH:mm"
+        )} hrs was cancelled by ${interview.empId.companyName}`,
+        postedBy: empId,
+      });
+    }
 
     responseToClient(res, 200, {
       success: true,
       message: "Interview cancelled. Notification created.",
+      receivers,
+      interview,
     });
   } catch (error) {
     responseToClient(res, 500, {
@@ -113,6 +113,7 @@ exports.updateInterview = async (req, res, next) => {
         error: "Interview not found.",
       });
 
+    const prevVenue = interview.venue;
     const prevInterviewDate = interview.interviewDate;
     const prevInterviewTime = interview.interviewTime;
 
@@ -122,26 +123,25 @@ exports.updateInterview = async (req, res, next) => {
 
     await interview.save();
 
-    // create notification
-    let receivers = [];
+    const receivers = interview.appIds.map((appId) => appId.seekerId);
 
-    interview.appIds.forEach((appId) => {
-      receivers.push(appId.seekerId);
-    });
-
-    await Notification.create({
-      receivers: [...receivers],
-      subject: "Interview Recheduled",
-      body: `The interview scheduled on ${moment(prevInterviewDate).format(
-        "DD/MM/YYYY"
-      )} | ${moment(prevInterviewTime).format(
-        "HH:mm"
-      )} hrs has been rescheduled by ${interview.empId.companyName}. \n
+    for (const receiver of receivers) {
+      await Notification.create({
+        receiver: receiver,
+        subject: "Interview Recheduled",
+        body: `The interview scheduled on ${moment(prevInterviewDate).format(
+          "DD/MM/YYYY"
+        )} | ${moment(prevInterviewTime).format(
+          "HH:mm"
+        )} hrs at ${prevVenue} has been rescheduled by ${
+          interview.empId.companyName
+        }. \n
       Recheduled Venue: ${interview.venue}\n
       Recheduled Date: ${moment(interview.interviewDate).format("DD/MM/YYYY")}\n
       Rescheduled Time: ${moment(interview.interviewTime).format("HH:mm")} hrs`,
-      postedBy: empId,
-    });
+        postedBy: empId,
+      });
+    }
 
     responseToClient(res, 200, {
       success: true,
