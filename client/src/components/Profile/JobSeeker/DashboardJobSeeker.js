@@ -14,24 +14,13 @@ const DashboardJobSeeker = ({ resumeRef }) => {
   const id = useSelector((state) => state.user?.id);
 
   const [profileData, setProfileData] = useState({});
-  const [totalJobsApplied, setTotalJobsApplied] = useState(0);
 
   const loadProfileData = async () => {
     try {
       const response = await axios.get(`http://localhost:2900/api/users/${id}`);
       const user = response.data.user;
+      console.log(response.data);
       setProfileData(user);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
-  const getTotalJobsApplied = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:2900/api/applications/${id}/count/seeker`
-      );
-      setTotalJobsApplied(response.data.count);
     } catch (error) {
       console.log(error.response);
     }
@@ -39,7 +28,6 @@ const DashboardJobSeeker = ({ resumeRef }) => {
 
   useEffect(() => {
     loadProfileData();
-    getTotalJobsApplied();
   }, []);
 
   return (
@@ -105,9 +93,21 @@ const DashboardJobSeeker = ({ resumeRef }) => {
 
       <Divider sx={{ mt: 4, mb: 4 }} />
       <Box className={classes.statPacks}>
-        <StatPack stat={totalJobsApplied} caption="Jobs Applied" color="info" />
-        <StatPack stat={123} caption="Interviews" color="success" />
-        <StatPack stat={123} caption="Rejected" color="error" />
+        <StatPack
+          stat={profileData.jobsApplied}
+          caption="Jobs Applied"
+          color="info"
+        />
+        <StatPack
+          stat={profileData.applicationsAccepted}
+          caption="Applications Accepted"
+          color="success"
+        />
+        <StatPack
+          stat={profileData.applicationsRejected}
+          caption="Application Rejections"
+          color="error"
+        />
       </Box>
       {(profileData.about ||
         profileData.qualifications?.length > 0 ||

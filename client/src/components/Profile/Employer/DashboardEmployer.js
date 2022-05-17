@@ -14,7 +14,6 @@ const DashboardEmployer = ({ brandingRef }) => {
   const id = useSelector((state) => state.user?.id);
 
   const [profileData, setProfileData] = useState({});
-  const [totalReceivedApplications, setTotalReceivedApplications] = useState(0);
   const [rating, setRating] = useState(0);
 
   const loadProfileData = async () => {
@@ -31,21 +30,8 @@ const DashboardEmployer = ({ brandingRef }) => {
     }
   };
 
-  const getTotalReceivedApplications = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:2900/api/applications/employer/count/${id}`
-      );
-      setTotalReceivedApplications(response.data.count);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
   useEffect(() => {
     loadProfileData();
-    getTotalReceivedApplications();
-    console.log(profileData);
   }, []);
 
   return (
@@ -115,7 +101,7 @@ const DashboardEmployer = ({ brandingRef }) => {
       <Divider sx={{ mt: 4, mb: 4 }} />
       <Box className={classes.statPacks}>
         <StatPack
-          stat={totalReceivedApplications}
+          stat={profileData.totalReceivedApplications}
           caption="Received Applications"
           color="info"
         />
@@ -124,8 +110,13 @@ const DashboardEmployer = ({ brandingRef }) => {
           caption="Total Jobs Posted"
           color="info"
         />
-        <StatPack stat={123} caption="Interviews Scheduled" color="info" />
+        <StatPack
+          stat={profileData.totalInterviewsScheduled}
+          caption="Interviews Scheduled"
+          color="info"
+        />
       </Box>
+
       {(profileData.about ||
         profileData.mission ||
         profileData.whyWorkWithUs?.length > 0) && (
