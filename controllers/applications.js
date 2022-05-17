@@ -1,8 +1,10 @@
 const Application = require("../models/Application");
 const Interview = require("../models/Interview");
 const Notification = require("../models/Notification");
+const User = require("../models/User");
 const responseToClient = require("../utils/responseToClient");
 const moment = require("moment");
+const Employer = require("../models/Employer");
 
 exports.createApplication = async (req, res, next) => {
   const { seekerId, jobId, empId } = req.params;
@@ -18,6 +20,16 @@ exports.createApplication = async (req, res, next) => {
       jobId,
       empId,
     });
+
+    //increment jobs applied in seeker
+    await User.updateOne({ _id: seekerId }, { $inc: { jobsApplied: 1 } });
+
+    //increment total received applications in Employer
+    await Employer.updateOne(
+      { _id: empId },
+      { $inc: { totalReceivedApplications: 1 } }
+    );
+
     responseToClient(res, 200, {
       success: true,
       application,
@@ -152,6 +164,13 @@ exports.rejectApplications = async (req, res, next) => {
       });
     }
 
+    // increment applicationsRejected in user
+    const seekerIds = applications.map((application) => application.seekerId);
+    await User.updateMany(
+      { _id: { $in: [...seekerIds] } },
+      { $inc: { applicationsRejected: 1 } }
+    );
+
     responseToClient(res, 200, {
       success: true,
       message: "Applications rejected.",
@@ -209,6 +228,18 @@ exports.acceptApplications = async (req, res, next) => {
         postedBy: empId,
       });
     }
+
+    const seekerIds = applications.map((application) => application.seekerId);
+    await User.updateMany(
+      { _id: { $in: [...seekerIds] } },
+      { $inc: { applicationsAccepted: 1 } }
+    );
+
+    // increment total interviews scheduled in employer
+    await Employer.updateOne(
+      { _id: empId },
+      { $inc: { totalInterviewsScheduled: 1 } }
+    );
 
     responseToClient(res, 200, {
       success: true,
