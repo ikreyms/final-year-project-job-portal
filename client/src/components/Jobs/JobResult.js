@@ -20,7 +20,7 @@ const JobResult = ({ job, onClick }) => {
       >
         <CardMedia
           component="img"
-          image={job.postedBy.image ? job.postedBy.image : logo}
+          image={job?.postedBy?.image ? job?.postedBy?.image : logo}
           height="40"
           sx={{ maxWidth: 40, borderRadius: 1, cursor: "pointer" }}
           alt="employer logo"
@@ -36,7 +36,7 @@ const JobResult = ({ job, onClick }) => {
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="subtitle2">{job.title}</Typography>
             <Typography variant="caption">
-              {job.postedBy.companyName}
+              {job?.postedBy?.companyName}
               <br />
             </Typography>
             <Typography variant="caption">MVR {job.salary}</Typography>
