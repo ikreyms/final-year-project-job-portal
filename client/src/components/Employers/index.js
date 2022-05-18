@@ -58,7 +58,7 @@ const Employers = () => {
     try {
       const response = await axios.get(
         // cannot sort based on rating which is a virtual
-        "http://localhost:2900/api/employers?sort=rating&order=desc&limit=6"
+        "http://localhost:2900/api/employers?sort=rating&order=desc&limit=6&sort=totalReceivedApplications"
       );
       const data = await response.data.employers;
       console.log(response);
@@ -180,11 +180,12 @@ const Employers = () => {
 
         <Box className={classes.popularEmployersBox} ref={popularEmployersBox}>
           <Typography variant="h6" mt={3}>
-            Popular Employers
+            Popular Employers{" "}
           </Typography>
+          <Typography variant="caption">(by applications received)</Typography>
           <Box
             className={classes.popularEmployers}
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={{ display: "flex", flexWrap: "wrap" }}
           >
             {/* {loading && <CircularProgress color="secondary" sx={{ m: 2 }} />} */}
             {popularEmployersData.length !== 0
