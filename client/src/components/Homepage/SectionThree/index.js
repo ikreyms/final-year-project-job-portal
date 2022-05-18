@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import NumberFormat from "react-number-format";
 
-const SectionThree = () => {
+const SectionThree = ({ homepageData }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   return (
@@ -13,7 +13,11 @@ const SectionThree = () => {
         <Box className={classes.box} onClick={() => navigate("/employers")}>
           <Box className={classes.content}>
             <Typography variant="h3" align="center" color="primary">
-              <NumberFormat value={452} thousandSeparator displayType="text" />
+              <NumberFormat
+                value={homepageData?.employerCount}
+                thousandSeparator
+                displayType="text"
+              />
             </Typography>
             <Typography
               variant="subtitle2"
@@ -21,14 +25,18 @@ const SectionThree = () => {
               color="secondary"
               className={classes.text}
             >
-              Registered Employers
+              Employers
             </Typography>
           </Box>
         </Box>
         <Box className={classes.box} onClick={() => navigate("/jobs")}>
           <Box className={classes.content}>
             <Typography variant="h3" align="center" color="primary">
-              <NumberFormat value={9332} thousandSeparator displayType="text" />
+              <NumberFormat
+                value={homepageData?.jobCount}
+                thousandSeparator
+                displayType="text"
+              />
             </Typography>
             <Typography
               variant="subtitle2"
@@ -43,7 +51,11 @@ const SectionThree = () => {
         <Box className={classes.box}>
           <Box className={classes.content}>
             <Typography variant="h3" align="center" color="primary">
-              <NumberFormat value={2923} thousandSeparator displayType="text" />
+              <NumberFormat
+                value={homepageData?.seekerCount}
+                thousandSeparator
+                displayType="text"
+              />
             </Typography>
             <Typography
               variant="subtitle2"
