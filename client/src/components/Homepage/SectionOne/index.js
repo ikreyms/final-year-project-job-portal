@@ -16,9 +16,9 @@ const SectionOne = () => {
               Find the job that's right for you.
             </Typography>
             <Typography variant="subtitle1" mt={2}>
-              Explore the most up-to-date job board in the Maldives with more
-              than 400 employers post on our platform.
+              Explore the most up-to-date job board in the Maldives.
             </Typography>
+            {/* // need better text here */}
             <Box className={classes.buttonWrapper}>
               <Button
                 variant="contained"
