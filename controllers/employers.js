@@ -161,3 +161,39 @@ exports.removeEmployer = async (req, res, next) => {
     });
   }
 };
+
+exports.verifyEmployer = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    await Employer.updateOne({ _id: id }, { $set: { verified: true } });
+    responseToClient(res, 200, {
+      success: true,
+      message: "Employer verified.",
+      verified: true,
+    });
+  } catch (error) {
+    responseToClient(res, 500, {
+      success: false,
+      error: error.message,
+      errorFrom: "verifyEmployer",
+    });
+  }
+};
+
+exports.deVerifyEmployer = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    await Employer.updateOne({ _id: id }, { $set: { verified: false } });
+    responseToClient(res, 200, {
+      success: true,
+      message: "Employer verification cancelled.",
+      verified: false,
+    });
+  } catch (error) {
+    responseToClient(res, 500, {
+      success: false,
+      error: error.message,
+      errorFrom: "deVerifyEmployer",
+    });
+  }
+};
