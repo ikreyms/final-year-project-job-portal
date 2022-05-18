@@ -108,10 +108,10 @@ const Resume = () => {
       const response = await axios.get(`http://localhost:2900/api/users/${id}`);
       const { user } = response.data;
       updateAllStates(user);
-      console.log("loadUserResume", user);
+      console.log("loadUserResume", response.data);
       console.log(qualifications);
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
 
