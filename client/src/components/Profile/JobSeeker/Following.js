@@ -53,6 +53,7 @@ const Following = () => {
         {following.length > 0 ? (
           following.map((employer) => (
             <FollowedEmployer
+              key={employer._id}
               employer={employer}
               onClick={() => navigate(`/employers/${employer._id}`)}
             />
