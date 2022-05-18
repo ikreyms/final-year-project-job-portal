@@ -19,6 +19,7 @@ import ReceivedApplications from "./Employer/ReceivedApplications";
 import Notifications from "./JobSeeker/Notifications";
 import Interviews from "./Employer/Interviews";
 import DashboardAdmin from "./Admin/DashboardAdmin";
+import Following from "./JobSeeker/Following";
 
 const Profile = () => {
   const classes = useStyles();
@@ -64,9 +65,12 @@ const Profile = () => {
                 <Resume />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <AppliedJobs />
+                <Following />
               </TabPanel>
               <TabPanel value={value} index={3}>
+                <AppliedJobs />
+              </TabPanel>
+              <TabPanel value={value} index={4}>
                 <Notifications />
               </TabPanel>
             </>
