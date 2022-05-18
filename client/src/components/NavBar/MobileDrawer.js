@@ -81,12 +81,16 @@ const MobileDrawer = ({ loggedIn, accountType }) => {
             </ListItemIcon>
             <ListItemText>Jobs</ListItemText>
           </ListItem>
-          <ListItem onClick={() => onDrawerClose("employers")}>
-            <ListItemIcon>
-              <EmployersIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Employers</ListItemText>
-          </ListItem>
+
+          {accountType !== "Employer" && (
+            <ListItem onClick={() => onDrawerClose("employers")}>
+              <ListItemIcon>
+                <EmployersIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Employers</ListItemText>
+            </ListItem>
+          )}
+
           <ListItem onClick={() => onDrawerClose("about")}>
             <ListItemIcon>
               <AboutIcon fontSize="small" />
