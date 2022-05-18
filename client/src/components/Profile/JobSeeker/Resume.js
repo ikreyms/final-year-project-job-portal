@@ -74,7 +74,7 @@ const Resume = () => {
       firstName,
       lastName,
       nid,
-      dob: moment(dob, "DD/MM/YYYY").format(),
+      dob,
       gender,
       maritalStatus,
       contact,
@@ -130,7 +130,7 @@ const Resume = () => {
         Your resume information will be included in your job application. Make
         sure the all the information is provided.
       </Typography>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} autoComplete="off">
         <Typography className={classes.resumeHeadings} color="primary" mb={2}>
           Basic Information
         </Typography>
@@ -213,6 +213,14 @@ const Resume = () => {
                 placeholder="dd/mm/yyyy"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
+                error={
+                  !isObjectEmpty(errorResponse)
+                    ? errorResponse.error?.dob
+                      ? true
+                      : false
+                    : false
+                }
+                helperText={errorResponse?.error?.dob && "Enter a valid date."}
               />
             </Grid>
             <Grid item xxs={1} xs={2}>
