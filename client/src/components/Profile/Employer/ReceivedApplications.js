@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useStyles from "../styles";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -24,7 +24,6 @@ const ReceivedApplications = () => {
   const [applications, setApplications] = useState([]);
 
   const [selection, setSelection] = useState([]);
-  console.log(selection);
 
   const getReveivedApplications = async (empId, applicationStatus) => {
     try {
