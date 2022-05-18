@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       boxShadow: theme.shadows[2],
     },
-    minWidth: 300,
+    width: 300,
     padding: theme.spacing(2),
     [theme.breakpoints.down("xxs")]: {
       paddingLeft: 0,
