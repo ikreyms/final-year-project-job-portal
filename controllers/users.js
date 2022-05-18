@@ -13,7 +13,24 @@ exports.getOneUser = async (req, res, next) => {
         success: false,
         error: "Job seeker not found.",
       });
-    responseToClient(res, 200, { success: true, user });
+
+    // const qualificationsWithFormatDate = user.qualifications.map(
+    //   (qualification) => {
+    //     return {
+    //       ...qualification,
+    //       completedOn: moment(qualification.completedOn).format("YYYY"),
+    //     };
+    //   }
+    // );
+
+    // user.qualifications = qualificationsWithFormatDate;
+
+    // await user.save();
+
+    responseToClient(res, 200, {
+      success: true,
+      user,
+    });
   } catch (error) {
     responseToClient(res, 500, {
       success: false,
@@ -28,10 +45,12 @@ exports.getUserRatingsAndFollowing = async (req, res, next) => {
     const user = await User.findOne({ _id: id })
       .populate("ratings")
       .populate("following");
-    // console.log(user);
+
     if (user) {
+      let following = user.following;
+      following.sort((a, b) => b.companyName - a.companyName);
       return responseToClient(res, 200, {
-        following: user.following,
+        following,
         ratings: user.ratings,
       });
     }
