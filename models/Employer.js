@@ -48,6 +48,7 @@ const employerSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
     },
+    verified: { type: Boolean, default: false },
 
     contact: String,
 
