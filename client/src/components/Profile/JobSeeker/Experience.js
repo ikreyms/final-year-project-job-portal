@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
 import DeleteIcon from "@mui/icons-material/Close";
 import { experienceCategories } from "../../../assets/dataArrays";
@@ -15,6 +15,9 @@ import moment from "moment";
 
 const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
   const classes = useStyles();
+
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const handleChange = (e) => {
     setExperiences((prev) =>
@@ -34,6 +37,35 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
     });
     setExperiences(newExperiences);
   };
+
+  useEffect(() => {
+    if (experiences[no - 1].from && experiences[no - 1].to) {
+      setFrom(moment(experiences[no - 1]?.from).format("YYYY"));
+      setTo(moment(experiences[no - 1]?.to).format("YYYY"));
+    }
+  }, []);
+
+  useEffect(() => {
+    setExperiences((prev) =>
+      prev.map((obj, index) => {
+        if (index === no - 1) {
+          return { ...obj, from: from };
+        }
+        return obj;
+      })
+    );
+  }, [from]);
+
+  useEffect(() => {
+    setExperiences((prev) =>
+      prev.map((obj, index) => {
+        if (index === no - 1) {
+          return { ...obj, to: to };
+        }
+        return obj;
+      })
+    );
+  }, [to]);
 
   return (
     <>
@@ -109,8 +141,10 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="From"
             margin="dense"
             name="from"
-            value={experiences[no - 1]?.from}
-            onChange={handleChange}
+            // value={experiences[no - 1]?.from}
+            value={from}
+            // onChange={handleChange}
+            onChange={(e) => setFrom(e.target.value)}
             error={
               !isObjectEmpty(errorResponse)
                 ? errorResponse.error?.[`experiences.${no - 1}.from`]
@@ -129,8 +163,10 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="To"
             margin="dense"
             name="to"
-            value={experiences[no - 1]?.to}
-            onChange={handleChange}
+            // value={experiences[no - 1]?.to}
+            value={to}
+            // onChange={handleChange}
+            onChange={(e) => setTo(e.target.value)}
             error={
               !isObjectEmpty(errorResponse)
                 ? errorResponse.error?.[`experiences.${no - 1}.to`]

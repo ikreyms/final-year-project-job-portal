@@ -6,7 +6,7 @@ import {
   Box,
   MenuItem,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
 import moment from "moment";
 import DeleteIcon from "@mui/icons-material/Close";
@@ -20,6 +20,8 @@ const Qualification = ({
   errorResponse,
 }) => {
   const classes = useStyles();
+
+  const [completedOn, setCompletedOn] = useState("");
 
   const handleChange = (e) => {
     setQualifications((prev) =>
@@ -39,6 +41,25 @@ const Qualification = ({
     });
     setQualifications(newQualifications);
   };
+
+  useEffect(() => {
+    if (qualifications[no - 1].completedOn) {
+      setCompletedOn(
+        moment(qualifications[no - 1]?.completedOn).format("YYYY")
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    setQualifications((prev) =>
+      prev.map((obj, index) => {
+        if (index === no - 1) {
+          return { ...obj, completedOn: completedOn };
+        }
+        return obj;
+      })
+    );
+  }, [completedOn]);
 
   return (
     <>
@@ -94,8 +115,10 @@ const Qualification = ({
             margin="dense"
             name="completedOn"
             placeholder="YYYY"
-            value={qualifications[no - 1]?.completedOn}
-            onChange={handleChange}
+            // value={qualifications[no - 1]?.completedOn}
+            value={completedOn}
+            // onChange={handleChange}
+            onChange={(e) => setCompletedOn(e.target.value)}
             error={
               !isObjectEmpty(errorResponse)
                 ? errorResponse.error?.[`qualifications.${no - 1}.completedOn`]
