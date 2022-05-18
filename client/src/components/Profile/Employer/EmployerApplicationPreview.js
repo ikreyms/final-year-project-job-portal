@@ -8,14 +8,14 @@ import {
   Checkbox,
   Typography,
   Chip,
+  Button,
 } from "@mui/material";
 import logo from "../../../assets/logo.svg";
-import HideIcon from "@mui/icons-material/Close";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import moment from "moment";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmployerResumePreview from "./EmployerResumePreview";
-import CallInterview from "./CallInterview";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 const EmployerApplicationPreview = ({
   application,
@@ -24,6 +24,8 @@ const EmployerApplicationPreview = ({
   setSelection,
 }) => {
   const [selected, setSelected] = useState(false);
+
+  const toPrintComponent = useRef();
 
   const selectionChangeHandler = () => {
     setSelected(!selected);
@@ -106,13 +108,13 @@ const EmployerApplicationPreview = ({
           </Stack>
         </AccordionSummary>
         <AccordionDetails>
-          <EmployerResumePreview seekerId={application.seekerId} />
-          {/* <Divider sx={{ my: 3 }} />
-        <CallInterview application={application} /> */}
+          <EmployerResumePreview
+            ref={toPrintComponent}
+            seekerId={application.seekerId}
+          />
         </AccordionDetails>
       </Accordion>
     </Stack>
   );
 };
-
 export default EmployerApplicationPreview;
