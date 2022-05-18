@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
   Snackbar,
+  Icon,
 } from "@mui/material";
 import SectorIcon from "@mui/icons-material/DonutSmall";
 import FollowersIcon from "@mui/icons-material/Loyalty";
@@ -21,6 +22,7 @@ import useStyles, { primaryBtnSxProps, secondaryBtnSxProps } from "./styles";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import VerifiedIcon from "@mui/icons-material/Verified";
 
 const Header = ({ employer, loggedIn, userType }) => {
   const classes = useStyles();
@@ -34,6 +36,8 @@ const Header = ({ employer, loggedIn, userType }) => {
 
   const [rated, setRated] = useState(false);
   const [ratedValue, setRatedValue] = useState(0);
+
+  const [verified, setVerified] = useState(employer.verified);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -136,6 +140,31 @@ const Header = ({ employer, loggedIn, userType }) => {
     }
   };
 
+  const verifyDeVerifyEmployer = async (e) => {
+    console.log(e.target.innerText);
+    if (e.target.innerText === "VERIFY") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:2900/api/employers/verify/${employer._id}`
+        );
+        setVerified(response.data.verified);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error.respone);
+      }
+    } else if (e.target.innerText === "CANCEL VERIFICATION") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:2900/api/employers/deVerify/${employer._id}`
+        );
+        setVerified(response.data.verified);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error.respone);
+      }
+    }
+  };
+
   useEffect(() => {
     if (loggedIn) {
       getUserRatingsAndFollowing();
@@ -161,6 +190,9 @@ const Header = ({ employer, loggedIn, userType }) => {
                 <Typography variant="h6" color="white">
                   {employer.companyName}
                 </Typography>
+                {verified && (
+                  <VerifiedIcon fontSize="small" sx={{ color: "white" }} />
+                )}
                 <Chip
                   label={employer.openings === 1 ? "Opening" : "Openings"}
                   color={employer.openings === 0 ? "error" : "success"}
@@ -225,16 +257,28 @@ const Header = ({ employer, loggedIn, userType }) => {
           <Box>
             <Box className={classes.headerActions}>
               {accountType === "Admin" ? (
-                <Button
-                  size="small"
-                  variant="contained"
-                  disableElevation
-                  // sx={primaryBtnSxProps}
-                  color="error"
-                  onClick={removeEmployer}
-                >
-                  Remove Employer
-                </Button>
+                <>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    color="success"
+                    sx={{ border: "1px solid white" }}
+                    onClick={verifyDeVerifyEmployer}
+                  >
+                    {verified ? "Cancel Verification" : "Verify"}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    color="error"
+                    sx={{ border: "1px solid white" }}
+                    onClick={removeEmployer}
+                  >
+                    Remove
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button
