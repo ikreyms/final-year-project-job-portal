@@ -83,7 +83,7 @@ const employerSchema = new mongoose.Schema(
 
     resetPasswordExpiry: Date,
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 employerSchema.virtual("followers", {
