@@ -15,6 +15,6 @@ router.get("/:seekerId/", getNotifications);
 router.patch("/:notificationId/readOne", markOneNotificationRead);
 router.patch("/markAsRead", markAsRead);
 router.patch("/markAsUnread", markAsUnread);
-router.patch("/clearAll/:seekerId", clearAll);
+router.delete("/clearAll/:seekerId", clearAll);
 
 module.exports = router;
