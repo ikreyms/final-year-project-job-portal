@@ -22,6 +22,7 @@ const Following = () => {
   const id = useSelector((state) => state?.user.id);
 
   const [following, setFollowing] = useState([]);
+  const [followingCount, setFollowingCount] = useState(0);
 
   const getFollowing = async () => {
     try {
@@ -30,6 +31,7 @@ const Following = () => {
       );
       console.log(response);
       setFollowing(response.data.following);
+      setFollowingCount(response.data.followingCount);
     } catch (error) {
       console.log(error.response);
     }
@@ -44,7 +46,7 @@ const Following = () => {
   return (
     <Box className={classes.panelWrapper}>
       <Typography variant="h5" mb={2}>
-        Following
+        Following ({followingCount})
       </Typography>
 
       <Divider sx={{ mt: 1, mb: 3 }} />
