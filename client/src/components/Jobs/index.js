@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  MenuItem,
+  Pagination,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Intro from "./Intro";
 import { jobCategories, salaryRanges, jobTypes } from "../../assets/dataArrays";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -29,14 +36,16 @@ const Jobs = () => {
   // data states
   const [jobs, setJobs] = useState([]);
 
+  const [page, setPage] = useState(1);
+  const [paginationArrayLength, setPaginationArrayLength] = useState(0);
+
   const fetchJobsData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:2900/api/jobs?jobCategory=${jobCategory}&jobType=${jobType}&salaryRange=${salaryRange}`
+        `http://localhost:2900/api/jobs?jobCategory=${jobCategory}&jobType=${jobType}&salaryRange=${salaryRange}&page=${page}`
       );
-      const data = response.data.jobs;
-      setJobs(data);
-      console.log(data);
+      setJobs(response.data.jobs);
+      setPaginationArrayLength(response.data.docCount);
     } catch (error) {
       console.log(error.response);
     }
@@ -45,6 +54,10 @@ const Jobs = () => {
   useEffect(() => {
     fetchJobsData();
   }, [jobCategory, jobType, salaryRange]);
+
+  useEffect(() => {
+    fetchJobsData();
+  }, [page]);
 
   return (
     <Box className={classes.section}>
@@ -140,6 +153,13 @@ const Jobs = () => {
             )}
           </Box>
         </Box>
+        <Pagination
+          sx={{ my: 2, display: paginationArrayLength <= 10 && "none" }}
+          count={Math.ceil(parseInt(paginationArrayLength) / 10)}
+          page={page}
+          boundaryCount={1}
+          onChange={(e, selectedPage) => setPage(selectedPage)}
+        />
       </Box>
     </Box>
   );
