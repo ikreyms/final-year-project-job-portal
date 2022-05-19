@@ -42,7 +42,7 @@ const NotificationActions = ({
 
   const clearAll = async () => {
     try {
-      const response = await axios.patch(
+      const response = await axios.delete(
         `http://localhost:2900/api/notifications/clearAll/${seekerId}`
       );
       console.log(response.data);

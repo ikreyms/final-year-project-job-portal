@@ -224,7 +224,9 @@ exports.acceptApplications = async (req, res, next) => {
           application?.empId.companyName
         }. Interview is scheduled on ${moment(date).format(
           "DD/MM/YYYY"
-        )} | ${moment(time).format("HH:mm")} at ${venue}.`,
+        )} hrs | ${moment(time).format(
+          "HH:mm"
+        )} at ${venue}. Remember to bring the original certificates to the interview.`,
         postedBy: empId,
       });
     }

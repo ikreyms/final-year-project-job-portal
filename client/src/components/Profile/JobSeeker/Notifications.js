@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import NotificationPreview from "./NotificationPreview";
 import NotificationActions from "./NotificationActions";
 
-const NotificationPanel = () => {
+const NotificationsAdmin = () => {
   const classes = useStyles();
 
   const seekerId = useSelector((state) => state?.user.id);
@@ -35,8 +35,8 @@ const NotificationPanel = () => {
 
   return (
     <Box className={classes.panelWrapper}>
-      <Typography variant="h5" mb={2}>
-        Notifications
+      <Typography variant="h5">
+        Notifications ({notifications?.length})
       </Typography>
 
       <NotificationActions
@@ -67,4 +67,4 @@ const NotificationPanel = () => {
   );
 };
 
-export default NotificationPanel;
+export default NotificationsAdmin;
