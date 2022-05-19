@@ -141,9 +141,8 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="From"
             margin="dense"
             name="from"
-            // value={experiences[no - 1]?.from}
+            placeholder="YYYY"
             value={from}
-            // onChange={handleChange}
             onChange={(e) => setFrom(e.target.value)}
             error={
               !isObjectEmpty(errorResponse)
@@ -163,9 +162,8 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             label="To"
             margin="dense"
             name="to"
-            // value={experiences[no - 1]?.to}
+            placeholder="YYYY"
             value={to}
-            // onChange={handleChange}
             onChange={(e) => setTo(e.target.value)}
             error={
               !isObjectEmpty(errorResponse)

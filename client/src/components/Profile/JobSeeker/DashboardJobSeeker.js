@@ -38,6 +38,9 @@ const DashboardJobSeeker = ({ resumeRef }) => {
             src={profileData.image ? profileData.image : logo}
             alt="profilePic"
             className={classes.profilePic}
+            onClick={() => {
+              resumeRef.current.click();
+            }}
           />
           <Box className={classes.headerMainTextWrapper}>
             <Typography

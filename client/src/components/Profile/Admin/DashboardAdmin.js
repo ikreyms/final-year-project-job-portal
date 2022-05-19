@@ -41,22 +41,27 @@ const DashboardAdmin = () => {
         <StatPack
           stat={profileData.seekerCount}
           caption="Seekers Registered"
-          color="primary"
+          color="primary.dark"
         />
         <StatPack
           stat={profileData.employerCount}
           caption="Employers Registered"
-          color="primary"
+          color="primary.dark"
+        />
+        <StatPack
+          stat={profileData.verifiedEmployerCount}
+          caption="Verified Employers"
+          color="primary.dark"
         />
         <StatPack
           stat={profileData.jobCount}
           caption="Total Jobs Posted"
-          color="primary"
+          color="primary.dark"
         />
         <StatPack
           stat={profileData.applicationCount}
-          caption="Applications"
-          color="primary"
+          caption="Total Applications"
+          color="primary.dark"
         />
       </Box>
     </Box>

@@ -27,11 +27,11 @@ import Responsibility from "./Responsibility";
 const JobPostForm = ({
   selectedJob,
   empId,
-  isShowForm,
   setIsShowForm,
   setSnackbarOpen,
   setSnackbarMessage,
   sx,
+  loadJobData,
 }) => {
   const classes = useStyles();
 

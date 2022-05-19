@@ -63,9 +63,8 @@ const EmployerApplicationPreview = ({
                 application.seekerId.image ? application.seekerId.image : logo
               }
               alt="profilePic"
-              style={{ height: 50, width: 50 }}
+              style={{ height: 50, width: 50, borderRadius: "50%" }}
               sx={{
-                borderRadius: "50%",
                 cursor: "pointer !important",
                 overflow: "hidden !important",
                 objectFit: "cover",

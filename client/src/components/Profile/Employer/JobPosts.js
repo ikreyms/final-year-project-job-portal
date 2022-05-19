@@ -23,23 +23,19 @@ const JobPosts = () => {
   const [isShowForm, setIsShowForm] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
   const loadJobData = async () => {
     try {
-      setLoading(true);
       const response = await axios.get(
         `http://localhost:2900/api/jobs/employer/${empId}`
       );
       const jobs = response.data.jobs;
       setJobs(jobs);
-      setLoading(false);
       console.log(response.data);
     } catch (error) {
-      setLoading(false);
       console.log(error.response);
     }
   };
@@ -64,7 +60,7 @@ const JobPosts = () => {
               ? "Post a Job"
               : isShowForm && selectedJob
               ? "Edit Job"
-              : "Job Posts"}
+              : `Job Posts (${jobs?.length})`}
           </Typography>
           <Typography variant="body1" mb={2}>
             {isShowForm && !selectedJob
@@ -98,6 +94,8 @@ const JobPosts = () => {
           setIsShowForm={setIsShowForm}
           setSnackbarOpen={setSnackbarOpen}
           setSnackbarMessage={setSnackbarMessage}
+          setJobs={setJobs}
+          loadJobData={loadJobData}
         />
       )}
 
@@ -108,22 +106,18 @@ const JobPosts = () => {
           gap: 2,
         }}
       >
-        {loading ? (
-          <CircularProgress color="secondary" sx={{ m: 2 }} />
-        ) : jobs.length === 0 ? (
-          "You have no active job posts."
-        ) : (
-          jobs.map((job) => (
-            <JobResult
-              job={job}
-              key={job._id}
-              onClick={() => {
-                setIsShowForm(true);
-                setSelectedJob(job);
-              }}
-            />
-          ))
-        )}
+        {jobs.length > 0
+          ? jobs.map((job) => (
+              <JobResult
+                job={job}
+                key={job._id}
+                onClick={() => {
+                  setIsShowForm(true);
+                  setSelectedJob(job);
+                }}
+              />
+            ))
+          : "No jobs to show."}
       </Box>
 
       <Snackbar
