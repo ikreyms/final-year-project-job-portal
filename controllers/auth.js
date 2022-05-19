@@ -5,6 +5,8 @@ const Employer = require("../models/Employer");
 const responseToClient = require("../utils/responseToClient");
 const sendEmail = require("../utils/sendEmail");
 const Admin = require("../models/Admin");
+const Notification = require("../models/Notification");
+const moment = require("moment");
 
 exports.signup = async (req, res, next) => {
   const {
@@ -96,6 +98,14 @@ exports.signup = async (req, res, next) => {
         email,
         password,
       });
+
+      //notify admin that new employer registered
+      await Notification.create({
+        adminReceiver: true,
+        subject: "New Employer Registered",
+        body: `New employer named (${employer.companyName}) was registered.`,
+      });
+
       sendEmployerToken(employer, 201, res);
     } else if (accountType === "Job Seeker") {
       const user = await User.create({
