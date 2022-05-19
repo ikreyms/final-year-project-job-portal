@@ -130,14 +130,6 @@ const Auth = () => {
     setRepeatPassword("");
   };
 
-  const googleLoginSuccess = (googleData) => {
-    console.log(googleData);
-  };
-
-  const googleLoginFailure = (failedResult) => {
-    console.log(failedResult);
-  };
-
   useEffect(() => {
     clearFields();
     setServerResponse({});

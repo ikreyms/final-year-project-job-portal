@@ -20,6 +20,7 @@ import Notifications from "./JobSeeker/Notifications";
 import Interviews from "./Employer/Interviews";
 import DashboardAdmin from "./Admin/DashboardAdmin";
 import Following from "./JobSeeker/Following";
+import NotificationsAdmin from "./Admin/NotificationsAdmin";
 
 const Profile = () => {
   const classes = useStyles();
@@ -122,7 +123,7 @@ const Profile = () => {
                 <DashboardAdmin />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                Admin not done
+                <NotificationsAdmin />
               </TabPanel>
             </>
           ) : (
