@@ -70,7 +70,7 @@ exports.createJob = async (req, res, next) => {
 };
 
 exports.filterJobs = async (req, res, next) => {
-  const { jobCategory, jobType, salaryRange, empId } = req.query;
+  const { jobCategory, jobType, salaryRange, empId, page } = req.query;
 
   let salaryLowerBound;
   let salaryUpperBound;
@@ -94,19 +94,28 @@ exports.filterJobs = async (req, res, next) => {
   };
 
   // console.log(searchObject);
+  let skip = 0;
+  let limit = 10;
+  if (page) {
+    skip = 10 * page - 10;
+  }
 
   try {
+    const docCount = await Job.estimatedDocumentCount();
+
     let jobs = await Job.find(searchObject, null, {
       sort: "-postDate",
       populate: { path: "postedBy" },
-    }).limit(12);
+    })
+      .skip(skip)
+      .limit(10);
 
     if (!jobs)
       return responseToClient(res, 204, {
         message: "No jobs match this filter.",
       });
 
-    responseToClient(res, 200, { success: true, jobs });
+    responseToClient(res, 200, { success: true, jobs, docCount });
   } catch (error) {
     responseToClient(res, 500, { success: false, error: error.message });
   }
