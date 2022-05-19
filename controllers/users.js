@@ -47,10 +47,9 @@ exports.getUserRatingsAndFollowing = async (req, res, next) => {
       .populate("following");
 
     if (user) {
-      let following = user.following;
-      following.sort((a, b) => b.companyName - a.companyName);
       return responseToClient(res, 200, {
-        following,
+        followingCount: user.following.length,
+        following: user.following,
         ratings: user.ratings,
       });
     }
