@@ -1,4 +1,4 @@
-import { Box, Divider, Link, Rating, Typography } from "@mui/material";
+import { Box, Divider, Link, Rating, Typography, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import ExclamationMark from "@mui/icons-material/ErrorOutline";
 import useStyles from "../styles";
 import StatPack from "../StatPack";
 import BrandingPreview from "./BrandingPreview";
+import VerifiedIcon from "@mui/icons-material/Verified";
 
 const DashboardEmployer = ({ brandingRef }) => {
   const classes = useStyles();
@@ -44,12 +45,15 @@ const DashboardEmployer = ({ brandingRef }) => {
             className={classes.profilePic}
           />
           <Box className={classes.headerMainTextWrapper}>
-            <Typography
-              variant="body1"
-              sx={{ textTransform: "uppercase", fontWeight: 500 }}
-            >
-              {profileData.companyName}
-            </Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Typography
+                variant="body1"
+                sx={{ textTransform: "uppercase", fontWeight: 500 }}
+              >
+                {profileData.companyName}
+              </Typography>
+              <VerifiedIcon fontSize="small" />
+            </Stack>
             <Typography variant="caption" sx={{ textTransform: "uppercase" }}>
               {profileData.followers !== 1
                 ? `${profileData.followers} Followers`
