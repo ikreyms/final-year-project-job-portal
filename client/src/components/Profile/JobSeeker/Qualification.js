@@ -127,7 +127,8 @@ const Qualification = ({
                 : false
             }
             helperText={
-              errorResponse?.error?.[`qualifications.${no - 1}.completedOn`]
+              errorResponse?.error?.[`qualifications.${no - 1}.completedOn`] &&
+              "Please provide the completed year."
             }
           />
         </Grid>
