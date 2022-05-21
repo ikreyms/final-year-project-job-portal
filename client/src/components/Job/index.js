@@ -21,6 +21,7 @@ const Job = () => {
   const navigate = useNavigate();
 
   const seekerId = useSelector((state) => state.user?.id);
+  const accountType = useSelector((state) => state.user?.accountType);
 
   const [job, setJob] = useState({});
   const [similarJobs, setSimilarJobs] = useState({});
@@ -108,15 +109,17 @@ const Job = () => {
             />
 
             <Box className={classes.btnSet}>
-              <Button
-                variant="contained"
-                disableElevation
-                className={classes.btn}
-                disabled={!checked}
-                onClick={applyToJob}
-              >
-                Apply
-              </Button>
+              {accountType !== "Admin" && accountType !== "Employer" && (
+                <Button
+                  variant="contained"
+                  disableElevation
+                  className={classes.btn}
+                  disabled={!checked}
+                  onClick={applyToJob}
+                >
+                  Apply
+                </Button>
+              )}
               <Button
                 variant="outlined"
                 className={classes.btn}
