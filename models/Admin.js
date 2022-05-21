@@ -7,17 +7,25 @@ const adminSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true],
-    },
-    password: {
-      type: String,
-      select: false,
+      required: [true, "Please provide your email address"],
+      trim: true,
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Please provide a valid email address",
       ],
       lowercase: true,
       unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required."],
+      minlength: [8, "Password must be minimum 8 characters long."],
+      maxlength: [20, "Password cannot be more than 20 characters."],
+      match: [
+        /^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$/,
+        "Password must have atleast 1 uppercase letter, 1 special character, 1 number.",
+      ],
+      select: false,
     },
     accountType: {
       required: [true, "Select an account type."],
