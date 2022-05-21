@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Employer = require("../models/Employer");
 const Job = require("../models/Job");
+const User = require("../models/User");
 const equals = require("../utils/equals");
 const responseToClient = require("../utils/responseToClient");
 
@@ -50,6 +51,23 @@ exports.createJob = async (req, res, next) => {
       { _id: employerId },
       { $inc: { totalJobsPosted: 1 } }
     );
+
+    //create notification for followers
+    const followers = await User.find({ following: { $in: [employerId] } });
+
+    for (const follower of followers) {
+      await Notification.create({
+        receiver: follower,
+        subject: `New Job Posted by ${employer.companyName}`,
+        body: `${
+          employer.companyName
+        } has posted a new job. Job title: ${title} Due date: ${$moment(
+          dueDate
+        ).format("DD/MM/YYYY")}`,
+        postedBy: employerId,
+      });
+    }
+
     responseToClient(res, 201, {
       success: true,
       job,
