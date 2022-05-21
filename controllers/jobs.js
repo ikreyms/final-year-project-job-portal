@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const Employer = require("../models/Employer");
 const Job = require("../models/Job");
+const Notification = require("../models/Notification");
 const User = require("../models/User");
 const equals = require("../utils/equals");
 const responseToClient = require("../utils/responseToClient");
+const moment = require("moment");
 
 exports.createJob = async (req, res, next) => {
   const { employerId } = req.params;
@@ -58,10 +60,8 @@ exports.createJob = async (req, res, next) => {
     for (const follower of followers) {
       await Notification.create({
         receiver: follower,
-        subject: `New Job Posted by ${employer.companyName}`,
-        body: `${
-          employer.companyName
-        } has posted a new job. Job title: ${title} Due date: ${$moment(
+        subject: `New Job Posted by ${companyName}`,
+        body: `${companyName} has posted a new job. Job title: ${title} Due date: ${moment(
           dueDate
         ).format("DD/MM/YYYY")}`,
         postedBy: employerId,
