@@ -151,7 +151,10 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
                   : false
                 : false
             }
-            helperText={errorResponse?.error?.[`experiences.${no - 1}.from`]}
+            helperText={
+              errorResponse?.error?.[`experiences.${no - 1}.from`] &&
+              "Please provide the starting year of employment."
+            }
           />
         </Grid>
         <Grid item z={1} xs={1}>
@@ -167,7 +170,8 @@ const Experience = ({ no, experiences, setExperiences, errorResponse }) => {
             onChange={(e) => setTo(e.target.value)}
             error={
               !isObjectEmpty(errorResponse)
-                ? errorResponse.error?.[`experiences.${no - 1}.to`]
+                ? errorResponse.error?.[`experiences.${no - 1}.to`] &&
+                  "Please provide the year of resignation."
                   ? true
                   : false
                 : false
