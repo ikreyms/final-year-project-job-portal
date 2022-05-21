@@ -8,11 +8,13 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import useStyles from "./styles";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ForgotPassword = () => {
   const classes = useStyles();
+
+  const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -41,6 +43,7 @@ const ForgotPassword = () => {
       setLoading(false);
       setPassword("");
       setRepeatPassword("");
+      navigate("/auth");
     } catch (error) {
       console.log(error.response);
       setServerResponse(error.response.data);
