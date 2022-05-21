@@ -198,7 +198,9 @@ const JobPostForm = ({
                   : false
                 : false
             }
-            helperText={errorResponse?.error?.title}
+            helperText={
+              errorResponse?.error?.title && "Please enter the job title."
+            }
           />
         </Grid>
         <Grid item xxs={1} xs={2}>
@@ -247,7 +249,10 @@ const JobPostForm = ({
                   : false
                 : false
             }
-            helperText={errorResponse?.error?.noOfPositions}
+            helperText={
+              errorResponse?.error?.noOfPositions &&
+              "Please enter a the number of vacancies for the job."
+            }
           />
         </Grid>
         <Grid item xxs={1} xs={2}>
@@ -267,7 +272,10 @@ const JobPostForm = ({
                   : false
                 : false
             }
-            helperText={errorResponse?.error?.location}
+            helperText={
+              errorResponse?.error?.location &&
+              "Please enter the location of the job."
+            }
           />
         </Grid>
         <Grid item xxs={1} xs={2}>
@@ -289,7 +297,9 @@ const JobPostForm = ({
                   : false
                 : false
             }
-            helperText={errorResponse?.error?.dueDate}
+            helperText={
+              errorResponse?.error?.dueDate && "Please enter a valid date."
+            }
           />
         </Grid>
         <Grid item xxs={1} xs={2}>
@@ -310,7 +320,9 @@ const JobPostForm = ({
                   : false
                 : false
             }
-            helperText={errorResponse?.error?.salary}
+            helperText={
+              errorResponse?.error?.salary && "Please enter the salary."
+            }
           />
         </Grid>
         <Grid item xxs={1} xs={2}>
