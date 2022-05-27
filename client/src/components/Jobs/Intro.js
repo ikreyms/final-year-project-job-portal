@@ -8,10 +8,8 @@ const Intro = () => {
         Find the right job for you.
       </Typography>
       <Typography variant="subtitle1" mt={1}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+        Explore our vast catalogue of jobs posted by employers registered with
+        us. Filter the jobs and apply to the jobs you prefer with convenience.
       </Typography>
     </>
   );
