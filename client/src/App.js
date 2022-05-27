@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Homepage from "./components/Homepage";
@@ -14,15 +14,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useTheme } from "@mui/styles";
 import axios from "axios";
 import { login, logout } from "./redux/actionCreators";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Profile from "./components/Profile";
+import PageNotFound from "./PageNotFound";
 
 const App = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const [token, setToken] = useState(
-    localStorage.getItem("joblookupLoginToken")
-  );
+  const [token] = useState(localStorage.getItem("joblookupLoginToken"));
 
   const checkIfLoggedIn = async () => {
     try {
@@ -48,7 +46,7 @@ const App = () => {
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     checkIfLoggedIn();
   }, [token]);
 
@@ -67,7 +65,7 @@ const App = () => {
         <Route path="employers/:id" element={<Employer />} />
 
         {/* if user manually enters a route, and it is invalid:  */}
-        {/* <Route path="*" element={<Employers />} />  <=not working... learn more... */}
+        <Route path="*" element={<PageNotFound />} />
 
         <Route path="about" element={<About />} />
         <Route path="auth" element={<Auth />} />

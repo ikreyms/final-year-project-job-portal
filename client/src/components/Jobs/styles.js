@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
     width: "100%",
     display: "flex",
-    // flexGrow: 1,
     alignItems: "center",
     flexWrap: "wrap",
     gap: theme.spacing(1),

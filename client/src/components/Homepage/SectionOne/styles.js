@@ -4,7 +4,6 @@ const useStyles = makeStyles((theme) => ({
   section: {
     backgroundColor: "white",
     paddingTop: theme.spacing(6),
-    // paddingBottom: theme.spacing(6),
   },
   boxContainer: {
     padding: `0 ${theme.spacing(3)}`,

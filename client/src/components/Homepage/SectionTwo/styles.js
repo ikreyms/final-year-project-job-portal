@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   box1: { backgroundColor: "transparent" },
   box2: {
     background: `url(${bgTexture})`,
-    // opacity: 0.5,
     [theme.breakpoints.down("sm")]: { display: "none" },
   },
   container: {
