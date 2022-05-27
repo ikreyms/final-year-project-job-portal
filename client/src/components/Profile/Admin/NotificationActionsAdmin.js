@@ -1,6 +1,6 @@
-import { Button, Checkbox, Link, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 const NotificationActions = ({
@@ -11,8 +11,6 @@ const NotificationActions = ({
   clearPressed,
   setClearPressed,
 }) => {
-  const seekerId = useSelector((state) => state?.user.id);
-
   const markAsRead = async () => {
     try {
       const response = await axios.patch(

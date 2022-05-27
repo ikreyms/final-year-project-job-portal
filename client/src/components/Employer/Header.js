@@ -9,7 +9,6 @@ import {
   Stack,
   Typography,
   Snackbar,
-  Icon,
 } from "@mui/material";
 import SectorIcon from "@mui/icons-material/DonutSmall";
 import FollowersIcon from "@mui/icons-material/Loyalty";

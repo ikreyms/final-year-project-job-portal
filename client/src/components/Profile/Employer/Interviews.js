@@ -1,22 +1,7 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Divider,
-  Stack,
-  Typography,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Snackbar,
-} from "@mui/material";
+import { Box, Divider, Typography, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
 import axios from "axios";
-import moment from "moment";
 
 import { useSelector } from "react-redux";
 import InterviewAccordion from "./InterviewAccordion";

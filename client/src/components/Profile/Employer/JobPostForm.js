@@ -4,9 +4,6 @@ import {
   Divider,
   Grid,
   MenuItem,
-  SliderTrack,
-  Snackbar,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,7 +14,6 @@ import {
   certificateLevels,
   experienceCategories,
   jobPostJobTypes,
-  jobTypes,
 } from "../../../assets/dataArrays";
 import { isObjectEmpty } from "../../../assets/utils";
 import useStyles from "../styles";

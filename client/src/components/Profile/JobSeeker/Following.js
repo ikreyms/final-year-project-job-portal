@@ -1,14 +1,4 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Divider,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Link, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

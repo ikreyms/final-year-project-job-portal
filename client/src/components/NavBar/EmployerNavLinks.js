@@ -1,6 +1,5 @@
 import React from "react";
-import { Link, Stack, Divider } from "@mui/material";
-import clsx from "clsx";
+import { Link, Stack } from "@mui/material";
 import useStyles from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/actionCreators";

@@ -2,20 +2,16 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Stack,
-  TextField,
   Checkbox,
   Typography,
   Chip,
-  Button,
 } from "@mui/material";
 import logo from "../../../assets/logo.svg";
-import React, { useEffect, useState, useRef, forwardRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmployerResumePreview from "./EmployerResumePreview";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 const EmployerApplicationPreview = ({
   application,

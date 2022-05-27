@@ -1,4 +1,4 @@
-import { Box, Divider, Stack, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useStyles from "../styles";
 import StatPack from "../StatPack";
