@@ -333,16 +333,22 @@ exports.isLoggedIn = async (req, res, next) => {
     const tokenValid = jwt.verify(token, process.env.JWT_SECRET);
     if (tokenValid) {
       const { email, firstName, accountType, id } = tokenValid;
-      return responseToClient(res, 200, {
+      responseToClient(res, 200, {
         success: true,
         token,
         user: { email, firstName, accountType, id },
       });
+    } else {
+      responseToClient(res, 401, {
+        sucess: false,
+        error: "No valid token found. Login again.",
+      });
     }
   } catch (error) {
-    responseToClient(res, 401, {
+    responseToClient(res, 500, {
       success: false,
-      error: "No valid token found. Login again.",
+      error: error.message,
+      errorFrom: "isLoggedIn",
     });
   }
 };
