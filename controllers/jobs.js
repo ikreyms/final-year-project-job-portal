@@ -225,8 +225,6 @@ exports.updateJob = async (req, res, next) => {
   try {
     let job = await Job.findOne({ _id: jobId });
 
-    // console.log(job);
-
     job.title !== title && (job.title = title);
     job.jobType !== jobType && (job.jobType = jobType);
     job.noOfPositions !== noOfPositions && (job.noOfPositions = noOfPositions);
