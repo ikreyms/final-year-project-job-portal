@@ -17,11 +17,6 @@ const applicationSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Employer",
     },
-    hidden: {
-      required: true,
-      type: Boolean,
-      default: false,
-    },
     status: {
       default: "Pending",
       type: String,
