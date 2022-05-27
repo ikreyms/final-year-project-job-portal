@@ -64,7 +64,6 @@ const App = () => {
         <Route path="employers" element={<Employers />} />
         <Route path="employers/:id" element={<Employer />} />
 
-        {/* if user manually enters a route, and it is invalid:  */}
         <Route path="*" element={<PageNotFound />} />
 
         <Route path="about" element={<About />} />
