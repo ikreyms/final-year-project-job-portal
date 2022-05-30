@@ -128,7 +128,7 @@ const Resume = () => {
       <Typography variant="h5">My Resume</Typography>
       <Typography variant="body1" mb={2}>
         Your resume information will be included in your job application. Make
-        sure the all the information is provided.
+        sure all the necessary information is provided.
       </Typography>
       <form onSubmit={submitHandler} autoComplete="off">
         <Typography className={classes.resumeHeadings} color="primary" mb={2}>

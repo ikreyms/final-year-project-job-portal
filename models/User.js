@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema(
       maxlength: [20, "Password cannot be more than 20 characters."],
       match: [
         /^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$/,
-        "Password must have atleast 1 uppercase letter, 1 special character, 1 number.",
+        "Password must have atleast 1 uppercase letter, 1 special character, and 1 number.",
       ],
       select: false,
     },

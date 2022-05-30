@@ -69,18 +69,14 @@ exports.signup = async (req, res, next) => {
         exists = await Employer.findOne({ email });
         break;
       case "Job Seeker":
-        exists = await User.findOne({ nid });
+        exists = await User.findOne({ email });
         break;
       default:
         break;
     }
 
     if (exists) {
-      if (!exists.nid) {
-        errorObj.email = "User already exists.";
-      } else if (exists.nid) {
-        errorObj.nid = "User already exists.";
-      }
+      errorObj.email = "User already exists.";
     }
 
     if (errorObj.repeatPassword || errorObj.email || errorObj.nid) {
