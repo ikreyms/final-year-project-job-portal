@@ -138,7 +138,11 @@ const Employers = () => {
     <Box className={classes.section}>
       <Box className={classes.container}>
         <Intro />
-        <form className={classes.searchControls} onSubmit={searchHandler}>
+        <form
+          className={classes.searchControls}
+          onSubmit={searchHandler}
+          autoComplete="off"
+        >
           <TextField
             name="searchTerm"
             type="text"
