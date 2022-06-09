@@ -40,7 +40,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
         <Typography variant="h6" color="primary">
           Resume
         </Typography>
-        {seekerId.about && (
+        {seekerId?.about && (
           <>
             <Typography
               className={classes.resumeHeadings}
@@ -73,7 +73,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">Full Name:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {seekerId.firstName} {seekerId.lastName}
+                {seekerId?.firstName} {seekerId?.lastName}
               </Typography>
             </Stack>
           </Grid>
@@ -81,7 +81,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">NID:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {seekerId.nid}
+                {seekerId?.nid}
               </Typography>
             </Stack>
           </Grid>
@@ -89,7 +89,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">DOB:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {moment(seekerId.dob).format("DD/MM/YYYY")}
+                {moment(seekerId?.dob).format("DD/MM/YYYY")}
               </Typography>
             </Stack>
           </Grid>
@@ -97,7 +97,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">Gender:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {seekerId.gender}
+                {seekerId?.gender}
               </Typography>
             </Stack>
           </Grid>
@@ -105,7 +105,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">Marital Status:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {seekerId.maritalStatus}
+                {seekerId?.maritalStatus}
               </Typography>
             </Stack>
           </Grid>
@@ -113,7 +113,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">Contact Number:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {seekerId.contact}
+                {seekerId?.contact}
               </Typography>
             </Stack>
           </Grid>
@@ -121,12 +121,12 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2">Email:</Typography>
               <Typography variant="subtitle2" fontWeight={400}>
-                {seekerId.email}
+                {seekerId?.email}
               </Typography>
             </Stack>
           </Grid>
         </Grid>
-        {seekerId.qualifications?.length > 0 && (
+        {seekerId?.qualifications?.length > 0 && (
           <>
             <Typography
               className={classes.resumeHeadings}
@@ -153,7 +153,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
           </>
         )}
 
-        {seekerId.experiences?.length > 0 && (
+        {seekerId?.experiences?.length > 0 && (
           <>
             <Typography
               className={classes.resumeHeadings}
@@ -181,7 +181,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
           </>
         )}
 
-        {seekerId.skills?.length > 0 && (
+        {seekerId?.skills?.length > 0 && (
           <>
             <Typography
               className={classes.resumeHeadings}
@@ -202,7 +202,7 @@ const EmployerResumePreview = forwardRef(({ seekerId }, ref) => {
 
       <ReactToPrint
         content={() => ref.current}
-        documentTitle={seekerId.nid}
+        documentTitle={seekerId?.nid}
         pageStyle={pageStyle}
         // onAfterPrint={() => accordionRef.click()}
         trigger={() => (

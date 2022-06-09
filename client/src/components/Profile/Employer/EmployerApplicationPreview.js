@@ -56,7 +56,9 @@ const EmployerApplicationPreview = ({
           <Stack direction="row" alignItems="center" spacing={2}>
             <img
               src={
-                application.seekerId.image ? application.seekerId.image : logo
+                application?.seekerId?.image
+                  ? application?.seekerId?.image
+                  : logo
               }
               alt="profilePic"
               style={{ height: 50, width: 50, borderRadius: "50%" }}

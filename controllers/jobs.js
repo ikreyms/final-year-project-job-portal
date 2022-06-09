@@ -60,8 +60,10 @@ exports.createJob = async (req, res, next) => {
     for (const follower of followers) {
       await Notification.create({
         receiver: follower,
-        subject: `New Job Posted by ${companyName}`,
-        body: `${companyName} has posted a new job. Job title: ${title} Due date: ${moment(
+        subject: `New Job Posted by ${employer.companyName}`,
+        body: `${
+          employer.companyName
+        } has posted a new job. Job title: ${title} Due date: ${moment(
           dueDate
         ).format("DD/MM/YYYY")}`,
         postedBy: employerId,
