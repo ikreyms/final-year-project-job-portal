@@ -98,6 +98,6 @@ const jobSchema = new mongoose.Schema(
   { timestamps: true, timestamps: { createdAt: "postDate" } }
 );
 
-jobSchema.index({ dueDate: 1 }, { expireAfterSeconds: 0 });
+// jobSchema.index({ dueDate: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = new mongoose.model("Job", jobSchema);

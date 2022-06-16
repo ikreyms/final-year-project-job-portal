@@ -192,10 +192,14 @@ exports.getSimilarJobs = async (req, res, next) => {
 exports.getJobsByEmployer = async (req, res, next) => {
   const { empId } = req.params;
   try {
-    const jobs = await Job.find({ postedBy: empId }, null, {
-      sort: "-postDate",
-      populate: { path: "postedBy" },
-    });
+    const jobs = await Job.find(
+      { postedBy: empId, dueDate: { $gt: Date.now() } },
+      null,
+      {
+        sort: "-postDate",
+        populate: { path: "postedBy" },
+      }
+    );
     if (jobs.length === 0)
       return responseToClient(res, 404, {
         success: false,
