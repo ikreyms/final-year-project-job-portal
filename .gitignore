@@ -15,7 +15,7 @@ node_modules/
 # misc
 config.env
 /client/.env
-/.env
+# /.env
 .DS_Store
 .env.local
 .env.development.local

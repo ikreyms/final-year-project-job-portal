@@ -57,6 +57,11 @@ const jobSchema = new mongoose.Schema(
     dueDate: {
       required: [true, "Job's due date must be provided."],
       type: Date,
+      validate: {
+        validator: function (v) {
+          return v && v.getTime() > Date.now() + 24 * 60 * 60 * 1000;
+        },
+      },
     },
 
     jobCategory: {

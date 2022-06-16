@@ -294,7 +294,8 @@ const JobPostForm = ({
                 : false
             }
             helperText={
-              errorResponse?.error?.dueDate && "Please enter a valid date."
+              errorResponse?.error?.dueDate &&
+              "Please enter a valid date. Due date must be at least 24hrs from now."
             }
           />
         </Grid>

@@ -226,7 +226,7 @@ exports.acceptApplications = async (req, res, next) => {
           "DD/MM/YYYY"
         )} hrs | ${moment(time).format(
           "HH:mm"
-        )} at ${venue}. Remember to bring the original certificates to the interview.`,
+        )} at ${venue}. Remember to bring the National ID card and original certificates to the interview.`,
         postedBy: empId,
       });
     }

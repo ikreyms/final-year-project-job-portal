@@ -52,7 +52,7 @@ const DashboardEmployer = ({ brandingRef }) => {
               >
                 {profileData.companyName}
               </Typography>
-              <VerifiedIcon fontSize="small" />
+              {profileData?.verified && <VerifiedIcon fontSize="small" />}
             </Stack>
             <Typography variant="caption" sx={{ textTransform: "uppercase" }}>
               {profileData.followers !== 1
